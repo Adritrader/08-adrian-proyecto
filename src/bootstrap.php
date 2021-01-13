@@ -11,12 +11,15 @@ use App\Core\Helpers\FlashMessage;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 
+
 $config = require_once __DIR__ . '/../config/config.php';
 
-
-App::bind("config", $config);
 $_flash = new FlashMessage();
+$redirect = new \App\Core\Router();
+
+App::bind("redirect", $redirect);
 App::bind("flash", $_flash);
+App::bind("config", $config);
 App::bind("DB", Database::getConnection());
 App::bind(Response::class, new Response());
 

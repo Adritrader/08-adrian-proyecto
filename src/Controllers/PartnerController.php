@@ -26,8 +26,11 @@ class PartnerController extends Controller
         $router = App::get(Router::class);
         $partnersPath = App::get("config")["partners_path"];
         $partners = $partnerModel->findAll(["name" => "ASC"]);
+
+        $message = App::get("flash")::get("message");
+
         return $this->response->renderView("partners", "default",
-            compact('title', 'partners', 'router', 'partnersPath'));
+            compact('title', 'partners', 'router', 'partnersPath', 'message'));
     }
 
     function filter(): string
@@ -104,7 +107,8 @@ class PartnerController extends Controller
 
                 //Redireccion a partners
 
-
+                App::get("flash")->set("message", "Partner has been created successfully");
+                App::get("redirect")::redirect("partners");
 
             } catch (Exception $e) {
                 $errors[] = 'Error: ' . $e->getMessage();
