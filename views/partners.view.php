@@ -1,14 +1,14 @@
 <?php
 
-if(!empty($message)){?>
+if(!empty($message)):?>
 
 <div class="alert alert-success" role="alert">
-    <?php $message ?>
+    <?= $message ?>
 <button type="button" class="close" data-dismiss="alert" aria-label="close">
     <span aria-hidden="true"></span>
 </button>
 </div>
-<?php}
+<?php endif;
 ?>
 <div class="container">
     <div class="row">

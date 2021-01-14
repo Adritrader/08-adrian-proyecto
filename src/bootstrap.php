@@ -2,6 +2,8 @@
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
+
+
 use App\Core\App;
 use App\Core\Response;
 use App\Database;
@@ -11,6 +13,7 @@ use App\Core\Helpers\FlashMessage;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 
+session_start();
 
 $config = require_once __DIR__ . '/../config/config.php';
 
