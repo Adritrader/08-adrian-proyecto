@@ -55,6 +55,7 @@ class AuthController extends Controller
     public function logout()
     {
         session_unset();
+        unset($_SESSION);
         session_destroy();
         setcookie(session_name());
         App::get(Router::class)->redirect("");

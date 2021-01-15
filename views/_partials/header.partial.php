@@ -18,14 +18,32 @@
                 </li>
             </ul>
 
-            <ul class="nav navbar-nav ml-auto">
+            <ul class="nav navbar-nav ml-auto">.
+
+                <?php
+
+                $loggedUser = $_SESSION["loggedUser"]??[];
+
+                if($loggedUser != []):?>
+
+                <li class="nav-item ">
+                    <a class="nav-item nav-link mr-md-2" id="bd-versions" aria-haspopup="false"
+                       aria-expanded="false" href="/logout">
+                        Log Out
+                    </a>
+
+                </li>
+                <?php else: ?>
+
+
                 <li class="nav-item ">
                     <a class="nav-item nav-link mr-md-2" id="bd-versions" aria-haspopup="false"
                        aria-expanded="false" href="/login">
                         Log in
                     </a>
-
                 </li>
+
+                <?php endif;?>
                 <li class="nav-item">
                     <a class="nav-item nav-link" data-toggle="dropdown" aria-haspopup="false" aria-expanded="false"
                        href="">

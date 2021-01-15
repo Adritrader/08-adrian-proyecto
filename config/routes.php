@@ -42,4 +42,9 @@ $router->post("partners/delete", "PartnerController", "destroy", [], "partners_d
 $router->get("login", "AuthController", "login");
 $router->post("login", "AuthController", "checkLogin");
 
+/*Logout routes */
+
+$router->get("logout", "AuthController", "logout");
+$router->post("logout", "AuthController", "checkLogin");
+
 
