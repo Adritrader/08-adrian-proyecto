@@ -38,3 +38,8 @@ $router->get("partners/:id/delete", "PartnerController", "delete", ["id"=>"numbe
 $router->post("partners/delete", "PartnerController", "destroy", [], "partners_destroy");
 
 
+/*Login routes */
+$router->get("login", "AuthController", "login");
+$router->post("login", "AuthController", "checkLogin");
+
+

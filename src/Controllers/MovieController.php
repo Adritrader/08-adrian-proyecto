@@ -49,8 +49,10 @@ class MovieController extends Controller
         }
         $router = App::get(Router::class);
 
+        $message = App::get("flash")::get("message");
+
         return $this->response->renderView("movies", "default", compact('title', 'movies',
-            'movieModel', 'errors', 'router'));
+            'movieModel', 'errors', 'router', 'message'));
     }
 
     /**

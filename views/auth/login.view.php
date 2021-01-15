@@ -1,6 +1,15 @@
 <?php
-?>
 
+if(!empty($message)):?>
+
+    <div class="alert alert-danger" role="alert">
+        <?= $message ?>
+        <button type="button" class="close" data-dismiss="alert" aria-label="close">
+            <span aria-hidden="true">x</span>
+        </button>
+    </div>
+<?php endif;
+?>
 <div class="container" >
     <div class="row">
         <div class="col-sm-12">

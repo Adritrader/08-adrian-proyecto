@@ -12,13 +12,14 @@ use App\Utils\MyMail;
 use App\Core\Helpers\FlashMessage;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
+use App\Core\Router;
 
 session_start();
 
 $config = require_once __DIR__ . '/../config/config.php';
 
 $_flash = new FlashMessage();
-$redirect = new \App\Core\Router();
+$redirect = new Router();
 
 App::bind("redirect", $redirect);
 App::bind("flash", $_flash);
