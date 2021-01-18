@@ -14,6 +14,7 @@ use App\Exception\UploadedFileNoFileException;
 use App\Model\GenreModel;
 use App\Model\MovieModel;
 use App\Core\App;
+use App\Core\Security;
 use App\Utils\MyLogger;
 use App\Utils\UploadedFile;
 use DateTime;
@@ -32,6 +33,10 @@ class MovieController extends Controller
      */
     public function index(): string
     {
+
+        if (!Security::isAuthenticatedUser())
+            App::get(Router::class)->redirect('login');
+
         $title = "Movies - Movie FX";
         $errors = [];
         $movieModel = new MovieModel(App::get("DB"));
