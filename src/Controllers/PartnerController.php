@@ -5,6 +5,7 @@ namespace App\Controllers;
 use App\Core\App;
 use App\Core\Controller;
 use App\Core\Router;
+use App\Core\Security;
 use App\Database;
 use App\Entity\Partner;
 use App\Exception\UploadedFileException;
@@ -20,6 +21,11 @@ class PartnerController extends Controller
 {
     function index(): string
     {
+
+
+        if (!Security::isAuthenticatedUser())
+            App::get(Router::class)->redirect('login');
+
         $title = "Partners - Movie FX";
 
         $partnerModel = App::getModel(PartnerModel::class);

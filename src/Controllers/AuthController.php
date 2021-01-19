@@ -24,6 +24,13 @@ class AuthController extends Controller
         $username = filter_input(INPUT_POST, 'username');
         $password = filter_input(INPUT_POST, 'password');
 
+        $pass_hash = password_hash($password, PASSWORD_DEFAULT);
+        if (password_verify("contrenya-errònia", $pass_hash)) {
+            // Contrasenya correcta
+        } else {
+            // Contrasenya incorrecta
+        }
+
         if (!empty($username) && !empty($password)) {
             $pdo = App::get("DB");
             $userModel = new UserModel($pdo);

@@ -5,6 +5,8 @@ use App\Core\Request;
 use App\Core\Router;
 
 
+$_SESSION["timeout"] = time();
+
 require_once __DIR__ . '/../src/bootstrap.php';
 
 $request = new Request();

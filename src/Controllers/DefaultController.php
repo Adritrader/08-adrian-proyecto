@@ -27,6 +27,7 @@ class DefaultController extends Controller
     public function index(): string
     {
         try {
+
             $movieModel = App::getModel(MovieModel::class);
             $movies = $movieModel->findAllPaginated(1, 8,
                 ["release_date" => "DESC", "title" => "ASC"]);

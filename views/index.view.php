@@ -1,5 +1,6 @@
 <?php use App\Entity\Movie;
     use App\Entity\Partner;
+
 ?>
 <div class="container">
     <div class="row">

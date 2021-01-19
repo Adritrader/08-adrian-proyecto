@@ -14,8 +14,7 @@ if(!empty($message)):?>
     <div class="row">
         <div class="col-12">
             <form method="post" action="<?php use App\Entity\Movie;
-
-            $_SERVER["PHP_SELF"] ?>"
+            $_SERVER["PHP_SELF"]; ?>"
                   class="form-inline  justify-content-center my-4">
                 <div class="form-group">
                     <input name="text" class="form-control mr-sm-4"
