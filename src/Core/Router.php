@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Core;
 
 use App\Core\Exception\NotFoundException;
+use App\Core\Exception\AuthorizationException;
 
 /**
  * Class Router
@@ -19,18 +20,20 @@ class Router
     }
 
     public function get(string $path, string $controller, string $action,
-                        array $parameters = [], string $name = ""): void
+                        array $parameters = [], string $name = "name",
+                        string $role = 'ROLE_ANONYMOUS'): void
     {
-        // movies -> [ MovieController, index() ]
-        $this->routes["GET"][$path] = ["controller" => $controller, "action" => $action,
-            "parameters" => $parameters, "name" => $name];
+
+        $this->routes["GET"][$path] = ["controller" => $controller,
+            "action" => $action, "parameters" => $parameters,
+            "name" => $name, "role"=>$role];
     }
 
     public function post(string $path, string $controller, string $action,
-                         array $parameters = [], string $name = ""): void
+                         array $parameters = [], string $name = "name", string $role = 'ROLE_ANONYMOUS'): void
     {
         $this->routes["POST"][$path] = ["controller" => $controller, "action" => $action,
-            "parameters" => $parameters, "name" => $name];
+            "parameters" => $parameters, "name" => $name, "role"=>$role];
     }
 
     public function route(string $url, string $method): string
@@ -43,6 +46,10 @@ class Router
             // movies/\d+/show
             $regexRoute = $this->getRegexRoute($route, $data);
             if (preg_match("@^$regexRoute$@", $requestedUrl)) {
+                $role = $data['role'];
+                if (!Security::isUserGranted($role))
+                    throw new
+                    AuthorizationException('You do not have access permissions');
                 $class = "\\App\\Controllers\\" . $data["controller"];
                 $instance = new $class;
                 $action = $data["action"];
