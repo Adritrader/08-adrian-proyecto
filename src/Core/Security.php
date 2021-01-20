@@ -4,11 +4,12 @@ declare(strict_types=1);
 
 namespace App\Core;
 
-class Security {
+class Security
+{
 
     public static function isAuthenticatedUser(): bool
     {
-        if (App::get('user')!==null)
+        if (App::get('user') !== null)
             return true;
         return false;
     }
@@ -34,14 +35,19 @@ class Security {
         return ($userRoleValue >= $minRoleValue);
     }
 
-    public static function encode(string $password): bool {
+    public static function encode(string $password): string
+    {
 
-
+        $passwordHash = password_hash($password, PASSWORD_DEFAULT);
+        return $passwordHash;
 
     }
-    public static function checkPassword(string $password, string $userPassword): bool {
+
+    public static function checkPassword(string $password, string $userPassword): bool
+    {
 
 
+        return password_verify($password, $userPassword);
 
     }
 }

@@ -47,7 +47,7 @@ class AuthController extends Controller
             if ($user->getUsername() == $username && $user->getPassword() == $password){
 
                 $_SESSION["loggedUser"] = $user->getId();
-                session_regenerate_id();
+                session_regenerate_id(true);
 
                 App::get('flash')->set("message", "Se ha conectado correctamente");
                 App::get("redirect")->redirect("movies");

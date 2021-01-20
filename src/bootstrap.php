@@ -15,6 +15,7 @@ use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use App\Core\Router;
 
+ini_set('session.cookie_secure', "0");
 ini_set('session.cookie_httponly', true);
 session_start();
 
@@ -25,9 +26,10 @@ $errors = $_SESSION[$sessionKey]??[];
 
 
 if (isset($_SESSION['LAST_ACTIVITY']) && (time() - $_SESSION['LAST_ACTIVITY'] > 900)) {
-    // last request was more than 30 minutes ago
+    // last request was more than 15 minutes ago
     session_unset();     // unset $_SESSION variable for the run-time
     session_destroy();   // destroy session data in storage
+    session_regenerate_id(true);
     header("Location: /login");
 
 }
