@@ -1,57 +1,47 @@
-<!-- FOOTER Start
-    ================================================== -->
+<footer>
+    <div class="container-fluid">
+        <div class="row fila-footer">
+            <div class="col-2 col-footer-enlaces enlaces-first">
+                <a href="home.html">Home</a>
+                <a href="servicios.html">Servicios</a>
+                <a href="quienes-somos.html">Quiénes Somos</a>
+                <a href="galeria.html">Galería</a>
+            </div>
+            <div class="col-2 col-footer-enlaces">
+                <a href="reserva-cita.html">Reservar Cita</a>
+                <a href="blog.html">Blog</a>
+                <a href="contacto.html">Contacto</a>
+                <a href="tienda.html">Tienda</a>
 
-<footer class="bg-dark text-secondary pt-4 footer">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-6">
-                <h4>MOVIE FX</h4>
-                <p>
-                    Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the
-                    industry's standard dummy text ever since the 1500s
-                </p>
-                <h4 class="connect-heading">CONNECT WITH US</h4>
-                <ul class="connect list-group ml-2 list-group-horizontal">
-                    <li class="bg-dark list-group-item">
-                        <a class="facebook-icon" href="#">
-                            <i class="fa fa-facebook"></i>
-                        </a>
-                    </li>
-                    <li class="bg-dark list-group-item">
-                        <a class="plus-icon" href="#">
-                            <i class="fa fa-google-plus"></i>
-                        </a>
-                    </li>
-                    <li class="bg-dark list-group-item">
-                        <a class="twitter-icon" href="#">
-                            <i class="fa fa-twitter"></i>
-                        </a>
-                    </li>
-                    <li class="bg-dark list-group-item">
-                        <a class="pinterest-icon" href="#">
-                            <i class="fa fa-pinterest"></i>
-                        </a>
-                    </li>
-                    <li class="bg-dark list-group-item">
-                        <a class="linkedin-icon" href="#">
-                            <i class="fa fa-linkedin"></i>
-                        </a>
-                    </li>
-                </ul>    <!-- End Of /.social-icon -->
+            </div>
+            <div class="col-3 mapa">
 
-            </div> <!-- End Of /.Col-md-4 -->
-            <div class="col-md-6">
-                <h4>GET IN TOUCH</h4>
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d194.2393834628329!2d0.10468218085136947!3d38.83635088764253!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x129e1b237dbfec7f%3A0x4882a2521c7a073d!2sCarrer%20de%20Sagunt%2C%2010%2C%2003700%20D%C3%A9nia%2C%20Alacant!5e0!3m2!1ses!2ses!4v1608655685043!5m2!1ses!2ses"
+                        width="100%" height="300" frameborder="0" style="border:0;" allowfullscreen="" aria-hidden="false" tabindex="0"></iframe>
+                <p>C/ Sagunto Bajo 10</p>
+                <p>Denia (Alicante)</p>
+                <p>96 654 55 44</p>
 
-                <p><i class="fa  fa-map-marker"></i> <span>La Marina Valley,</span>03780 Pego,
-                    Spain</p>
-                <p><i class="fa  fa-phone"></i> <span>Phone:</span> (+34) 940 123 456 </p>
-
-                <p><i class="fa  fa-mobile"></i> <span>Mobile:</span> (+34) 940 654 123 651</p>
-
-                <p class="mail"><i class="fa  fa-envelope"></i> <a href="/contact">Contact form</a></p>
-
-            </div> <!-- End Of Col-md-3 -->
-        </div> <!-- End Of /.row -->
-    </div> <!-- End Of /.Container -->
+            </div>
+        </div>
+        <div class="row fila-iconos-rrss">
+            <div class="col-3 col-iconos-rrss">
+                <a href="#"><img src="img/facebook-logo.svg" alt="facebook"></a>
+                <a href="#"><img src="img/instagram-logo.svg" alt="instagram"></a>
+                <a href="#"><img src="img/whatsapp.svg" alt="whatsapp"></a>
+            </div>
+        </div>
+        <div class="row fila-footer-politicas">
+            <div class="col-3 col-footer-politicas">
+                <span>© 2020 VaporDev Web Designs</span>
+            </div>
+            <div class="col-8 col-footer-avisos-legales">
+                <a href="sitemap.html">Sitemap</a>
+                <a href="#">Política</a>
+                <a href="#">Cookies</a>
+                <a href="#">Aviso Legal</a>
+                <a href="#">Tienda</a>
+            </div>
+        </div>
+    </div>
 </footer>
