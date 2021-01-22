@@ -9,6 +9,13 @@ $router->get("api/demo", "DefaultController", "demo");
 /* My routes */
 $router->get("", "MyController", "index");
 $router->get("servicios", "MyController", "servicios");
+$router->get("quienes-somos", "MyController", "quienesSomos");
+$router->get("galeria", "MyController", "galeria");
+$router->get("blog", "MyController", "blog");
+$router->get("reserva-cita", "MyController", "reservaCita");
+$router->get("contacto", "MyController", "contacto");
+$router->get("tienda", "MyController", "tienda");
+
 
 
 /* Movies routes */

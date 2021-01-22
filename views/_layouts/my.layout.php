@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="css/header.css">
     <link rel="stylesheet" href="css/footer.css">
     <link rel="stylesheet" href="css/template-grid3.css">
+    <link rel="stylesheet" href="css/formulario-reserva.css">
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <script src="https://kit.fontawesome.com/a076d05399.js"></script>
     <script src="js/app.js"></script>
@@ -20,7 +21,7 @@
     <div class="container-fluid headerContainer">
         <div class="row fila-header">
             <div class="col-3 header-logo">
-                <a href="home.html"><img class="logo" src="/images/design/logo-bueno.png" alt="logo"></a>
+                <a href=""><img class="logo" src="/images/design/logo-bueno.png" alt="logo"></a>
             </div>
 
             <div class="col-5 horario">
@@ -105,13 +106,13 @@
         <div class="container-fluid container-barra-nav">
             <div class="row barra-nav">
                 <div class="col-11 barra-nav-elementos">
-                    <a href="home.html" class="active">Home</a>
-                    <a href="servicios.html">Servicios</a>
-                    <a href="quienes-somos.html">Quiénes Somos</a>
-                    <a href="galeria.html">Galería</a>
-                    <a href="blog.html">Blog</a>
-                    <a href="contacto.html">Contacto</a>
-                    <a href="tienda.html">Tienda</a>
+                    <a href="/" class="active">Home</a>
+                    <a href="/servicios">Servicios</a>
+                    <a href="/quienes-somos">Quiénes Somos</a>
+                    <a href="/galeria">Galería</a>
+                    <a href="/blog">Blog</a>
+                    <a href="/contacto">Contacto</a>
+                    <a href="/tienda">Tienda</a>
                 </div>
             </div>
         </div>
@@ -121,7 +122,7 @@
         <div class="container-fluid">
             <div class="row fila-ruta">
                 <div class="col-5 col-ruta">
-                    <div><span>Estas aquí: </span><a href="home.html" class="active">Home</a></div>
+                    <div><span>Estas aquí: </span><a href="/" class="active">Home</a></div>
                 </div>
             </div>
         </div>
@@ -130,21 +131,26 @@
 
 </header>
 
+
+
 <?=$content?>
+
+
+
 <footer>
     <div class="container-fluid">
         <div class="row fila-footer">
             <div class="col-2 col-footer-enlaces enlaces-first">
-                <a href="home.html">Home</a>
-                <a href="servicios.html">Servicios</a>
-                <a href="quienes-somos.html">Quiénes Somos</a>
-                <a href="galeria.html">Galería</a>
+                <a href="/">Home</a>
+                <a href="/servicios">Servicios</a>
+                <a href="/quienes-somos">Quiénes Somos</a>
+                <a href="/galeria">Galería</a>
             </div>
             <div class="col-2 col-footer-enlaces">
-                <a href="reserva-cita.html">Reservar Cita</a>
-                <a href="blog.html">Blog</a>
-                <a href="contacto.html">Contacto</a>
-                <a href="tienda.html">Tienda</a>
+                <a href="/reserva-cita">Reservar Cita</a>
+                <a href="/blog">Blog</a>
+                <a href="/contacto">Contacto</a>
+                <a href="/tienda">Tienda</a>
 
             </div>
             <div class="col-3 mapa">
@@ -169,7 +175,7 @@
                 <span>© 2020 VaporDev Web Designs</span>
             </div>
             <div class="col-8 col-footer-avisos-legales">
-                <a href="sitemap.html">Sitemap</a>
+                <a href="/sitemap">Sitemap</a>
                 <a href="#">Política</a>
                 <a href="#">Cookies</a>
                 <a href="#">Aviso Legal</a>

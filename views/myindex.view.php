@@ -6,21 +6,21 @@
 
         <div class="mySlides fade">
             <div class="button-container">
-                <a href="reserva-cita.html" class="button-three" alt="">Reservar cita</a>
+                <a href="/reserva-cita" class="button-three" alt="">Reservar cita</a>
                 <img src="/images/design/carrousel-1.jpg" style="width:100%; height: 450px">
             </div>
         </div>
 
         <div class="mySlides fade">
             <div class="button-container">
-                <a href="reserva-cita.html" class="button-three" alt="">Reservar cita</a>
+                <a href="/reserva-cita" class="button-three" alt="">Reservar cita</a>
                 <img src="/images/design/carrousel-2.jpg" style="width:100%; height: 450px">
             </div>
         </div>
 
         <div class="mySlides fade">
             <div class="button-container">
-                <a href="reserva-cita.html" class="button-three" alt="">Reservar cita</a>
+                <a href="/reserva-cita" class="button-three" alt="">Reservar cita</a>
                 <img src="/images/design/fondo-estilo.jpg" style="width:100%; height: 450px">
             </div>
         </div>
@@ -93,7 +93,7 @@
 <div class="container-fluid">
     <div class="row fila-reserva">
         <div class="col-12 boton-reserva">
-            <a href="reserva-cita.html"><button class="button-three">Reservar cita</button></a>
+            <a href="/reserva-cita"><button class="button-three">Reservar cita</button></a>
         </div>
     </div>
 </div>

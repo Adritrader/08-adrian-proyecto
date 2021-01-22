@@ -39,6 +39,49 @@ class MyController extends Controller
 
     }
 
+    public function quienesSomos(): string
+    {
+
+        return $this->response->renderView("quienes-somos", "my");
+
+
+    }
+    public function galeria(): string
+    {
+
+        return $this->response->renderView("galeria", "my");
+
+
+    }
+    public function blog(): string
+    {
+
+        return $this->response->renderView("blog", "my");
+
+
+    }
+    public function reservaCita(): string
+    {
+
+        return $this->response->renderView("reserva-cita", "my");
+
+
+    }
+    public function contacto(): string
+    {
+
+        return $this->response->renderView("contacto", "my");
+
+
+    }
+    public function tienda(): string
+    {
+
+        return $this->response->renderView("tienda", "my");
+
+
+    }
+
     /**
      * @return string
      * @throws Exception

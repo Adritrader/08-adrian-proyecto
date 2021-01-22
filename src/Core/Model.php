@@ -63,7 +63,7 @@ abstract class Model
         $stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, $this->className);
         $e = $stmt->fetch();
         if (empty($e)) {
-            throw new NotFoundException("Cannot found a {$this->className} entity with id=$id");
+            throw NotFoundException("Cannot found a {$this->className} entity with id=$id");
         }
         return $e;
     }

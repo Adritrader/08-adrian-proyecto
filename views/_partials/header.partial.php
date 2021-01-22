@@ -88,8 +88,8 @@
         <div class="container-fluid container-barra-nav">
             <div class="row barra-nav">
                 <div class="col-11 barra-nav-elementos">
-                    <a href="home.html" class="active">Home</a>
-                    <a href="servicios.html">Servicios</a>
+                    <a href="/">Home</a>
+                    <a href="/servicios">Servicios</a>
                     <a href="quienes-somos.html">Quiénes Somos</a>
                     <a href="galeria.html">Galería</a>
                     <a href="blog.html">Blog</a>

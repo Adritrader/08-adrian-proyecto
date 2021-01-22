@@ -30,12 +30,12 @@
                     la peluquería, si le ha gustado un champú o una mascarilla no dude en preguntarnos.
                 </p>
             </div>
-            <img src="img/servicios-2.jpg" alt="servicios-2" id="servicios-2">
+            <img src="/images/design/servicios-2.jpg" alt="servicios-2" id="servicios-2">
 
         </div>
         <div class="col-2 fotos-servicios">
-            <img src="img/servicios-11.jpg" alt="servicios-11">
-            <img src="img/servicios-12.jpg" alt="servicios-12">
+            <img src="/images/design/servicios-11.jpg" alt="servicios-11">
+            <img src="/images/design/servicios-12.jpg" alt="servicios-12">
         </div>
     </div>
 </div>
