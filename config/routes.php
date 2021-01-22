@@ -8,6 +8,7 @@ $router->get("api/demo", "DefaultController", "demo");
 
 /* My routes */
 $router->get("", "MyController", "index");
+$router->get("servicios", "MyController", "servicios");
 
 
 /* Movies routes */

@@ -4,7 +4,6 @@
 
         <!-- Full-width images with number and caption text -->
 
-
         <div class="mySlides fade">
             <div class="button-container">
                 <a href="reserva-cita.html" class="button-three" alt="">Reservar cita</a>
@@ -77,13 +76,13 @@
 
             </div>
             <div class="col-3">
-                <img src="img/miniatura3.jpg" alt="miniatura3">
+                <img src="/images/design/miniatura3.jpg" alt="miniatura3">
                 <p>Atención personalizada e inmediata. Ofrecemos los mejores servicios, con los mejores productos a
                     un precio muy competitivo.</p>
 
             </div>
             <div class="col-3">
-                <img src="img/miniatura4.jpg" alt="miniatura4">
+                <img src="/images/design/miniatura4.jpg" alt="miniatura4">
                 <p>Disponemos de una amplia gama de productos para el tratamiento de su cabello. Seleccionamos las
                     mejores marcas para ofreceroslo.</p>
 
@@ -105,13 +104,13 @@
                 <div class="col-5">
 
                     <button class="button-four"
-                            onclick="document.getElementById('myImage').src='img/precios-mujer.jpg'">Mujer</button>
+                            onclick="document.getElementById('myImage').src='/images/design/precios-mujer.jpg'">Mujer</button>
                     <button class="button-four"
-                            onclick="document.getElementById('myImage').src='img/precios-caballero.jpg'">Caballero</button>
+                            onclick="document.getElementById('myImage').src='/images/design/precios-caballero.jpg'">Caballero</button>
                     <button class="button-four"
-                            onclick="document.getElementById('myImage').src='img/precios-manicura.jpg'">Manicura</button>
+                            onclick="document.getElementById('myImage').src='/images/design/precios-manicura.jpg'">Manicura</button>
                     <button class="button-four"
-                            onclick="document.getElementById('myImage').src='img/precios-tratamientos.jpg'">Tratamientos</button>
+                            onclick="document.getElementById('myImage').src='/images/design/precios-tratamientos.jpg'">Tratamientos</button>
 
                 </div>
             </div>
@@ -125,7 +124,7 @@
 
             <div class="row fila-precios">
                 <div class="col-5 col-precios">
-                    <img src="img/precios-mujer.jpg" alt="precios-mujer" id="myImage">
+                    <img src="/images/design/precios-mujer.jpg" alt="precios-mujer" id="myImage">
                 </div>
             </div>
 
@@ -145,7 +144,7 @@
                 <div class="gallery-container w-3 h-2">
                     <div class="gallery-item">
                         <div class="image">
-                            <img src="img/salon1.jpg" alt="nature">
+                            <img src="/images/design/salon1.jpg" alt="nature">
                         </div>
                         <div class="text">Instalaciones modernas</div>
                     </div>
@@ -154,7 +153,7 @@
                 <div class="gallery-container w-3 h-3">
                     <div class="gallery-item">
                         <div class="image">
-                            <img src="img/servicios-9.jpg" alt="people">
+                            <img src="/images/design/servicios-9.jpg" alt="people">
                         </div>
                         <div class="text">Colores divertidos</div>
                     </div>
@@ -163,7 +162,7 @@
                 <div class="gallery-container h-3">
                     <div class="gallery-item">
                         <div class="image">
-                            <img src="img/servicios-4.jpg" alt="sport">
+                            <img src="/images/design/servicios-4.jpg" alt="sport">
                         </div>
                         <div class="text">Tendencia</div>
                     </div>
@@ -172,7 +171,7 @@
                 <div class="gallery-container w-2">
                     <div class="gallery-item">
                         <div class="image">
-                            <img src="img/servicios-8.jpg" alt="fitness">
+                            <img src="/images/design/servicios-8.jpg" alt="fitness">
                         </div>
                         <div class="text">Caballero</div>
                     </div>
@@ -181,7 +180,7 @@
                 <div class="gallery-container w-4 h-2">
                     <div class="gallery-item">
                         <div class="image">
-                            <img src="img/servicios-7.jpg" alt="food">
+                            <img src="/images/design/servicios-7.jpg" alt="food">
                         </div>
                         <div class="text">Atención personalizada</div>
                     </div>
@@ -190,7 +189,7 @@
                 <div class="gallery-container h-2">
                     <div class="gallery-item">
                         <div class="image">
-                            <img src="img/servicios-10.jpg" alt="hair">
+                            <img src="/images/design/servicios-10.jpg" alt="hair">
                         </div>
                         <div class="text">Estilo</div>
                     </div>
@@ -204,17 +203,17 @@
 <div class="row fila-descripcion fila-miniaturas" id="partners">
     <h1>Marcas colaboradoras</h1>
     <div class="col-3">
-        <img src="img/pantene-partner.jpg" alt="pantene" class="partner">
+        <img src="/images/design/pantene-partner.jpg" alt="pantene" class="partner">
     </div>
     <div class="col-3">
-        <img src="img/loreal-partner.jpg" alt="loreal" class="partner">
+        <img src="/images/design/loreal-partner.jpg" alt="loreal" class="partner">
     </div>
     <div class="col-3">
-        <img src="img/sebastian-partner.jpg" alt="sebastian" class="partner">
+        <img src="/images/design/sebastian-partner.jpg" alt="sebastian" class="partner">
 
     </div>
     <div class="col-3">
-        <img src="img/kerastase-partner.jpg" alt="kerastase" class="partner">
+        <img src="/images/design/kerastase-partner.jpg" alt="kerastase" class="partner">
 
     </div>
 </div>

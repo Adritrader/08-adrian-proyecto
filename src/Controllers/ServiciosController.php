@@ -18,20 +18,13 @@ use App\Entity\Movie;
  * Class DefaultController
  * @package App\Controllers
  */
-class MyController extends Controller
+class ServiciosController extends Controller
 {
     /**
      * @return string
      * @throws Exception
      */
     public function index(): string
-    {
-
-            return $this->response->renderView("myindex", "my");
-
-
-    }
-    public function servicios(): string
     {
 
         return $this->response->renderView("servicios", "my");
