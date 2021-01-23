@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+
 
 namespace App\Entity;
 
@@ -7,10 +7,10 @@ namespace App\Entity;
 use App\Core\Entity;
 use JsonSerializable;
 
-class Servicio implements Entity, JsonSerializable {
+class Realiza implements Entity, JsonSerializable {
 
     private ?int $id = null;
-    private string $nombre;
+    private int $usuario_id;
 
     /**
      * @return null
@@ -31,31 +31,31 @@ class Servicio implements Entity, JsonSerializable {
     /**
      * @return mixed
      */
-    public function getNombre()
+    public function getUsuarioId()
     {
-        return $this->nombre;
+        return $this->usuario_id;
     }
 
     /**
-     * @param mixed $nombre
+     * @param mixed $usuario_id
      */
-    public function setNombre($nombre): void
+    public function setUsuarioId($usuario_id): void
     {
-        $this->nombre = $nombre;
+        $this->usuario_id = $usuario_id;
     }
 
     public function toArray(): array
     {
         return [
             "id"=>$this->getId(),
-            "name"=>$this->getNombre()
+            "nombre"=>$this->getUsuarioId()
         ];
     }
 
     public function jsonSerialize()
     {
-
         return $this->toArray();
     }
+
 
 }

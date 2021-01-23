@@ -1,12 +1,12 @@
 <?php
-
+declare(strict_types=1);
 
 namespace App\Entity;
 
-
 use App\Core\Entity;
+use JsonSerializable;
 
-class Usuario implements Entity {
+class Usuario implements Entity, JsonSerializable {
 
     private ?int $id = null;
     private string $nombre;
@@ -141,4 +141,12 @@ class Usuario implements Entity {
             "role"=>$this->getRole()
         ];
     }
+
+    public function jsonSerialize()
+    {
+
+        return $this->toArray();
+    }
+
+
 }

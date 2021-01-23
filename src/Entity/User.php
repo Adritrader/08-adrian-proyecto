@@ -11,7 +11,7 @@ use JsonSerializable;
 class User implements Entity {
 
     private ?int $id = null;
-    private string $nombre;
+    private string $username;
     private string $password;
     private string $role;
 
