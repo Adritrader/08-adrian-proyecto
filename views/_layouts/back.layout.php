@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="../css/table.css">
     <link rel="stylesheet" href="../css/template-grid3.css">
     <script src="https://kit.fontawesome.com/a076d05399.js"></script>
-    <script src="../js/calendar.js"></script>
+    <!--<script src="../js/calendar.js"></script>-->
     <title>BackOffice | Joan Bisquert Peluqueros</title>
 </head>
 
@@ -19,7 +19,7 @@
                 <div class="container-fluid headerContainer">
                     <div class="row fila-header">
                         <div class="col-2 header-logo">
-                            <a href="back-reservas.html"><img class="logo" src="../img/logo-bueno.png"
+                            <a href="back-reservas.html"><img class="logo" src="../images/design/logo-bueno.png"
                                                               alt="logo"></a>
                         </div>
                         <div class="col-1 navbar iconos-header">

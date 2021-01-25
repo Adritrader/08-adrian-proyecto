@@ -9,6 +9,8 @@ use JsonSerializable;
 
 class Producto implements Entity, JsonSerializable {
 
+    const IMAGEN_PATH = 'images/design/productos';
+
     private ?int $id = null;
     private string $nombre;
     private string $categoria;

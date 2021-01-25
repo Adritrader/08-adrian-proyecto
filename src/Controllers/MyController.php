@@ -97,8 +97,11 @@ class MyController extends Controller
     public function contact(): string
     {
         // 2. S'ha enviat el formulari
+
         $errors = [];
+
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
             // 3. Validar
             $name = filter_input(INPUT_POST, "name");
             $subject = filter_input(INPUT_POST, "subject");

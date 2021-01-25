@@ -48,10 +48,10 @@ class BackController extends Controller
         return $this->response->renderView("back/back-blog", "back");
 
     }
-    public function backTienda(): string
+    public function backProductos(): string
     {
 
-        return $this->response->renderView("back/back-tienda", "back");
+        return $this->response->renderView("back/back-productos", "back");
 
     }
     public function backPedidos(): string
