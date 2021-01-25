@@ -3,7 +3,7 @@
     <div class="container-fluid headerContainer">
         <div class="row fila-header">
             <div class="col-3 header-logo">
-                <a href="home.html"><img class="logo" src="/images/design/logo-bueno.png" alt="logo"></a>
+                <a href=""><img class="logo" src="/images/design/logo-bueno.png" alt="logo"></a>
             </div>
 
             <div class="col-5 horario">
@@ -52,7 +52,7 @@
                     <!-- Modal Content -->
                     <form class="modal-content animate" action="/action_page.php">
                         <div class="imgcontainer">
-                            <img src="img/avatar.jpeg" alt="Avatar" class="avatar">
+                            <img src="images/design/avatar.jpeg" alt="Avatar" class="avatar">
                         </div>
 
                         <div class="container2">
@@ -75,7 +75,7 @@
                     </form>
                 </div>
 
-                <a href="#" class="button-two">Sign Up</a>
+                <a href="/signup" class="button-two">Sign Up</a>
 
                 <div class="row fila-carrito">
                     <div class="col-12">
@@ -90,11 +90,11 @@
                 <div class="col-11 barra-nav-elementos">
                     <a href="/">Home</a>
                     <a href="/servicios">Servicios</a>
-                    <a href="quienes-somos.html">Quiénes Somos</a>
-                    <a href="galeria.html">Galería</a>
-                    <a href="blog.html">Blog</a>
-                    <a href="contacto.html">Contacto</a>
-                    <a href="tienda.html">Tienda</a>
+                    <a href="/quienes-somos">Quiénes Somos</a>
+                    <a href="/galeria">Galería</a>
+                    <a href="/blog">Blog</a>
+                    <a href="/contacto">Contacto</a>
+                    <a href="/tienda">Tienda</a>
                 </div>
             </div>
         </div>
@@ -104,7 +104,7 @@
         <div class="container-fluid">
             <div class="row fila-ruta">
                 <div class="col-5 col-ruta">
-                    <div><span>Estas aquí: </span><a href="home.html" class="active">Home</a></div>
+                    <div><span>Estas aquí: </span><a href="" class="active">Home</a></div>
                 </div>
             </div>
         </div>
@@ -162,7 +162,7 @@
                 <?php endif;?>
                 <li class="nav-item">
                     <a class="nav-item nav-link" data-toggle="dropdown" aria-haspopup="false" aria-expanded="false"
-                       href="">
+                       href="/signup">
                         Register
                     </a>
 

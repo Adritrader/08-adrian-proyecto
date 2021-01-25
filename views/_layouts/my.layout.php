@@ -17,7 +17,6 @@
 
 <body onload="docReady()">
 <header>
-    <audio autoplay loop id="audio" src="audio/cancion.mp3"></audio>
     <div class="container-fluid headerContainer">
         <div class="row fila-header">
             <div class="col-3 header-logo">
@@ -61,39 +60,28 @@
             </div>
             <div class="col-1 col-carrito">
 
-                <button onclick="document.getElementById('id01').style.display='block'"
-                        class="button-two">Login</button>
-                <div id="id01" class="modal">
-                        <span onclick="document.getElementById('id01').style.display='none'" class="close"
-                              title="Close Modal">&times;</span>
+                    <?php
 
-                    <!-- Modal Content -->
-                    <form class="modal-content animate" action="/action_page.php">
-                        <div class="imgcontainer">
-                            <img src="/images/design/avatar.jpeg" alt="Avatar" class="avatar">
-                        </div>
+                    use App\Core\App;
 
-                        <div class="container2">
-                            <label for="uname"><b>Usuario</b></label>
-                            <input type="text" placeholder="Enter Username" name="uname" required>
+                    $loggedUser = $_SESSION["loggedUser"]??[];
 
-                            <label for="psw"><b>Password</b></label>
-                            <input type="password" placeholder="Enter Password" name="psw" required>
-                            <input type="checkbox" checked="checked" id="remember"> Recuerdame
-                            <span>¿Se ha olvidado su <a href="#">password?</a></span>
-                        </div>
+                if($loggedUser != []):?>
 
+                            <a id="bd-versions" aria-haspopup="false"
+                               aria-expanded="false" href="/logout" class="button-two">
+                                Log Out
+                            </a>
+                    <?php else: ?>
 
-                        <div class="container2" style="background-color:#f1f1f1">
-                            <button type="submit" class="loginbtn">Login</button>
-                            <button type="button" onclick="document.getElementById('id01').style.display='none'"
-                                    class="cancelbtn">Cancelar</button>
-                        </div>
+                            <a id="bd-versions" aria-haspopup="false"
+                               aria-expanded="false" href="/login" class="button-two">
+                                Log in
+                            </a>
+                            <a href="/signup" class="button-two">Sign Up</a>
 
-                    </form>
-                </div>
+                    <?php endif;?>
 
-                <a href="#" class="button-two">Sign Up</a>
 
                 <div class="row fila-carrito">
                     <div class="col-12">
@@ -113,6 +101,15 @@
                     <a href="/blog">Blog</a>
                     <a href="/contacto">Contacto</a>
                     <a href="/tienda">Tienda</a>
+
+                    <?php
+                    $user = App::get("user");
+                    if(!empty($user) && ($user->getRole() === "ROLE_ADMIN")):?>
+                        <a href="/back-index">BackOffice</a>
+
+                    <?php else: ?>
+
+                    <?php endif;?>
                 </div>
             </div>
         </div>

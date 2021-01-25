@@ -1,6 +1,17 @@
 <?php use App\Entity\Movie;
     use App\Entity\Partner;
 ?>
+
+<?php if(!empty($message)):?>
+
+    <div class="alert alert-success" role="alert">
+        <?= $message ?>
+        <button type="button" class="close" data-dismiss="alert" aria-label="close">
+            <span aria-hidden="true">x</span>
+        </button>
+    </div>
+<?php endif;
+?>
 <!-- Slideshow container -->
 <div class="container-fluid slideshow-container">
 

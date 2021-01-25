@@ -15,7 +15,7 @@ $router->get("blog", "MyController", "blog");
 $router->get("reserva-cita", "MyController", "reservaCita");
 $router->get("contacto", "MyController", "contacto");
 $router->get("tienda", "MyController", "tienda");
-
+$router->get("signup", "MyController", "signup");
 
 
 /* Movies routes */
@@ -59,3 +59,12 @@ $router->get("logout", "AuthController", "logout");
 $router->post("logout", "AuthController", "checkLogin");
 
 
+/* BackOffice routes */
+
+$router->get("back-index", "BackController", "backIndex");
+$router->get("back-reservas", "BackController", "backReservas");
+$router->get("back-galeria", "BackController", "backGaleria");
+$router->get("back-blog", "BackController", "backBlog");
+$router->get("back-tienda", "BackController", "backTienda");
+$router->get("back-pedidos", "BackController", "backP");
+$router->get("back-usuario", "BackController", "backIndex");

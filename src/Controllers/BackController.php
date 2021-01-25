@@ -18,75 +18,52 @@ use App\Entity\Movie;
  * Class DefaultController
  * @package App\Controllers
  */
-class MyController extends Controller
+class BackController extends Controller
 {
     /**
      * @return string
      * @throws Exception
      */
-    public function index(): string
+    public function backIndex(): string
     {
 
-            return $this->response->renderView("myindex", "my");
-
+            return $this->response->renderView("back/back-index", "back");
 
     }
-    public function servicios(): string
+    public function backReservas(): string
     {
 
-        return $this->response->renderView("servicios", "my");
-
+        return $this->response->renderView("back/back-reservas", "back");
 
     }
-
-    public function quienesSomos(): string
+    public function backGaleria(): string
     {
 
-        return $this->response->renderView("quienes-somos", "my");
-
+        return $this->response->renderView("back/back-galeria", "back");
 
     }
-    public function galeria(): string
+    public function backBlog(): string
     {
 
-        return $this->response->renderView("galeria", "my");
-
+        return $this->response->renderView("back/back-blog", "back");
 
     }
-    public function blog(): string
+    public function backTienda(): string
     {
 
-        return $this->response->renderView("blog", "my");
-
+        return $this->response->renderView("back/back-tienda", "back");
 
     }
-    public function reservaCita(): string
+    public function backPedidos(): string
     {
 
-        return $this->response->renderView("reserva-cita", "my");
-
+        return $this->response->renderView("back/back-pedidos", "back");
 
     }
-    public function contacto(): string
+    public function backUsuarios(): string
     {
 
-        return $this->response->renderView("contacto", "my");
-
-
-    }
-    public function tienda(): string
-    {
-
-        return $this->response->renderView("tienda", "my");
-
-
-    }
-
-    public function signup(): string
-    {
-
-        return $this->response->renderView("signup", "my");
-
+        return $this->response->renderView("back/back-usuarios", "back");
 
     }
 

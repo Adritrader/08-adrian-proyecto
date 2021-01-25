@@ -15,7 +15,7 @@ class AuthController extends Controller
     public function login()
     {
         $message = App::get('flash')::get('message');
-        return $this->response->renderView('auth/login', 'default', compact('message'));
+        return $this->response->renderView('auth/login', 'my', compact('message'));
     }
 
     public function checkLogin()
@@ -50,7 +50,7 @@ class AuthController extends Controller
                 session_regenerate_id(true);
 
                 App::get('flash')->set("message", "Se ha conectado correctamente");
-                App::get("redirect")->redirect("movies");
+                App::get("redirect")->redirect("login");
 
             }
 
