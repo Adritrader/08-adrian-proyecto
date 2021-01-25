@@ -1,9 +1,5 @@
 <div class="container">
     <div class="row">
-        <div class="col-lg-3 col-md-6 my-4">
-            <?= generar_imagen_local("/".$productosPath, $producto->getImagen(),
-                $producto->getNombre() , "rounded w-100") ?>
-        </div>
         <div class="col-lg-9 col-md-6 my-5">
             <h1><?= $producto->getNombre() ?></h1>
             <p class="text-muted"><?= $producto->getCategoria()?></p>

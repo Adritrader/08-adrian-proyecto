@@ -62,7 +62,7 @@
 
 .fondo-form {
 
-	background-image: url("/img/fondo-estilo.jpg");
+	background-image: url("/images/design/fondo-estilo.jpg");
 	background-repeat: no-repeat;
 	background-size: auto;
 
@@ -74,7 +74,7 @@
 
 
 .form-style-3 {
-	max-width: 450px;
+
 	font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
 }
 

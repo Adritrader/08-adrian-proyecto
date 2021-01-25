@@ -5,7 +5,7 @@
             <h1 style="color: black;">Contacta con nosotros</h1>
         </div>
         <div class="row fila-formulario">
-            <div class="form-style-3 col-4 col-formulario">
+            <div class="form-style-3 col-5 col-formulario">
                 <form>
                     <fieldset><legend>Datos Personales</legend>
                         <label for="field1"><span>Nombre <span class="required">*</span></span><input type="text" class="input-field" name="field1" value="" /></label>

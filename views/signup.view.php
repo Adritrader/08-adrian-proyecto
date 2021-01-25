@@ -1,6 +1,6 @@
 <div class="container-fluid">
     <div class="row titulo-formulario">
-        <div class="col-5">
+        <div class="col-6">
             <h1>SignUp</h1>
         </div>
 
@@ -11,17 +11,17 @@
                     <fieldset>
                         <legend>Datos Personales</legend>
                         <label for="field1"><span>Nombre <span class="required">*</span></span><input type="text"
-                                                                                                      class="input-field" name="nombre" value="" /></label>
+                                                                                                      class="input-field" name="nombre"></label>
                         <label for="field2"><span>Apellidos <span class="required">*</span></span><input type="text"
-                                                                                                        class="input-field" name="apellidos" value=""/></label>
+                                                                                                        class="input-field" name="apellidos"></label>
                         <label for="field3"><span>Telefono <span class="required">*</span></span><input type="text"
-                                                                                                        class="input-field" name="telefono" value=""/></label>
+                                                                                                        class="input-field" name="telefono"></label>
                         <label for="field4"><span>Email<span class="required">*</span></span><input type="email"
-                                                                                                    class="input-field" name="email" value="" /></label>
+                                                                                                    class="input-field" name="email"></label>
                         <label for="field4"><span>Password<span class="required">*</span></span><input type="text"
-                                                                                                    class="input-field" name="password" value="" /></label>
+                                                                                                    class="input-field" name="password"></label>
                         <label for="field4"><span>Repite Password<span class="required">*</span></span><input type="text"
-                                                                                                    class="input-field" name="repitepassword" value="" /></label>
+                                                                                                    class="input-field" name="repitepassword"></label>
 
                     </fieldset>
                     <input type="submit" value="SignUp">
