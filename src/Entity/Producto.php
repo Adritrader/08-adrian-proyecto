@@ -107,7 +107,8 @@ class Producto implements Entity, JsonSerializable {
             "id"=>$this->getId(),
             "nombre"=>$this->getNombre(),
             "categoria"=>$this->getCategoria(),
-            "precio"=>$this->getPrecio()
+            "precio"=>$this->getPrecio(),
+            "imagen"=>$this->getImagen()
         ];
     }
 
