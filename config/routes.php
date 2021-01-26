@@ -67,4 +67,4 @@ $router->get("back-galeria", "BackController", "backGaleria");
 $router->get("back-blog", "BackController", "backBlog");
 $router->get("back-productos", "BackController", "backProductos");
 $router->get("back-pedidos", "BackController", "backPedidos");
-$router->get("back-usuario", "BackController", "backIndex");
+$router->get("back-usuarios", "BackController", "backUsuarios");
