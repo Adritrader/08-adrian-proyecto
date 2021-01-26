@@ -15,6 +15,7 @@ class Producto implements Entity, JsonSerializable {
     private string $nombre;
     private string $categoria;
     private int $precio;
+    private string $imagen;
 
     /**
      * @return null
@@ -80,6 +81,25 @@ class Producto implements Entity, JsonSerializable {
     {
         $this->precio = $precio;
     }
+
+    /**
+     * @return string
+     */
+    public function getImagen(): string
+    {
+        return $this->imagen;
+    }
+
+    /**
+     * @param string $imagen
+     */
+    public function setImagen(string $imagen): void
+    {
+        $this->imagen = $imagen;
+    }
+
+
+
 
     public function toArray(): array
     {

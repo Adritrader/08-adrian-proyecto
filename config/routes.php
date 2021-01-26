@@ -68,3 +68,20 @@ $router->get("back-blog", "BackController", "backBlog");
 $router->get("back-productos", "BackController", "backProductos");
 $router->get("back-pedidos", "BackController", "backPedidos");
 $router->get("back-usuarios", "BackController", "backUsuarios");
+
+
+/*BackOffice Productos routes*/
+
+$router->get("productos/create", "BackController", "create");
+$router->post("productos/create", "BackController", "store");
+$router->get("productos/:id/show", "BackController", "show",
+    ["id" => "number"], "movies_show");
+
+$router->get("movies/create", "MovieController", "create");
+$router->post("movies/create", "MovieController", "store");
+
+$router->get("movies/:id/edit", "MovieController", "edit", ["id" => "number"]);
+$router->post("movies/:id/edit", "MovieController", "edit", ["id" => "number"]);
+
+$router->get("movies/:id/delete", "MovieController", "delete", ["id"=>"number"], "movies_delete");
+$router->post("movies/delete", "MovieController", "destroy", [],"movies_destroy");

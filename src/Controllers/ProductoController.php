@@ -33,12 +33,9 @@ class ProductoController extends Controller
     public function index(): string
     {
 
-        if (!Security::isAuthenticatedUser())
-            App::get(Router::class)->redirect('login');
-
         $title = "BackOffice | Productos";
         $errors = [];
-        $productoModel = new ProductoModel(App::get("DB"));
+        $productoModel = new ProductoModel(App::getModel("ProductoModel"));
         $productos = $productoModel->findAll();
 
         $order = filter_input(INPUT_GET, "order", FILTER_SANITIZE_STRING);
@@ -55,8 +52,8 @@ class ProductoController extends Controller
 
         $message = App::get("flash")::get("message");
 
-        return $this->response->renderView("movies", "default", compact('title', 'movies',
-            'movieModel', 'errors', 'router', 'message'));
+        return $this->response->renderView("movies", "default", compact('title', 'productos',
+            'productoModel', 'errors', 'router', 'message'));
     }
 
     /**
@@ -80,17 +77,17 @@ class ProductoController extends Controller
         if (!empty($text)) {
             $productoModel = App::getModel(ProductoModel::class);
             if ($tipo_busqueda == "both") {
-                $productos = $productoModel->executeQuery("SELECT * FROM producto WHERE title LIKE :text OR tagline LIKE :text",
+                $productos = $productoModel->executeQuery("SELECT * FROM producto WHERE nombre LIKE :text OR descripcion LIKE :text",
                     ["text" => "%$text%"]);
 
             }
-            if ($tipo_busqueda == "title") {
-                $productos = $productoModel->executeQuery("SELECT * FROM producto WHERE title LIKE :text",
+            if ($tipo_busqueda == "nombre") {
+                $productos = $productoModel->executeQuery("SELECT * FROM producto WHERE nombre LIKE :text",
                     ["text" => "%$text%"]);
 
             }
-            if ($tipo_busqueda == "tagline") {
-                $productos = $productoModel->executeQuery("SELECT * FROM producto WHERE tagline LIKE :text",
+            if ($tipo_busqueda == "descripcion") {
+                $productos = $productoModel->executeQuery("SELECT * FROM producto WHERE descripcion LIKE :text",
                     ["text" => "%$text%"]);
             }
 

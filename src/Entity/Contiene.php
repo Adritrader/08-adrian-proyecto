@@ -3,9 +3,9 @@
 
 namespace App\Entity;
 
-
 use App\Core\Entity;
 use JsonSerializable;
+
 class Contiene implements Entity, JsonSerializable {
 
     private int $producto_id;
@@ -51,10 +51,9 @@ class Contiene implements Entity, JsonSerializable {
         ];
     }
 
-    public function jsonSerialize()
-    {
+    public function jsonSerialize() {
+
         return $this->toArray();
+
     }
-
-
 }

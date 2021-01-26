@@ -7,12 +7,10 @@ use App\Core\Controller;
 use App\Core\Router;
 use App\Model\GenreModel;
 use App\Model\MovieModel;
-use App\Model\PartnerModel;
 use App\Utils\MyMail;
 use DateTime;
 use Exception;
 use PDOException;
-use App\Entity\Movie;
 
 /**
  * Class DefaultController
@@ -66,6 +64,12 @@ class BackController extends Controller
         return $this->response->renderView("back/back-usuarios", "back");
 
     }
+
+    public function create(): string
+    {
+        return $this->response->renderView("productos-create-form", "back", compact("productos"));
+    }
+
 
     /**
      * @return string

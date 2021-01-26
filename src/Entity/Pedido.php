@@ -16,6 +16,15 @@ class Pedido implements Entity, JsonSerializable {
     private string $realiza_id;
     private string $realiza_usuario_id;
 
+
+    public function __set(string $name, $value){
+        switch ($name) {
+            case "release_date":
+                $this->fecha = DateTime::createFromFormat("Y-m-d", $value ?? date("Y-m-d"));
+                break;
+        }
+    }
+
     /**
      * @return null
      */

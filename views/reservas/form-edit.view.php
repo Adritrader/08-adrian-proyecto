@@ -1,4 +1,5 @@
 <form action="<?php $_SERVER['PHP_SELF']; ?>" method="post" enctype="multipart/form-data" novalidate>
+    <input type="hidden" name="id" value="<?= $registra->getId() ?>">
     <div class="form-group">
         <label for="nombre">Servicio:</label>
         <select class="form-control" name="nombre" id="nombre"

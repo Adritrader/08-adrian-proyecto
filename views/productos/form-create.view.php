@@ -8,8 +8,8 @@
         <input id="categoria" type="text" name="categoria" class="form-control" required>
     </div>
     <div class="form-group">
-        <label for="descripcion">Descripción:</label>
-        <input id="descripcion" class="form-control" type="text" name="descripcion" required>
+        <label for="descripcion">Descripcion:</label>
+        <textarea id="descripcion" name="overview" class="form-control rounded-0" rows="4"></textarea>
     </div>
     <div class="form-group">
         <label for="precio">Precio:</label>
@@ -21,5 +21,6 @@
     </div>
     <div class="form-group text-right">
         <button type="submit" class="btn btn-primary">Guardar</button>
+        <a href="/back-productos"><button type="submit" class="btn btn-primary">Ir atrás</button></a>
     </div>
 </form>
