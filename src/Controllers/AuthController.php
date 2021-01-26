@@ -6,7 +6,7 @@ namespace App\Controllers;
 use App\Core\Controller;
 use App\Core\Router;
 use App\Core\App;
-use App\Model\UserModel;
+use App\Model\UsuarioModel;
 
 
 
@@ -33,20 +33,20 @@ class AuthController extends Controller
 
         if (!empty($username) && !empty($password)) {
             $pdo = App::get("DB");
-            $userModel = new UserModel($pdo);
+            $usuarioModel = new UsuarioModel($pdo);
             $router = App::get(Router::class);
-            $user = $userModel->findOneBy(['username' => $username]);
+            $usuario = $usuarioModel->findOneBy(['username' => $username]);
 
-            if(empty($user)){
+            if(empty($usuario)){
 
                 App::get('flash')->set("message", "No se ha podido conectar");
                 App::get("redirect")->redirect("login");
 
             }
 
-            if ($user->getUsername() == $username && $user->getPassword() == $password){
+            if ($usuario->getUsername() == $username && $usuario->getPassword() == $password){
 
-                $_SESSION["loggedUser"] = $user->getId();
+                $_SESSION["loggedUser"] = $usuario->getId();
                 session_regenerate_id(true);
 
                 App::get('flash')->set("message", "Se ha conectado correctamente");

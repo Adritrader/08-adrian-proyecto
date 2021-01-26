@@ -18,7 +18,7 @@ $router->get("tienda", "MyController", "tienda");
 $router->get("signup", "MyController", "signup");
 
 
-/* Movies routes */
+/* Movies routes
 
 $router->get("movies", "MovieController", "index", [], "", "ROLE_USER");
 $router->post("movies", "MovieController", "filter", [], "", "ROLE_USER");
@@ -72,11 +72,15 @@ $router->get("back-usuarios", "BackController", "backUsuarios");
 
 /*BackOffice Productos routes*/
 
+$router->get("productos", "BackController", "index", [], "producto_index", "ROLE_ADMIN");
+$router->post("productos", "BackController", "filter", [], "producto_filter", "ROLE_ADMIN");
+
 $router->get("productos/create", "BackController", "create");
 $router->post("productos/create", "BackController", "store");
 $router->get("productos/:id/show", "BackController", "show",
     ["id" => "number"], "movies_show");
 
+/*
 $router->get("movies/create", "MovieController", "create");
 $router->post("movies/create", "MovieController", "store");
 
@@ -85,3 +89,4 @@ $router->post("movies/:id/edit", "MovieController", "edit", ["id" => "number"]);
 
 $router->get("movies/:id/delete", "MovieController", "delete", ["id"=>"number"], "movies_delete");
 $router->post("movies/delete", "MovieController", "destroy", [],"movies_destroy");
+*/

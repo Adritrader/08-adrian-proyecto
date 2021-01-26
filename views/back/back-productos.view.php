@@ -1,7 +1,7 @@
 
 <div class="container">
     <div class="row">
-        <div class="col-6">
+        <div class="col-xl-12">
             <form method="post" action="<?php use App\Entity\Producto;
             $_SERVER["PHP_SELF"]; ?>"
                   class="form-inline  justify-content-center my-4">
@@ -33,9 +33,12 @@
                     </i>Añadir producto</a>
             </div>
         </div>
-        <p><?= $error ?? "" ?></p>
+
+        <p><?= $error ?? ""
+            ?></p>
     </div>
     <?php if (empty($productos)) : ?>
+
         <h3>No se ha encontrado ningún producto</h3>
     <?php else: ?>
         <table class="table table-condensed">
@@ -45,19 +48,15 @@
                             class="fa fa-arrow-down"></i></a>
                     <a href="/movies?order=title&&tipo=DESC"><i
                             class="fa fa-arrow-up"></i></a></th>
-                <th>Servicio</th>
-                <th>Hora</th>
-                <th>Fecha<a href="/movies?order=release_date&amp;tipo=ASC"><i
-                            class="fa fa-arrow-down"></i></a>
-                    <a href="/movies?order=release_date&amp;tipo=DESC"><i
-                            class="fa fa-arrow-up"></i></a></th>
-                </th>
+                <th>Categoría</th>
+                <th>Descripción</th>
+                <th>Precio</th>
                 <th>Acciones</th>
             </tr>
             <?php foreach ($productos as $producto) { ?>
                 <tr>
                     <td> <?= generar_imagen_local(Producto::IMAGEN_PATH . '/', $producto->getImagen(),
-                            $producto->getNombre(), 200, 100) ?> </td>
+                            $producto->getNombre(), 300, 200) ?> </td>
                     <td><?= $producto->getCategoria() ?></td>
                     <td><?= $producto->getDescripcion() ?></td>
                     <td><?= $producto->getPrecio()?></td>

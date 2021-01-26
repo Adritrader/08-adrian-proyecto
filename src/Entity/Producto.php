@@ -14,6 +14,7 @@ class Producto implements Entity, JsonSerializable {
     private ?int $id = null;
     private string $nombre;
     private string $categoria;
+    private string $descripcion;
     private int $precio;
     private string $imagen;
 
@@ -69,6 +70,24 @@ class Producto implements Entity, JsonSerializable {
     /**
      * @return mixed
      */
+    public function getDescripcion()
+    {
+        return $this->descripcion;
+    }
+
+    /**
+     * @param mixed $descripcion
+     */
+    public function setDescripcion($descripcion): void
+    {
+        $this->descripcion = $descripcion;
+    }
+
+
+
+    /**
+     * @return mixed
+     */
     public function getPrecio()
     {
         return $this->precio;
@@ -107,6 +126,7 @@ class Producto implements Entity, JsonSerializable {
             "id"=>$this->getId(),
             "nombre"=>$this->getNombre(),
             "categoria"=>$this->getCategoria(),
+            "descripcion"=>$this->getDescripcion(),
             "precio"=>$this->getPrecio(),
             "imagen"=>$this->getImagen()
         ];

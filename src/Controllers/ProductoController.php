@@ -10,7 +10,6 @@ use App\Core\Exception\NotFoundException;
 use App\Core\Router;
 use App\Exception\UploadedFileException;
 use App\Exception\UploadedFileNoFileException;
-use App\Model\GenreModel;
 use App\Model\ProductoModel;
 use App\Core\App;
 use App\Core\Security;
@@ -21,39 +20,16 @@ use Exception;
 use PDOException;
 
 /**
- * Class MovieController
+ * Class ProductoController
  * @package App\Controllers
  */
-class ProductoController extends Controller
-{
-    /**
-     * @return string
-     * @throws Exception
-     */
+class ProductoController extends Controller {
+    
+
     public function index(): string
     {
 
-        $title = "BackOffice | Productos";
-        $errors = [];
-        $productoModel = new ProductoModel(App::getModel("ProductoModel"));
-        $productos = $productoModel->findAll();
 
-        $order = filter_input(INPUT_GET, "order", FILTER_SANITIZE_STRING);
-
-        if (!empty($_GET['order'])) {
-            $orderBy = [$_GET["order"] => $_GET["tipo"]];
-            try {
-                $productos = $productoModel->findAll($orderBy);
-            } catch (Exception $e) {
-                $errors[] = $e->getMessage();
-            }
-        }
-        $router = App::get(Router::class);
-
-        $message = App::get("flash")::get("message");
-
-        return $this->response->renderView("movies", "default", compact('title', 'productos',
-            'productoModel', 'errors', 'router', 'message'));
     }
 
     /**

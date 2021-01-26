@@ -13,6 +13,7 @@ class Usuario implements Entity, JsonSerializable {
     private string $apellidos;
     private int $telefono;
     private string $email;
+    private string $username;
     private string $password;
     private string $role;
 
@@ -99,6 +100,23 @@ class Usuario implements Entity, JsonSerializable {
     /**
      * @return mixed
      */
+    public function getUsername()
+    {
+        return $this->username;
+    }
+
+    /**
+     * @param mixed $username
+     */
+    public function setUsername($username): void
+    {
+        $this->username = $username;
+    }
+
+
+    /**
+     * @return mixed
+     */
     public function getPassword()
     {
         return $this->password;
@@ -137,6 +155,7 @@ class Usuario implements Entity, JsonSerializable {
             "apellidos"=>$this->getApellidos(),
             "telefono"=>$this->getTelefono(),
             "email"=>$this->getEmail(),
+            "username"=>$this->getUsername(),
             "password"=>$this->getPassword(),
             "role"=>$this->getRole()
         ];
