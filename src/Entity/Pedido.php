@@ -19,7 +19,7 @@ class Pedido implements Entity, JsonSerializable {
 
     public function __set(string $name, $value){
         switch ($name) {
-            case "release_date":
+            case "fecha":
                 $this->fecha = DateTime::createFromFormat("Y-m-d", $value ?? date("Y-m-d"));
                 break;
         }
@@ -126,7 +126,7 @@ class Pedido implements Entity, JsonSerializable {
         return [
             "id"=>$this->getId(),
             "precio"=>$this->getPrecio(),
-            "fecha"=>$this->getFecha(),
+            "fecha"=>$this->getFecha()->format("Y-m-d"),
             "estado"=>$this->getEstado(),
             "realiza_id"=>$this->getRealizaId(),
             "realiza_usuario_id"=>$this->getRealizaUsuarioId()

@@ -4,7 +4,6 @@
     <link rel="stylesheet" href="../css/styles-back.css">
     <link rel="stylesheet" href="../css/calendar.css">
     <link rel="stylesheet" href="../css/styles.css">
-    <link rel="stylesheet" href="../css/table.css">
     <link rel="stylesheet" href="../css/template-grid3.css">
     <script src="https://kit.fontawesome.com/a076d05399.js"></script>
     <!--<script src="../js/calendar.js"></script>-->
@@ -60,8 +59,11 @@
         </div>
     </div>
 
-
-    <?=$content?>
+    <div class="row">
+        <div class="col-12">
+            <?=$content?>
+        </div>
+    </div>
 
 </main>
 

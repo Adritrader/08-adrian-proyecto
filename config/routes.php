@@ -80,6 +80,21 @@ $router->post("productos/create", "BackController", "store");
 $router->get("productos/:id/show", "BackController", "show",
     ["id" => "number"], "movies_show");
 
+$router->get("productos/delete", "BackController", "delete", [],"productos_delete", "ROLE_ADMIN");
+
+
+/*BackOffice Pedidos routes */
+
+$router->get("pedidos", "BackController", "index", [], "pedidos_index", "ROLE_ADMIN");
+
+
+
+
+/* BackOffice Usuarios routes */
+
+$router->get("usuarios", "BackController", "index", [], "usuarios_index", "ROLE_ADMIN");
+$router->get("usuarios/delete", "BackController", "delete", [],"usuarios_delete", "ROLE_ADMIN");
+
 /*
 $router->get("movies/create", "MovieController", "create");
 $router->post("movies/create", "MovieController", "store");

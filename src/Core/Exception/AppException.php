@@ -4,6 +4,9 @@
 namespace App\Core\Exception;
 
 
+use Exception;
+use Throwable;
+
 class AppException extends Exception
 {
     /**

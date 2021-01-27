@@ -1,7 +1,7 @@
 
 <div class="container">
     <div class="row">
-        <div class="col-xl-12">
+        <div class="col-12">
             <form method="post" action="<?php use App\Entity\Producto;
             $_SERVER["PHP_SELF"]; ?>"
                   class="form-inline  justify-content-center my-4">
@@ -41,7 +41,9 @@
 
         <h3>No se ha encontrado ningún producto</h3>
     <?php else: ?>
-        <table class="table table-condensed">
+
+    <div class="container">
+        <table>
             <tr>
                 <th>Imagen</th>
                 <th>Nombre <a href="/movies?order=title&&tipo=ASC"><i
@@ -74,5 +76,5 @@
         </table>
     <?php endif; ?>
 
-    <!-- /.row -->
+</div>
 </div>

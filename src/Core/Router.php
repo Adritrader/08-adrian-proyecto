@@ -99,7 +99,7 @@ class Router
             }
         }
 
-        throw NotFoundException ("Route name ($name) doens't exists");
+        throw new NotFoundException ("Route name ($name) doens't exists");
 
     }
 

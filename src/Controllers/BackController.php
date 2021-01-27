@@ -5,7 +5,9 @@ namespace App\Controllers;
 use App\Core\App;
 use App\Core\Controller;
 use App\Core\Router;
+use App\Model\PedidoModel;
 use App\Model\ProductoModel;
+use App\Model\UsuarioModel;
 use App\Utils\MyMail;
 use DateTime;
 use Exception;
@@ -48,13 +50,10 @@ class BackController extends Controller
     public function backProductos(): string
     {
 
-
         $title = "BackOffice | Productos";
         $errors = [];
         $productoModel = App::getModel(ProductoModel::class);
         $productos = $productoModel->findAll();
-
-        var_dump($productos);
 
         $order = filter_input(INPUT_GET, "order", FILTER_SANITIZE_STRING);
 
@@ -79,37 +78,17 @@ class BackController extends Controller
     public function backPedidos(): string
     {
 
-        return $this->response->renderView("back/back-pedidos", "back");
-
-    }
-    public function backUsuarios(): string
-    {
-
-        return $this->response->renderView("back/back-usuarios", "back");
-
-    }
-
-    public function create(): string
-    {
-        return $this->response->renderView("productos-create-form", "back");
-    }
-
-    public function verProductos(): string
-    {
-
-        $title = "BackOffice | Productos";
+        $title = "BackOffice | Pedidos";
         $errors = [];
-        $productoModel = App::getModel(ProductoModel::class);
-        $productos = $productoModel->findAll();
-
-        var_dump($productos);
+        $pedidoModel = App::getModel(PedidoModel::class);
+        $pedidos = $pedidoModel->findAll();
 
         $order = filter_input(INPUT_GET, "order", FILTER_SANITIZE_STRING);
 
         if (!empty($_GET['order'])) {
             $orderBy = [$_GET["order"] => $_GET["tipo"]];
             try {
-                $productos = $productoModel->findAll($orderBy);
+                $pedidos = $pedidoModel->findAll($orderBy);
             } catch (Exception $e) {
                 $errors[] = $e->getMessage();
             }
@@ -119,9 +98,42 @@ class BackController extends Controller
 
         $message = App::get("flash")::get("message");
 
-        return $this->response->renderView("back-productos", "default", compact('title', 'productos',
-            'ProductoModel', 'errors', 'router', 'message'));
+        return $this->response->renderView("back/back-pedidos", "back");
+
     }
+    public function backUsuarios(): string
+    {
+        $title = "BackOffice | Usuarios";
+        $errors = [];
+        $usuarioModel = App::getModel(UsuarioModel::class);
+        $usuarios = $usuarioModel->findAll();
+
+        $order = filter_input(INPUT_GET, "order", FILTER_SANITIZE_STRING);
+
+        if (!empty($_GET['order'])) {
+            $orderBy = [$_GET["order"] => $_GET["tipo"]];
+            try {
+                $usuarios = $usuarioModel->findAll($orderBy);
+            } catch (Exception $e) {
+                $errors[] = $e->getMessage();
+            }
+        }
+
+        $router = App::get(Router::class);
+
+        $message = App::get("flash")::get("message");
+
+
+        return $this->response->renderView("back/back-usuarios", "back", compact('title', 'usuarios',
+            'usuarioModel', 'errors', 'router', 'message'));
+
+    }
+
+    public function create(): string
+    {
+        return $this->response->renderView("productos-create-form", "back");
+    }
+
 
     /**
      * @return string
