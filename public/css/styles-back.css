@@ -40,6 +40,25 @@ li {
 
 }
 
+td {
+
+  border-bottom: 2px solid black;
+  margin: 0px;
+  font-weight: 600;
+
+
+}
+
+th {
+
+  padding: 5px;
+  border: 2px solid black;
+  background-color: rgb(150, 80, 108);
+  border-radius: 5px;
+  margin: 0px;
+
+}
+
 
 li a {
   display: block;
@@ -60,6 +79,9 @@ li a:hover {
   border: 2px solid black;
   width: 1300px;
   margin-top: 40px;
+  text-align: center;
+  font-size: 18px;
+  border-radius: 5px;
 
 
 }
@@ -70,6 +92,9 @@ li a:hover {
   border: 2px solid black;
   width: 1000px;
   margin-top: 40px;
+  text-align: center;
+  font-size: 18px;
+  border-radius: 5px;
 
 
 }
