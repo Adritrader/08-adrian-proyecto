@@ -4,11 +4,18 @@ namespace App\Controllers;
 
 use App\Core\App;
 use App\Core\Controller;
+use App\Core\Exception\ModelException;
 use App\Core\Router;
+use App\Entity\Movie;
+use App\Entity\Usuario;
+use App\Model\GenreModel;
+use App\Model\MovieModel;
 use App\Model\PedidoModel;
 use App\Model\ProductoModel;
 use App\Model\UsuarioModel;
+use App\Utils\MyLogger;
 use App\Utils\MyMail;
+use App\Utils\UploadedFile;
 use DateTime;
 use Exception;
 use PDOException;
@@ -129,9 +136,14 @@ class BackController extends Controller
 
     }
 
-    public function create(): string
+    public function createProducto(): string
     {
         return $this->response->renderView("productos-create-form", "back");
+    }
+
+    public function createUsuario(): string
+    {
+        return $this->response->renderView("usuarios-create-form", "back");
     }
 
 
@@ -183,6 +195,81 @@ class BackController extends Controller
 
     }
 
+
+    public function storeUsuario(): string
+    {
+        $errors = [];
+        $pdo = App::get("DB");
+
+        $nombre = filter_input(INPUT_POST, "nombre", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        $apellidos = filter_input(INPUT_POST, "apellidos", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        $telefono = filter_input(INPUT_POST, "telefono", FILTER_VALIDATE_INT);
+        $email = filter_input(INPUT_POST, "email", FILTER_VALIDATE_EMAIL);
+        $username = filter_input(INPUT_POST, "username");
+        $password = filter_input(INPUT_POST, "password");
+        $repitePassword = filter_input(INPUT_POST, "repitePassword");
+
+        if (empty($nombre)) {
+            $errors[] = "El nombre es obligatorio";
+        }
+        if (empty($apellidos)) {
+            $errors[] = "Los apellidos son obligatorios";
+        }
+
+        if (empty($telefono)) {
+            $errors[] = "El teléfono es obligatorio";
+        }
+
+        if (empty($email)) {
+            $errors[] = "El email es obligatorio";
+        }
+
+        if (empty($username)) {
+            $errors[] = "El username es obligatorio";
+        }
+
+        if (empty($password)) {
+            $errors[] = "El password es obligtorio";
+        }
+
+        if(empty($repitePassword)){
+
+            $errors[] = "Debe repetir el password";
+        }
+
+        if($repitePassword != $password){
+
+            $errors[] = "Debe introcir el mismo password";
+        }
+
+
+        if (empty($errors)) {
+            try {
+                $usuarioModel = new UsuarioModel($pdo);
+                $usuario = new Usuario();
+
+                $usuario->setNombre($nombre);
+                $usuario->setApellidos($apellidos);
+                $usuario->setTelefono($telefono);
+                $usuario->setEmail($email);
+                $usuario->setUsername($username);
+                $usuario->setPassword($password);
+
+                $usuarioModel->saveTransaction($usuario);
+                App::get(MyLogger::class)->info("Se ha creado un nuevo usuario");
+
+            } catch (PDOException | ModelException | Exception $e) {
+                $errors[] = "Error: " . $e->getMessage();
+            }
+        }
+
+        if (empty($errors)) {
+            App::get(Router::class)->redirect("back-usuarios");
+        }
+
+        return $this->response->renderView("usuarios-create", "back", compact(
+            "errors", "nombre"));
+    }
     /**
      * @return string
      * @throws \App\Core\Exception\ModelException

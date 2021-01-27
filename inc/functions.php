@@ -26,4 +26,19 @@ function generar_imagen_local(string $ruta, string $url, string $alt = "imagen",
     return $img;
 }
 
+function isActiveOption(string $opcion1, string $opcion2){
+
+
+    if($opcion1 === $opcion2) {
+
+        return "active";
+
+    } else {
+
+        return "";
+
+    }
+
+}
+
 

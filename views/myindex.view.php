@@ -1,4 +1,11 @@
-
+<div class="container-fluid">
+    <div class="row fila-ruta">
+        <div class="col-5 col-ruta">
+            <div><span>Estas aquí: </span><a href="/" class="active">Home</a></div>
+        </div>
+    </div>
+</div>
+</div>
 <main>
     <!-- Slideshow container -->
     <div class="container-fluid slideshow-container">

@@ -94,13 +94,14 @@
         <div class="container-fluid container-barra-nav">
             <div class="row barra-nav">
                 <div class="col-11 barra-nav-elementos">
-                    <a href="/" class="active">Home</a>
-                    <a href="/servicios">Servicios</a>
-                    <a href="/quienes-somos">Quiénes Somos</a>
-                    <a href="/galeria">Galería</a>
-                    <a href="/blog">Blog</a>
-                    <a href="/contacto">Contacto</a>
-                    <a href="/tienda">Tienda</a>
+                    <?php require_once '../inc/functions.php';?>
+                    <a class="<?=isActiveOption(trim($_SERVER['REQUEST_URI'],  "/"), "");?>" href="/">Home</a>
+                    <a class="<?=isActiveOption(trim($_SERVER['REQUEST_URI'],  "/"), "servicios");?>" href="/servicios">Servicios</a>
+                    <a class="<?=isActiveOption(trim($_SERVER['REQUEST_URI'],  "/"), "quienes-somos");?>" href="/quienes-somos">Quiénes Somos</a>
+                    <a class="<?=isActiveOption(trim($_SERVER['REQUEST_URI'],  "/"), "galeria");?>" href="/galeria">Galería</a>
+                    <a class="<?=isActiveOption(trim($_SERVER['REQUEST_URI'],  "/"), "blog");?>" href="/blog">Blog</a>
+                    <a class="<?=isActiveOption(trim($_SERVER['REQUEST_URI'],  "/"), "contacto");?>" href="/contacto">Contacto</a>
+                    <a class="<?=isActiveOption(trim($_SERVER['REQUEST_URI'],  "/"), "tienda");?>" href="/tienda">Tienda</a>
 
                     <?php
                     $user = App::get("user");
@@ -116,14 +117,7 @@
 
         <!-- Ruta -->
 
-        <div class="container-fluid">
-            <div class="row fila-ruta">
-                <div class="col-5 col-ruta">
-                    <div><span>Estas aquí: </span><a href="/" class="active">Home</a></div>
-                </div>
-            </div>
-        </div>
-    </div>
+
 
 
 </header>

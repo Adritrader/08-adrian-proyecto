@@ -54,12 +54,22 @@ li a:hover {
   color: white;
 }
 
-table {
+#tabla-productos {
+
+  padding: 10px;
+  border: 2px solid black;
+  width: 1300px;
+  margin-top: 40px;
+
+
+}
+
+#tabla-usuarios {
 
   padding: 10px;
   border: 2px solid black;
   width: 1000px;
-  margin-top: 5px;
+  margin-top: 40px;
 
 
 }
@@ -108,6 +118,12 @@ table {
   transition: 0s
 }
 
+.botones-form {
+
+  margin-top: 15px;
+
+}
+
 .col-calendario iframe {
 
   margin-left: 80px;
@@ -120,7 +136,11 @@ table {
   color: black;
   margin-top: 60px;
 
+}
 
+fila-tabla-producto {
+
+  display: flex;
 
 }
 
@@ -166,6 +186,13 @@ div.content {
 }
 
 .fila-inputs {
+
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+
+}
+.fila-inputs-productos {
 
   display: flex;
   flex-direction: row;
@@ -229,7 +256,7 @@ div.content {
   width: 300px;
   background-color: rgb(37, 36, 46);
   position: absolute;
-  height: 100%;
+  height: 200%;
 }
 
 .sidebar a {
@@ -265,6 +292,15 @@ div.content {
   width: 50px;
 
 }
+
+input[type=text] {
+
+  padding: 15px;
+  border: 3px solid rgb(109, 0, 63);
+
+}
+
+
 
 /* Style the search box inside the navigation bar */
 .topnav input[type=text] {

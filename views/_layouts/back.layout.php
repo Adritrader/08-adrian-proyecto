@@ -5,6 +5,7 @@
     <link rel="stylesheet" href="../css/calendar.css">
     <link rel="stylesheet" href="../css/styles.css">
     <link rel="stylesheet" href="../css/template-grid3.css">
+    <link rel="stylesheet" href="../css/formulario-reserva.css">
     <script src="https://kit.fontawesome.com/a076d05399.js"></script>
     <!--<script src="../js/calendar.js"></script>-->
     <title>BackOffice | Joan Bisquert Peluqueros</title>
@@ -18,7 +19,7 @@
                 <div class="container-fluid headerContainer">
                     <div class="row fila-header">
                         <div class="col-2 header-logo">
-                            <a href="back-reservas.html"><img class="logo" src="../images/design/logo-bueno.png"
+                            <a href="/back-index"><img class="logo" src="../images/design/logo-bueno.png"
                                                               alt="logo"></a>
                         </div>
                         <div class="col-1 navbar iconos-header">
@@ -48,21 +49,21 @@
     <div class="row navbar-vertical">
         <div class="col-12 col-navbar">
             <div class="sidebar">
-                <a href="/back-index"><i class="far fa-calendar-alt"></i>HOME</a>
-                <a href="/back-reservas"><i class="far fa-calendar-alt"></i>CALENDARIO RESERVAS</a>
-                <a href="/back-galeria"><i class="far fa-images"></i>GALERIA</a>
-                <a href="/back-blog"><i class="fab fa-blogger-b"></i>BLOG</a>
-                <a href="/back-productos" class="active"><i class="fas fa-store-alt"></i>TIENDA</a>
-                <a href="/back-pedidos"><i class="far fa-newspaper"></i>PEDIDOS</a>
-                <a href="/back-usuarios"><i class="fas fa-border-all"></i>USUARIOS</a>
+                <?php require_once '../inc/functions.php';?>
+                <a class="<?=isActiveOption(trim($_SERVER['REQUEST_URI'],  "/"), "back-index");?>" href="/back-index"><i class="far fa-calendar-alt"></i>HOME</a>
+                <a class="<?=isActiveOption(trim($_SERVER['REQUEST_URI'],  "/"), "back-reservas");?>" href="/back-reservas"><i class="far fa-calendar-alt"></i>CALENDARIO RESERVAS</a>
+                <a class="<?=isActiveOption(trim($_SERVER['REQUEST_URI'],  "/"), "back-galeria");?>" href="/back-galeria"><i class="far fa-images"></i>GALERIA</a>
+                <a class="<?=isActiveOption(trim($_SERVER['REQUEST_URI'],  "/"), "back-blog");?>"href="/back-blog"><i class="fab fa-blogger-b"></i>BLOG</a>
+                <a class="<?=isActiveOption(trim($_SERVER['REQUEST_URI'],  "/"), "back-productos");?>"href="/back-productos"><i class="fas fa-store-alt"></i>PRODUCTOS</a>
+                <a class="<?=isActiveOption(trim($_SERVER['REQUEST_URI'],  "/"), "back-pedidos");?>"href="/back-pedidos"><i class="far fa-newspaper"></i>PEDIDOS</a>
+                <a class="<?=isActiveOption(trim($_SERVER['REQUEST_URI'],  "/"), "back-usuarios");?>"href="/back-usuarios"><i class="fas fa-border-all"></i>USUARIOS</a>
             </div>
         </div>
     </div>
 
     <div class="row">
-        <div class="col-12">
             <?=$content?>
-        </div>
+
     </div>
 
 </main>
