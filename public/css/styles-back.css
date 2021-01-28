@@ -29,7 +29,7 @@ ul {
   height: 100%;
   /* Full height */
   position: relative;
-  display: sticky;
+
 }
 
 li {
@@ -166,6 +166,16 @@ li a:hover {
 fila-tabla-producto {
 
   display: flex;
+  flex-direction: row;
+  align-content: flex-end;
+
+}
+
+.col-buscar {
+
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
 
 }
 
@@ -178,6 +188,12 @@ fila-tabla-producto {
 .col-header {
 
   padding: 0 !important;
+
+}
+
+.col-buscar {
+
+  align-content: center;
 
 }
 
@@ -221,6 +237,7 @@ div.content {
 
   display: flex;
   flex-direction: row;
+  text-align: left;
   justify-content: center;
 
 }

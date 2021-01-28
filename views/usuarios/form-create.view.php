@@ -1,28 +1,54 @@
 <div class="container">
-        <div class="row fila-formulario">
-            <div class="col-6">
-                <form action="" method="post" enctype="multipart/form-data" novalidate>
-                    <fieldset>
-                        <legend>Datos Personales</legend>
-                        <label for="nombre"><span>Nombre<span class="required">*</span></span><input type="text"
-                                                                                                      class="input-field" name="nombre"></label>
-                        <label for="apellidos"><span>Apellidos <span class="required">*</span></span><input type="text"
-                                                                                                         class="input-field" name="apellidos"></label>
-                        <label for="telefono"><span>Telefono <span class="required">*</span></span><input type="text"
-                                                                                                        class="input-field" name="telefono"></label>
-                        <label for="email"><span>Email<span class="required">*</span></span><input type="email"
-                                                                                                    class="input-field" name="email"></label>
-                        <label for="username"><span>Username<span class="required">*</span></span><input type="email"
-                                                                                                    class="input-field" name="username"></label>
-                        <label for="password"><span>Password<span class="required">*</span></span><input type="text"
-                                                                                                       class="input-field" name="password"></label>
-                        <label for="repitePassword"><span>Repite Password<span class="required">*</span></span><input type="text"
-                                                                                                              class="input-field" name="repitePassword"></label>
+    <div class="row fila-formulario">
+        <div class="col-6 col-formulario">
 
-                    </fieldset>
-                    <button type="submit" class="button-two">Registrar</button>
-                </form>
-            </div>
+            <form class="form-style-3" action="" method="post" enctype="multipart/form-data" novalidate>
+                <fieldset>
+                    <div class="form-group">
+                        <label for="nombre">Nombre:</label>
+                        <input id="nombre" class="form-control" type="text" name="nombre" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="apellidos">Apellidos:</label>
+                        <input id="apellidos" type="text" name="apellidos" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="telefono">Telefono:</label>
+                        <input id="telefono" name="telefono" type="text" class="form-control rounded-0" rows="4">
+                    </div>
+                    <div class="form-group">
+                        <label for="telefono">Precio:</label>
+                        <input id="" class="form-control" type="text" name="precio" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email:</label>
+                        <input id="email" class="form-control" type="email" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="username">Username:</label>
+                        <input id="username" class="form-control" type="text" name="username" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password:</label>
+                        <input id="password" class="form-control" type="password" name="password" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="repitePassword">Repite Password:</label>
+                        <input id="repitePassword" class="form-control" type="password" name="repitePassword" required>
+                    </div>
+                    <div class="botones-form">
+                        <div class="form-group text-right">
+                            <button type="submit" class="button-two">Guardar</button>
+                            <a href="/back-productos"><button type="submit" class="button-two">Ir atrás</button></a>
+                        </div>
+                    </div>
+                </fieldset>
+            </form>
         </div>
     </div>
 </div>
+
+
+
+
+

@@ -75,7 +75,7 @@ $router->get("back-usuarios", "BackController", "backUsuarios");
 $router->get("productos", "BackController", "index", [], "producto_index", "ROLE_ADMIN");
 $router->post("productos", "BackController", "filter", [], "producto_filter", "ROLE_ADMIN");
 $router->get("productos/create", "BackController", "createProducto", [], "producto_create", "ROLE_ADMIN");
-$router->post("productos/create", "BackController", "store");
+$router->post("productos/create", "BackController", "storeProducto", [], "producto_store", "ROLE_ADMIN");
 $router->get("productos/:id/show", "BackController", "show",
     ["id" => "number"], "movies_show");
 $router->get("productos/delete", "BackController", "delete", [],"productos_delete", "ROLE_ADMIN");

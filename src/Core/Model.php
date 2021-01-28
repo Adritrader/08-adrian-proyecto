@@ -145,7 +145,7 @@ abstract class Model
             }
             // Com que en l'id no el sabem ja que és autonumèric l'obtenim amb lastInsertId() i li'l
             // passem a l'objecte que acabem d'inserir.
-            $entity->setId($this->pdo->lastInsertId());
+            $entity->setId((int)$this->pdo->lastInsertId());
             return true;
         }
         catch (Exception $e) {

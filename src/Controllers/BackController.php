@@ -8,6 +8,7 @@ use App\Core\Exception\ModelException;
 use App\Core\Router;
 use App\Entity\Movie;
 use App\Entity\Usuario;
+use App\Entity\Producto;
 use App\Model\GenreModel;
 use App\Model\MovieModel;
 use App\Model\PedidoModel;
@@ -237,7 +238,7 @@ class BackController extends Controller
             $errors[] = "Debe repetir el password";
         }
 
-        if($repitePassword != $password){
+        if($repitePassword !== $password){
 
             $errors[] = "Debe introcir el mismo password";
         }
@@ -254,6 +255,7 @@ class BackController extends Controller
                 $usuario->setEmail($email);
                 $usuario->setUsername($username);
                 $usuario->setPassword($password);
+                $usuario->setRole("ROLE_USER");
 
                 $usuarioModel->saveTransaction($usuario);
                 App::get(MyLogger::class)->info("Se ha creado un nuevo usuario");
@@ -268,6 +270,75 @@ class BackController extends Controller
         }
 
         return $this->response->renderView("usuarios-create", "back", compact(
+            "errors", "nombre"));
+    }
+
+    public function storeProducto(): string
+    {
+        $errors = [];
+        $pdo = App::get("DB");
+
+        $nombre = filter_input(INPUT_POST, "nombre", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        $categoria = filter_input(INPUT_POST, "categoria", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        $precio = filter_input(INPUT_POST, "precio", FILTER_VALIDATE_INT);
+        $descripcion = filter_input(INPUT_POST, "descripcion", FILTER_SANITIZE_SPECIAL_CHARS);
+        $imagen = "nofoto.jpg";
+
+        if (empty($nombre)) {
+            $errors[] = "El nombre es obligatorio";
+        }
+        if (empty($categoria)) {
+            $errors[] = "La categoria es obligatorios";
+        }
+
+        if (empty($precio)) {
+            $errors[] = "El precio es obligatorio";
+        }
+
+        if (empty($descripcion)) {
+            $errors[] = "La descripcion es obligatoria";
+        }
+
+        // Si hay errores no necesitamos subir la imagen
+        if (empty($errors)) {
+            try {
+                $uploadedFile = new UploadedFile("imagen", 2000 * 1024, ["image/jpeg", "image/jpg"]);
+                if ($uploadedFile->validate()) {
+                    $uploadedFile->save(Producto::IMAGEN_PATH);
+                    $imagen = $uploadedFile->getFileName();
+                }
+            } catch (Exception $exception) {
+                $errors[] = "Error uploading file ($exception)";
+            }
+        }
+
+
+        if (empty($errors)) {
+            try {
+                $productoModel = new ProductoModel($pdo);
+                $producto = new Producto();
+
+                $producto->setNombre($nombre);
+                $producto->setCategoria($categoria);
+                $producto->setDescripcion($descripcion);
+                $producto->setPrecio($precio);
+                $producto->setImagen($imagen);
+
+
+                $productoModel->saveTransaction($producto);
+                App::get(MyLogger::class)->info("Se ha creado un nuevo producto");
+
+            } catch (PDOException | ModelException | Exception $e) {
+                $errors[] = "Error: " . $e->getMessage();
+            }
+        }
+
+        if (empty($errors)) {
+
+            App::get(Router::class)->redirect("back-productos");
+        }
+
+        return $this->response->renderView("productos-create", "back", compact(
             "errors", "nombre"));
     }
     /**
