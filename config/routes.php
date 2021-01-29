@@ -6,7 +6,7 @@ $router->get("contact", "DefaultController", "contact");
 $router->post("contact", "DefaultController", "contact");
 $router->get("api/demo", "DefaultController", "demo");
 
-/* My routes */
+/* My routes Front-End */
 $router->get("", "MyController", "index");
 $router->get("servicios", "MyController", "servicios");
 $router->get("quienes-somos", "MyController", "quienesSomos");
@@ -76,17 +76,25 @@ $router->get("productos", "BackController", "index", [], "producto_index", "ROLE
 $router->post("productos", "BackController", "filter", [], "producto_filter", "ROLE_ADMIN");
 $router->get("productos/create", "BackController", "createProducto", [], "producto_create", "ROLE_ADMIN");
 $router->post("productos/create", "BackController", "storeProducto", [], "producto_store", "ROLE_ADMIN");
+$router->get("productos/:id/edit", "BackController", "editProducto", ["id" => "number"], "producto_edit", "ROLE_ADMIN");
+$router->post("productos/:id/edit", "BackController", "updateProducto", ["id" => "number"], "producto_update", "ROLE_ADMIN");
 $router->get("productos/:id/show", "BackController", "show",
     ["id" => "number"], "movies_show");
-$router->get("productos/delete", "BackController", "delete", [],"productos_delete", "ROLE_ADMIN");
+$router->get("productos/:id/delete", "BackController", "deleteProducto", ["id" => "number"],"productos_delete", "ROLE_ADMIN");
+$router->post("productos/delete", "BackController", "destroyProducto", [], "productos_destroy", "ROLE_ADMIN");
 
 
 /*BackOffice Pedidos routes */
 
 $router->get("pedidos", "BackController", "index", [], "pedidos_index", "ROLE_ADMIN");
-
-
-
+$router->post("pedidos", "BackController", "filter", [], "pedidos_filter", "ROLE_ADMIN");
+$router->get("pedidos/create", "BackController", "createPedido", [], "pedidos_create", "ROLE_ADMIN");
+$router->post("pedidos/create", "BackController", "storePedido", [], "pedidos_store", "ROLE_ADMIN");
+$router->get("movies/:id/edit", "MovieController", "edit", ["id" => "number"]);
+$router->post("movies/:id/edit", "MovieController", "edit", ["id" => "number"]);
+$router->get("pedidos/:id/show", "BackController", "showPedido",
+    ["id" => "number"], "pedidos_show");
+$router->get("pedidos/delete", "BackController", "deletePedido", [],"pedidos_delete", "ROLE_ADMIN");
 
 
 /* BackOffice Usuarios routes */
@@ -95,18 +103,21 @@ $router->get("usuarios", "BackController", "index", [], "usuarios_index", "ROLE_
 $router->post("usuarios", "BackController", "filter", [], "usuarios_filter", "ROLE_ADMIN");
 $router->get("usuarios/create", "BackController", "createUsuario", [], "usuarios_create", "ROLE_ADMIN");
 $router->post("usuarios/create", "BackController", "storeUsuario", [], "usuarios_store", "ROLE_ADMIN");
+$router->get("movies/:id/edit", "MovieController", "edit", ["id" => "number"]);
+$router->post("movies/:id/edit", "MovieController", "edit", ["id" => "number"]);
 $router->get("usuarios/:id/show", "BackController", "show",
     ["id" => "number"], "usuarios_show");
 $router->get("usuarios/delete", "BackController", "delete", [],"usuarios_delete", "ROLE_ADMIN");
 
 
-/*
-$router->get("movies/create", "MovieController", "create");
-$router->post("movies/create", "MovieController", "store");
+/* BackOffice Reservas routes */
 
+$router->get("registra", "BackController", "index", [], "registra_index", "ROLE_ADMIN");
+$router->post("registra", "BackController", "filter", [], "registra_filter", "ROLE_ADMIN");
+$router->get("registra/create", "BackController", "createRegistra", [], "registra_create", "ROLE_ADMIN");
+$router->post("registra/create", "BackController", "storeRegistra", [], "registra_store", "ROLE_ADMIN");
 $router->get("movies/:id/edit", "MovieController", "edit", ["id" => "number"]);
 $router->post("movies/:id/edit", "MovieController", "edit", ["id" => "number"]);
-
-$router->get("movies/:id/delete", "MovieController", "delete", ["id"=>"number"], "movies_delete");
-$router->post("movies/delete", "MovieController", "destroy", [],"movies_destroy");
-*/
+$router->get("registra/:id/show", "BackController", "show",
+    ["id" => "number"], "usuarios_show");
+$router->get("usuarios/delete", "BackController", "delete", [],"usuarios_delete", "ROLE_ADMIN");

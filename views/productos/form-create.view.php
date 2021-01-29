@@ -8,10 +8,12 @@
         <label for="nombre">Nombre:</label>
         <input id="nombre" class="form-control" type="text" name="nombre" required>
     </div>
-    <div class="form-group">
-        <label for="categoria">Categoria:</label>
-        <input id="categoria" type="text" name="categoria" class="form-control" required>
-    </div>
+        <select class="form-control" name="categoria" id="categoria">
+            <option id="tratamientos">Tratamientos</option>
+            <option id="champus">Champús</option>
+            <option id="acondicionador">Acondicionador</option>
+            <option id="accesorios">Accesorios</option>
+        </select>
     <div class="form-group">
         <label for="descripcion">Descripcion:</label>
         <textarea id="descripcion" name="descripcion" class="form-control rounded-0" rows="4"></textarea>

@@ -1,4 +1,5 @@
-<form action="<?php $_SERVER['PHP_SELF']; ?>" method="post" enctype="multipart/form-data" novalidate>
+<form class="form-style-3" action="<?php $_SERVER['PHP_SELF']; ?>" method="post" enctype="multipart/form-data" novalidate>
+    <fieldset>
     <input type="hidden" name="id" value="<?= $producto->getId() ?>">
     <div class="form-group">
         <label for="nombre">Nombre:</label>
@@ -6,10 +7,11 @@
     </div>
     <div class="form-group">
         <label for="categoria">Categoria</label>
-        <select class="form-control" name="categoria" id="categoria"
-        <?php foreach ($productos as $producto): ?>
-            <option value="<?=$producto->getId() ?>"><?=$producto->getCategoria() ?></option>
-        <?php endforeach; ?>
+        <select class="form-control" name="categoria" id="categoria">
+            <option id="tratamientos">Tratamientos</option>
+            <option id="champus">Champús</option>
+            <option id="acondicionador">Acondicionador</option>
+            <option id="accesorios">Accesorios</option>
         </select>
     </div>
     <div class="form-group">
@@ -26,7 +28,8 @@
         <input id="imagen" class="form-control" type="file" name="imagen" value="<?= $producto->getImagen() ?>" required>
         <small><?= $producto->getImagen() ?></small>
     </div>
+    </fieldset>
     <div class="form-group text-right">
-        <button type="submit" class="btn btn-primary">Guardar</button>
+        <button type="submit" class="button-two">Guardar</button>
     </div>
 </form>

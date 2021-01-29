@@ -15,7 +15,9 @@ class Response
      */
     public function renderView(string $view, string $layout = 'default', array $data = []): string {
 
+        //var_dump($data);
         extract($data);
+
 
         ob_start();
         require __DIR__ . "/../../views/$view.view.php";
