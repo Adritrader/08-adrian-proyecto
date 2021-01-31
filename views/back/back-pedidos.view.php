@@ -39,7 +39,7 @@
     </div>
     <?php if (empty($pedidos)) : ?>
 
-        <h3>No se ha encontrado ningún producto</h3>
+        <h3>No se ha encontrado ningún pedido</h3>
     <?php else: ?>
 
     <div class="container">
@@ -63,10 +63,10 @@
                     <td><?= $pedido->getEstado() ?></td>
                     <td><?= $pedido->getRealizaId()?></td>
                     <td><?= $pedido->getRealizaUsuarioId() ?></td>
-                    <td style="width: 140px"><a href="/productos/<?= $pedido->getId() ?>/edit">
+                    <td style="width: 140px"><a href="/pedidos/<?= $pedido->getId() ?>/edit">
                             <button type="button" class="btn btn-primary"><i class="fa fa-edit"></i></button>
                         </a>
-                        <a href="<?=$router->getUrl("productos_delete", ["id"=>$pedido->getId()]) ?>">
+                        <a href="<?=$router->getUrl("pedidos_delete", ["id"=>$pedido->getId()]) ?>">
                             <button type="button" class="btn btn-warning"><i class="fa fa-trash"></i></button>
                         </a>
                     </td>
