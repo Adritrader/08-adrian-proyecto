@@ -16,6 +16,7 @@ $router->get("reserva-cita", "MyController", "reservaCita");
 $router->get("contacto", "MyController", "contacto");
 $router->get("tienda", "MyController", "tienda");
 $router->get("signup", "MyController", "signup");
+$router->get("perfil", "MyController", "perfil");
 
 
 /* Movies routes
@@ -103,11 +104,12 @@ $router->get("usuarios", "BackController", "index", [], "usuarios_index", "ROLE_
 $router->post("usuarios", "BackController", "filter", [], "usuarios_filter", "ROLE_ADMIN");
 $router->get("usuarios/create", "BackController", "createUsuario", [], "usuarios_create", "ROLE_ADMIN");
 $router->post("usuarios/create", "BackController", "storeUsuario", [], "usuarios_store", "ROLE_ADMIN");
-$router->get("movies/:id/edit", "MovieController", "edit", ["id" => "number"]);
-$router->post("movies/:id/edit", "MovieController", "edit", ["id" => "number"]);
-$router->get("usuarios/:id/show", "BackController", "show",
+$router->get("usuarios/:id/edit", "UsuarioController", "editUsuario", ["id" => "number"],"usuarios_edit", "ROLE_ADMIN");
+$router->post("usuarios/:id/edit", "UsuarioController", "editUsuario", ["id" => "number"], "usuarios_update", "ROLE_ADMIN");
+$router->get("usuarios/:id/show", "BackController", "showUsuario",
     ["id" => "number"], "usuarios_show");
-$router->get("usuarios/delete", "BackController", "delete", [],"usuarios_delete", "ROLE_ADMIN");
+$router->get("usuarios/:id/delete", "UsuarioController", "deleteUsuario", ["id" => "number"],"usuarios_delete", "ROLE_ADMIN");
+$router->post("usuarios/delete", "UsuarioController", "destroyUsuario", [], "usuarios_destroy", "ROLE_ADMIN");
 
 
 /* BackOffice Reservas routes */

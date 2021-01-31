@@ -1,4 +1,4 @@
-<form action="<?php $_SERVER['PHP_SELF']; ?>" method="post" enctype="multipart/form-data" novalidate>
+<form class="form-style-3" action="<?php $_SERVER['PHP_SELF']; ?>" method="post" enctype="multipart/form-data" novalidate>
     <input type="hidden" name="id" value="<?= $usuario->getId() ?>">
     <div class="form-group">
         <label for="nombre">Nombre:</label>
@@ -9,7 +9,7 @@
         <input id="apellidos" class="form-control" type="text" name="apellidos" value="<?= $usuario->getApellidos() ?>" required>
     </div>
     <div class="form-group">
-        <label for="telefono">Apellidos:</label>
+        <label for="telefono">Telefono:</label>
         <input id="telefono" class="form-control" type="text" name="telefono" value="<?= $usuario->getTelefono() ?>" required>
     </div>
     <div class="form-group">

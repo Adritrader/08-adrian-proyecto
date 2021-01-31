@@ -17,10 +17,6 @@
                         <input id="telefono" name="telefono" type="text" class="form-control rounded-0" rows="4">
                     </div>
                     <div class="form-group">
-                        <label for="telefono">Precio:</label>
-                        <input id="" class="form-control" type="text" name="precio" required>
-                    </div>
-                    <div class="form-group">
                         <label for="email">Email:</label>
                         <input id="email" class="form-control" type="email" name="email" required>
                     </div>
@@ -39,7 +35,6 @@
                     <div class="botones-form">
                         <div class="form-group text-right">
                             <button type="submit" class="button-two">Guardar</button>
-                            <a href="/back-productos"><button type="submit" class="button-two">Ir atrás</button></a>
                         </div>
                     </div>
                 </fieldset>

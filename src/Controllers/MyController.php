@@ -90,6 +90,14 @@ class MyController extends Controller
 
     }
 
+    public function perfil(): string
+    {
+
+        return $this->response->renderView("perfil", "my");
+
+
+    }
+
     /**
      * @return string
      * @throws Exception

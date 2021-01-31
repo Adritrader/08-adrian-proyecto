@@ -72,6 +72,8 @@
                                aria-expanded="false" href="/logout" class="button-two">
                                 Log Out
                             </a>
+
+                            <a href="/perfil"><i class="fa fa-user">Perfil</i></a>
                     <?php else: ?>
 
                             <a id="bd-versions" aria-haspopup="false"

@@ -8,6 +8,8 @@ use App\Core\Controller;
 use App\Core\Exception\ModelException;
 use App\Core\Exception\NotFoundException;
 use App\Core\Router;
+
+use App\Entity\Producto;
 use App\Exception\UploadedFileException;
 use App\Exception\UploadedFileNoFileException;
 use App\Model\ProductoModel;
@@ -29,6 +31,28 @@ class ProductoController extends Controller {
     public function index(): string
     {
 
+        $title = "BackOffice | Productos";
+        $errors = [];
+        $productoModel = App::getModel(ProductoModel::class);
+        $productos = $productoModel->findAll();
+
+        $order = filter_input(INPUT_GET, "order", FILTER_SANITIZE_STRING);
+
+        if (!empty($_GET['order'])) {
+            $orderBy = [$_GET["order"] => $_GET["tipo"]];
+            try {
+                $productos = $productoModel->findAll($orderBy);
+            } catch (Exception $e) {
+                $errors[] = $e->getMessage();
+            }
+        }
+
+        $router = App::get(Router::class);
+
+        $message = App::get("flash")::get("message");
+
+        return $this->response->renderView("back/back-productos", "back", compact('title', 'productos',
+            'productoModel', 'errors', 'router', 'message'));
 
     }
 
@@ -36,7 +60,7 @@ class ProductoController extends Controller {
      * @return string
      * @throws ModelException
      */
-    public function filter(): string
+    public function filterProducto(): string
     {
         // S'executa amb el POST
         $title = "BackOffice | Productos";
@@ -75,56 +99,143 @@ class ProductoController extends Controller {
             'productoModel', 'errors', 'router'));
     }
 
-    /**
-     * @return string
-     * @throws Exception
-     */
-    public function create(): string
-    {
-        $genreModel = new GenreModel(App::get("DB"));
-        $genres = $genreModel->findAll(["name" => "ASC"]);
-
-        return $this->response->renderView("movies-create-form", "default", compact("genres"));
-    }
 
     /**
      * @return string
      * @throws Exception
      */
-    public function store(): string
+    public function storeProducto(): string
     {
         $errors = [];
         $pdo = App::get("DB");
 
-        /*
-        $genreModel = new GenreModel($pdo);
-        $genres = $genreModel->findAll(["name" => "ASC"]);
-        */
+        $nombre = filter_input(INPUT_POST, "nombre", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        $categoria = filter_input(INPUT_POST, "categoria", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        $precio = filter_input(INPUT_POST, "precio", FILTER_VALIDATE_INT);
+        $descripcion = filter_input(INPUT_POST, "descripcion", FILTER_SANITIZE_SPECIAL_CHARS);
+        $imagen = "nofoto.jpg";
 
-        $title = filter_input(INPUT_POST, "title", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-        $overview = filter_input(INPUT_POST, "overview", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-        $tagline = filter_input(INPUT_POST, "tagline", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-        $genre_id = filter_input(INPUT_POST, "genre_id", FILTER_VALIDATE_INT);
-        $filename = "nofoto.jpg";
-        if (empty($title)) {
-            $errors[] = "The name is mandatory";
+        if (empty($nombre)) {
+            $errors[] = "El nombre es obligatorio";
         }
-        if (empty($overview)) {
-            $errors[] = "The overview is mandatory";
+        if (empty($categoria)) {
+            $errors[] = "La categoria es obligatorios";
         }
 
-        $releaseDate = DateTime::createFromFormat("Y-m-d", $_POST["release_date"]);
-        if (empty($releaseDate)) {
-            $errors[] = "The release date is mandatory";
+        if (empty($precio)) {
+            $errors[] = "El precio es obligatorio";
         }
 
-        // If there are errors we don't need to upload the poster.
+        if (empty($descripcion)) {
+            $errors[] = "La descripcion es obligatoria";
+        }
+
+        // Si hay errores no necesitamos subir la imagen
         if (empty($errors)) {
             try {
-                $uploadedFile = new UploadedFile("poster", 2000 * 1024, ["image/jpeg", "image/jpg"]);
+                $uploadedFile = new UploadedFile("imagen", 2000 * 1024, ["image/jpeg", "image/jpg"]);
                 if ($uploadedFile->validate()) {
-                    $uploadedFile->save(Movie::POSTER_PATH, uniqid("MOV"));
-                    $filename = $uploadedFile->getFileName();
+                    $uploadedFile->save(Producto::IMAGEN_PATH);
+                    $imagen = $uploadedFile->getFileName();
+                }
+            } catch (Exception $exception) {
+                $errors[] = "Error uploading file ($exception)";
+            }
+        }
+
+
+        if (empty($errors)) {
+            try {
+                $productoModel = new ProductoModel($pdo);
+                $producto = new Producto();
+
+                $producto->setNombre($nombre);
+                $producto->setCategoria($categoria);
+                $producto->setDescripcion($descripcion);
+                $producto->setPrecio($precio);
+                $producto->setImagen($imagen);
+
+
+                $productoModel->saveTransaction($producto);
+                App::get(MyLogger::class)->info("Se ha creado un nuevo producto");
+
+            } catch (PDOException | ModelException | Exception $e) {
+                $errors[] = "Error: " . $e->getMessage();
+            }
+        }
+
+        if (empty($errors)) {
+
+            App::get(Router::class)->redirect("back-productos");
+        }
+
+        return $this->response->renderView("productos-create", "back", compact(
+            "errors", "nombre"));
+    }
+
+    public function showProducto(int $id): string
+    {
+        $errors = [];
+        if (!empty($id)) {
+            try {
+                $productoModel = new MovieModel(App::get("DB"));
+                $producto = $productoModel->find($id);
+                $nombre = $producto->getNombre() . " (" . $producto->getDescripcion();
+                return $this->response->renderView("single-page", "back", compact(
+                    "errors", "prodcuto"));
+
+            } catch (NotFoundException $notFoundException) {
+                $errors[] = $notFoundException->getMessage();
+            }
+        }
+        else
+            return $this->response->renderView("single-page", "back", compact(
+                "errors"));
+
+        return "";
+    }
+
+    public function updateProducto(int $id): string
+    {
+        $isGetMethod = true;
+        $errors = [];
+
+        $id = filter_input(INPUT_POST, "id", FILTER_VALIDATE_INT);
+        if (empty($id)) {
+            $errors[] = "Wrong ID";
+        }
+
+        $errors = [];
+        $pdo = App::get("DB");
+
+        $nombre = filter_input(INPUT_POST, "nombre", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        $categoria = filter_input(INPUT_POST, "categoria", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        $precio = filter_input(INPUT_POST, "precio", FILTER_VALIDATE_INT);
+        $descripcion = filter_input(INPUT_POST, "descripcion", FILTER_SANITIZE_SPECIAL_CHARS);
+        $imagen = "nofoto.jpg";
+
+        if (empty($nombre)) {
+            $errors[] = "El nombre es obligatorio";
+        }
+        if (empty($categoria)) {
+            $errors[] = "La categoria es obligatorios";
+        }
+
+        if (empty($precio)) {
+            $errors[] = "El precio es obligatorio";
+        }
+
+        if (empty($descripcion)) {
+            $errors[] = "La descripcion es obligatoria";
+        }
+
+        // Si hay errores no necesitamos subir la imagen
+        if (empty($errors)) {
+            try {
+                $uploadedFile = new UploadedFile("imagen", 2000 * 1024, ["image/jpeg", "image/jpg"]);
+                if ($uploadedFile->validate()) {
+                    $uploadedFile->save(Producto::IMAGEN_PATH);
+                    $imagen = $uploadedFile->getFileName();
                 }
             } catch (Exception $exception) {
                 $errors[] = "Error uploading file ($exception)";
@@ -133,118 +244,36 @@ class ProductoController extends Controller {
 
         if (empty($errors)) {
             try {
-                $movieModel = new MovieModel($pdo);
-                $movie = new Movie();
-
-                $movie->setTitle($title);
-                $movie->setOverview($overview);
-                $movie->setReleaseDate($releaseDate);
-                $movie->setTagline($tagline);
-                $movie->setPoster($filename);
-                $movie->setGenreId($genre_id);
-
-                $movieModel->saveTransaction($movie);
-                App::get(MyLogger::class)->info("S'ha creat una nova pel·lícula");
-
-            } catch (PDOException | ModelException | Exception $e) {
-                $errors[] = "Error: " . $e->getMessage();
+                $productoModel = App::getModel(ProductoModel::class);
+                // getting the partner by its identifier
+                $producto = $productoModel->find($id);
+                $producto->setNombre($nombre);
+                $producto->setCategoria($categoria);
+                $producto->setDescripcion($descripcion);
+                $producto->setPrecio($precio);
+                $producto->setImagen($imagen);
+                // updating changes
+                $productoModel->update($producto);
+            } catch (Exception $e) {
+                $errors[] = 'Error: ' . $e->getMessage();
             }
         }
-
-        if (empty($errors)) {
-            App::get(Router::class)->redirect("movies");
-        }
-
-        return $this->response->renderView("movies-create", "default", compact(
-            "errors", "genres"));
+        return $this->response->renderView("productos-edit", "back", compact(
+            "errors", "isGetMethod", "producto"));
     }
 
-    /**
-     * @param int $id
-     * @return string
-     * @throws Exception
-     */
-    public function delete(int $id): string
-    {
-        $errors = [];
-        $movie = null;
-        $movieModel = App::getModel(MovieModel::class);
-
-        if (empty($id)) {
-            $errors[] = '404 Not Found';
-        } else {
-            try {
-                $movie = $movieModel->find($id);
-            } catch (NotFoundException $e) {
-                $errors[] = '404 Movie Not Found';
-            }
-        }
-
-        $router = App::get(Router::class);
-        $moviesPath = App::get("config")["posters_path"];
-
-        return $this->response->renderView("movies-delete", "default", compact(
-            "errors", "movie", 'moviesPath', 'router'));
-    }
-
-    /**
-     * @return string
-     * @throws ModelException
-     * @throws NotFoundException
-     */
-    public function destroy(): string
-    {
-        $errors = [];
-        $movieModel = App::getModel(MovieModel::class);
-        $movie = null;
-
-        $id = filter_input(INPUT_POST, "id", FILTER_VALIDATE_INT);
-        if (empty($id)) {
-            $errors[] = '404 Not Found';
-        } else {
-            $movie = $movieModel->find($id);
-        }
-        $userAnswer = filter_input(INPUT_POST, "userAnswer");
-        if ($userAnswer === 'yes') {
-            if (empty($errors)) {
-                try {
-                    $movie = $movieModel->find($id);
-                    $result = $movieModel->delete($movie);
-                } catch (PDOException $e) {
-                    $errors[] = "Error: " . $e->getMessage();
-                }
-            }
-        }
-        else
-            App::get(Router::class)->redirect('movies');
-
-        if (empty($errors))
-            App::get(Router::class)->redirect('movies');
-        else
-            return $this->response->renderView("movies-destroy", "default",
-                compact("errors", "movie"));
-
-        return "";
-    }
-
-    /**
-     * @param int $id
-     * @return string
-     * @throws ModelException
-     * @throws NotFoundException
-     */
-
-    public function edit(int $id): string
+    public function editProducto(int $id): string
     {
         $isGetMethod = true;
         $errors = [];
-        $movieModel = App::getModel(MovieModel::class);
-        $movie = null;
+        $productoModel = App::getModel(ProductoModel::class);
+        $producto = null;
 
         if (empty($id)) {
             $errors[] = '404 Not Found';
         } else {
-            $movie = $movieModel->find($id);
+            $producto = $productoModel->find($id);
+
         }
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -255,24 +284,27 @@ class ProductoController extends Controller {
                 $errors[] = "Wrong ID";
             }
 
-            $title = filter_input(INPUT_POST, "title", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-            if (empty($title)) {
-                $errors[] = "The title is mandatory";
+            $nombre = filter_input(INPUT_POST, "nombre", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+            $categoria = filter_input(INPUT_POST, "categoria", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+            $precio = filter_input(INPUT_POST, "precio", FILTER_VALIDATE_INT);
+            $descripcion = filter_input(INPUT_POST, "descripcion", FILTER_SANITIZE_SPECIAL_CHARS);
+            $imagen = "nofoto.jpg";
+
+            if (empty($nombre)) {
+                $errors[] = "El nombre es obligatorio";
+            }
+            if (empty($categoria)) {
+                $errors[] = "La categoria es obligatorios";
             }
 
-            $overview = filter_input(INPUT_POST, "overview", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-            if (empty($overview)) {
-                $errors[] = "The overview is mandatory";
+            if (empty($precio)) {
+                $errors[] = "El precio es obligatorio";
             }
 
-            $tagline = filter_input(INPUT_POST, "tagline", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-
-            $releaseDate = DateTime::createFromFormat("Y-m-d", $_POST["release_date"]);
-            if (empty($releaseDate)) {
-                $errors[] = "The release date is mandatory";
+            if (empty($descripcion)) {
+                $errors[] = "La descripcion es obligatoria";
             }
-
-            $poster = filter_input(INPUT_POST, "poster");
+            $imagen = filter_input(INPUT_POST, "imagen");
 
 
             if (empty($errors)) {
@@ -281,7 +313,7 @@ class ProductoController extends Controller {
                     $image = new UploadedFile('poster', 300000, ['image/jpg', 'image/jpeg']);
                     if ($image->validate()) {
                         $image->save(Movie::POSTER_PATH);
-                        $poster = $image->getFileName();
+                        $imagen = $image->getFileName();
                     }
                     //Al estar editando no nos interesa que se muestre este error ya que puede ser que no suba archivo
                 } catch (UploadedFileNoFileException $uploadFileNoFileException) {
@@ -294,16 +326,16 @@ class ProductoController extends Controller {
             if (empty($errors)) {
                 try {
                     // Instead of creating a new object we load the current data object.
-                    $movie = $movieModel->find($id);
+                    $producto = $productoModel->find($id);
 
                     //then we set the new values
-                    $movie->setTitle($title);
-                    $movie->setOverview($overview);
-                    $movie->setReleaseDate($releaseDate);
-                    $movie->setTagline($tagline);
-                    $movie->setPoster($poster);
+                    $producto->setNombre($nombre);
+                    $producto->setCategoria($categoria);
+                    $producto->setDescripcion($descripcion);
+                    $producto->setPrecio($precio);
+                    $producto->setImagen($imagen);;
 
-                    $movieModel->update($movie);
+                    $producto->update($producto);
 
                 } catch (PDOException $e) {
                     $errors[] = "Error: " . $e->getMessage();
@@ -311,33 +343,69 @@ class ProductoController extends Controller {
             }
         }
 
-        return $this->response->renderView("movies-edit", "default", compact("isGetMethod",
-            "errors", "movie"));
+        return $this->response->renderView("productos-edit", "back", compact(
+            "errors", "isGetMethod", "producto"));
+    }
+
+    public function deleteProducto(int $id): string
+    {
+        $errors = [];
+        $producto = null;
+        $productoModel = App::getModel(ProductoModel::class);
+
+        if (empty($id)) {
+            $errors[] = '404 Not Found';
+        } else {
+            try {
+                $producto = $productoModel->find($id);
+            } catch (NotFoundException $e) {
+                $errors[] = '404 Movie Not Found';
+            }
+        }
+
+        $router = App::get(Router::class);
+        $productosPath = App::get("config")["imagen_path"];
+
+        return $this->response->renderView("productos-delete", "back", compact(
+            "errors", "producto", 'productosPath', 'router'));
     }
 
     /**
-     * @param int $id
      * @return string
-     * @throws Exception
+     * @throws ModelException
+     * @throws NotFoundException
      */
-    public function show(int $id): string
+    public function destroyProducto(): string
     {
         $errors = [];
-        if (!empty($id)) {
-            try {
-                $movieModel = new MovieModel(App::get("DB"));
-                $movie = $movieModel->find($id);
-                $title = $movie->getTitle() . " (" . $movie->getReleaseDate()->format("Y") . ") - Movie FX";
-                return $this->response->renderView("single-page", "default", compact(
-                    "errors", "movie"));
+        $productoModel = App::getModel(ProductoModel::class);
+        $producto = null;
 
-            } catch (NotFoundException $notFoundException) {
-                $errors[] = $notFoundException->getMessage();
+        $id = filter_input(INPUT_POST, "id", FILTER_VALIDATE_INT);
+        if (empty($id)) {
+            $errors[] = '404 Not Found';
+        } else {
+            $producto = $productoModel->find($id);
+        }
+        $userAnswer = filter_input(INPUT_POST, "userAnswer");
+        if ($userAnswer === 'yes') {
+            if (empty($errors)) {
+                try {
+                    $producto = $productoModel->find($id);
+                    $result = $productoModel->delete($producto);
+                } catch (PDOException $e) {
+                    $errors[] = "Error: " . $e->getMessage();
+                }
             }
         }
         else
-            return $this->response->renderView("single-page", "default", compact(
-                "errors"));
+            App::get(Router::class)->redirect('back-productos');
+
+        if (empty($errors))
+            App::get(Router::class)->redirect('back-productos');
+        else
+            return $this->response->renderView("productos-destroy", "back",
+                compact("errors", "id", "producto"));
 
         return "";
     }

@@ -8,15 +8,13 @@ use App\Core\Controller;
 use App\Core\Exception\ModelException;
 use App\Core\Exception\NotFoundException;
 use App\Core\Router;
-use App\Entity\Movie;
-use App\Exception\UploadedFileException;
-use App\Exception\UploadedFileNoFileException;
+use App\Entity\Usuario;
 use App\Model\GenreModel;
 use App\Model\MovieModel;
 use App\Core\App;
 use App\Core\Security;
+use App\Model\UsuarioModel;
 use App\Utils\MyLogger;
-use App\Utils\UploadedFile;
 use DateTime;
 use Exception;
 use PDOException;
@@ -34,30 +32,29 @@ class UsuarioController extends Controller
     public function index(): string
     {
 
-        if (!Security::isAuthenticatedUser())
-            App::get(Router::class)->redirect('login');
-
-        $title = "Movies - Movie FX";
+        $title = "BackOffice | Usuarios";
         $errors = [];
-        $movieModel = new MovieModel(App::get("DB"));
-        $movies = $movieModel->findAll();
+        $usuarioModel = App::getModel(UsuarioModel::class);
+        $usuarios = $usuarioModel->findAll();
 
         $order = filter_input(INPUT_GET, "order", FILTER_SANITIZE_STRING);
 
         if (!empty($_GET['order'])) {
             $orderBy = [$_GET["order"] => $_GET["tipo"]];
             try {
-                $movies = $movieModel->findAll($orderBy);
+                $usuarios = $usuarioModel->findAll($orderBy);
             } catch (Exception $e) {
                 $errors[] = $e->getMessage();
             }
         }
+
         $router = App::get(Router::class);
 
         $message = App::get("flash")::get("message");
 
-        return $this->response->renderView("movies", "default", compact('title', 'movies',
-            'movieModel', 'errors', 'router', 'message'));
+
+        return $this->response->renderView("back/back-usuarios", "back", compact('title', 'usuarios',
+            'usuarioModel', 'errors', 'router', 'message'));
     }
 
     /**
@@ -119,57 +116,68 @@ class UsuarioController extends Controller
      * @return string
      * @throws Exception
      */
-    public function store(): string
+    public function storeUsuario(): string
     {
         $errors = [];
         $pdo = App::get("DB");
-        $genreModel = new GenreModel($pdo);
-        $genres = $genreModel->findAll(["name" => "ASC"]);
 
-        $title = filter_input(INPUT_POST, "title", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-        $overview = filter_input(INPUT_POST, "overview", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-        $tagline = filter_input(INPUT_POST, "tagline", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-        $genre_id = filter_input(INPUT_POST, "genre_id", FILTER_VALIDATE_INT);
-        $filename = "nofoto.jpg";
-        if (empty($title)) {
-            $errors[] = "The name is mandatory";
-        }
-        if (empty($overview)) {
-            $errors[] = "The overview is mandatory";
-        }
+        $nombre = filter_input(INPUT_POST, "nombre", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        $apellidos = filter_input(INPUT_POST, "apellidos", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        $telefono = filter_input(INPUT_POST, "telefono", FILTER_VALIDATE_INT);
+        $email = filter_input(INPUT_POST, "email", FILTER_VALIDATE_EMAIL);
+        $username = filter_input(INPUT_POST, "username");
+        $password = filter_input(INPUT_POST, "password");
+        $repitePassword = filter_input(INPUT_POST, "repitePassword");
 
-        $releaseDate = DateTime::createFromFormat("Y-m-d", $_POST["release_date"]);
-        if (empty($releaseDate)) {
-            $errors[] = "The release date is mandatory";
+        if (empty($nombre)) {
+            $errors[] = "El nombre es obligatorio";
+        }
+        if (empty($apellidos)) {
+            $errors[] = "Los apellidos son obligatorios";
         }
 
-        // If there are errors we don't need to upload the poster.
+        if (empty($telefono)) {
+            $errors[] = "El teléfono es obligatorio";
+        }
+
+        if (empty($email)) {
+            $errors[] = "El email es obligatorio";
+        }
+
+        if (empty($username)) {
+            $errors[] = "El username es obligatorio";
+        }
+
+        if (empty($password)) {
+            $errors[] = "El password es obligtorio";
+        }
+
+        if(empty($repitePassword)){
+
+            $errors[] = "Debe repetir el password";
+        }
+
+        if($repitePassword !== $password){
+
+            $errors[] = "Debe introcir el mismo password";
+        }
+
+
         if (empty($errors)) {
             try {
-                $uploadedFile = new UploadedFile("poster", 2000 * 1024, ["image/jpeg", "image/jpg"]);
-                if ($uploadedFile->validate()) {
-                    $uploadedFile->save(Movie::POSTER_PATH, uniqid("MOV"));
-                    $filename = $uploadedFile->getFileName();
-                }
-            } catch (Exception $exception) {
-                $errors[] = "Error uploading file ($exception)";
-            }
-        }
+                $usuarioModel = new UsuarioModel($pdo);
+                $usuario = new Usuario();
 
-        if (empty($errors)) {
-            try {
-                $movieModel = new MovieModel($pdo);
-                $movie = new Movie();
+                $usuario->setNombre($nombre);
+                $usuario->setApellidos($apellidos);
+                $usuario->setTelefono($telefono);
+                $usuario->setEmail($email);
+                $usuario->setUsername($username);
+                $usuario->setPassword($password);
+                $usuario->setRole("ROLE_USER");
 
-                $movie->setTitle($title);
-                $movie->setOverview($overview);
-                $movie->setReleaseDate($releaseDate);
-                $movie->setTagline($tagline);
-                $movie->setPoster($filename);
-                $movie->setGenreId($genre_id);
-
-                $movieModel->saveTransaction($movie);
-                App::get(MyLogger::class)->info("S'ha creat una nova pel·lícula");
+                $usuarioModel->saveTransaction($usuario);
+                App::get(MyLogger::class)->info("Se ha creado un nuevo usuario");
 
             } catch (PDOException | ModelException | Exception $e) {
                 $errors[] = "Error: " . $e->getMessage();
@@ -177,11 +185,11 @@ class UsuarioController extends Controller
         }
 
         if (empty($errors)) {
-            App::get(Router::class)->redirect("movies");
+            App::get(Router::class)->redirect("back-usuarios");
         }
 
-        return $this->response->renderView("movies-create", "default", compact(
-            "errors", "genres"));
+        return $this->response->renderView("usuarios-create", "back", compact(
+            "errors", "nombre"));
     }
 
     /**
@@ -189,87 +197,102 @@ class UsuarioController extends Controller
      * @return string
      * @throws Exception
      */
-    public function delete(int $id): string
-    {
-        $errors = [];
-        $movie = null;
-        $movieModel = App::getModel(MovieModel::class);
-
-        if (empty($id)) {
-            $errors[] = '404 Not Found';
-        } else {
-            try {
-                $movie = $movieModel->find($id);
-            } catch (NotFoundException $e) {
-                $errors[] = '404 Movie Not Found';
-            }
-        }
-
-        $router = App::get(Router::class);
-        $moviesPath = App::get("config")["posters_path"];
-
-        return $this->response->renderView("movies-delete", "default", compact(
-            "errors", "movie", 'moviesPath', 'router'));
-    }
-
-    /**
-     * @return string
-     * @throws ModelException
-     * @throws NotFoundException
-     */
-    public function destroy(): string
-    {
-        $errors = [];
-        $movieModel = App::getModel(MovieModel::class);
-        $movie = null;
-
-        $id = filter_input(INPUT_POST, "id", FILTER_VALIDATE_INT);
-        if (empty($id)) {
-            $errors[] = '404 Not Found';
-        } else {
-            $movie = $movieModel->find($id);
-        }
-        $userAnswer = filter_input(INPUT_POST, "userAnswer");
-        if ($userAnswer === 'yes') {
-            if (empty($errors)) {
-                try {
-                    $movie = $movieModel->find($id);
-                    $result = $movieModel->delete($movie);
-                } catch (PDOException $e) {
-                    $errors[] = "Error: " . $e->getMessage();
-                }
-            }
-        }
-        else
-            App::get(Router::class)->redirect('movies');
-
-        if (empty($errors))
-            App::get(Router::class)->redirect('movies');
-        else
-            return $this->response->renderView("movies-destroy", "default",
-                compact("errors", "movie"));
-
-        return "";
-    }
-
-    /**
-     * @param int $id
-     * @return string
-     * @throws ModelException
-     * @throws NotFoundException
-     */
-
-    public function edit(int $id): string
+    public function updateUsuario(int $id): string
     {
         $isGetMethod = true;
         $errors = [];
-        $movieModel = App::getModel(MovieModel::class);
-        $movie = null;
+
+        $id = filter_input(INPUT_POST, "id", FILTER_VALIDATE_INT);
+        if (empty($id)) {
+            $errors[] = "Wrong ID";
+        }
+
+        $errors = [];
+        $pdo = App::get("DB");
+
+        $nombre = filter_input(INPUT_POST, "nombre", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        $apellidos = filter_input(INPUT_POST, "apellidos", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        $telefono = filter_input(INPUT_POST, "telefono", FILTER_VALIDATE_INT);
+        $email = filter_input(INPUT_POST, "email", FILTER_VALIDATE_EMAIL);
+        $username = filter_input(INPUT_POST, "username");
+        $password = filter_input(INPUT_POST, "password");
+        $repitePassword = filter_input(INPUT_POST, "repitePassword");
+
+        if (empty($nombre)) {
+            $errors[] = "El nombre es obligatorio";
+        }
+        if (empty($apellidos)) {
+            $errors[] = "Los apellidos son obligatorios";
+        }
+
+        if (empty($telefono)) {
+            $errors[] = "El teléfono es obligatorio";
+        }
+
+        if (empty($email)) {
+            $errors[] = "El email es obligatorio";
+        }
+
+        if (empty($username)) {
+            $errors[] = "El username es obligatorio";
+        }
+
+        if (empty($password)) {
+            $errors[] = "El password es obligtorio";
+        }
+
+        if(empty($repitePassword)){
+
+            $errors[] = "Debe repetir el password";
+        }
+
+        if($repitePassword !== $password){
+
+            $errors[] = "Debe introcir el mismo password";
+        }
+
+        if (empty($errors)) {
+
+            try {
+
+                $usuarioModel = App::getModel(UsuarioModel::class);
+                // getting the partner by its identifier
+                $usuario = $usuarioModel->find($id);
+                $usuario->setNombre($nombre);
+                $usuario->setApellidos($apellidos);
+                $usuario->setTelefono($telefono);
+                $usuario->setEmail($email);
+                $usuario->setUsername($username);
+                $usuario->setPassword($password);
+                $usuario->setRole("ROLE_USER");
+
+
+
+
+                // updating changes
+                $usuarioModel->update($usuario);
+            } catch (Exception $e) {
+                $errors[] = 'Error: ' . $e->getMessage();
+            }
+        }
+        return $this->response->renderView("usuarios-edit", "back", compact(
+            "errors", "isGetMethod", "usuario"));
+    }
+
+
+
+    public function editUsuario(int $id): string
+    {
+        $isGetMethod = true;
+        $errors = [];
+        $usuarioModel = App::getModel(UsuarioModel::class);
+        $usuario = null;
 
         if (empty($id)) {
-            $errors[] = '404 Not Found';
+            $errors[] = '404 No encontrado';
         } else {
-            $movie = $movieModel->find($id);
+            $usuario = $usuarioModel->find($id);
+
         }
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -277,58 +300,62 @@ class UsuarioController extends Controller
 
             $id = filter_input(INPUT_POST, "id", FILTER_VALIDATE_INT);
             if (empty($id)) {
-                $errors[] = "Wrong ID";
+                $errors[] = "ID Erronea";
             }
 
-            $title = filter_input(INPUT_POST, "title", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-            if (empty($title)) {
-                $errors[] = "The title is mandatory";
+            $nombre = filter_input(INPUT_POST, "nombre", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+            $apellidos = filter_input(INPUT_POST, "apellidos", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+            $telefono = filter_input(INPUT_POST, "telefono", FILTER_VALIDATE_INT);
+            $email = filter_input(INPUT_POST, "email", FILTER_VALIDATE_EMAIL);
+            $username = filter_input(INPUT_POST, "username");
+
+            if (empty($nombre)) {
+                $errors[] = "El nombre es obligatorio";
+            }
+            if (empty($apellidos)) {
+                $errors[] = "Los apellidos son obligatorios";
             }
 
-            $overview = filter_input(INPUT_POST, "overview", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-            if (empty($overview)) {
-                $errors[] = "The overview is mandatory";
+            if (empty($telefono)) {
+                $errors[] = "El teléfono es obligatorio";
             }
 
-            $tagline = filter_input(INPUT_POST, "tagline", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-
-            $releaseDate = DateTime::createFromFormat("Y-m-d", $_POST["release_date"]);
-            if (empty($releaseDate)) {
-                $errors[] = "The release date is mandatory";
+            if (empty($email)) {
+                $errors[] = "El email es obligatorio";
             }
 
-            $poster = filter_input(INPUT_POST, "poster");
+            if (empty($username)) {
+                $errors[] = "El username es obligatorio";
+            }
 
+            if (empty($password)) {
+                $errors[] = "El password es obligtorio";
+            }
 
-            if (empty($errors)) {
-                //Gestion de la imagen si se ha subido
-                try {
-                    $image = new UploadedFile('poster', 300000, ['image/jpg', 'image/jpeg']);
-                    if ($image->validate()) {
-                        $image->save(Movie::POSTER_PATH);
-                        $poster = $image->getFileName();
-                    }
-                    //Al estar editando no nos interesa que se muestre este error ya que puede ser que no suba archivo
-                } catch (UploadedFileNoFileException $uploadFileNoFileException) {
-                    //$errors[] = $uploadFileNoFileException->getMessage();
-                } catch (UploadedFileException $uploadFileException) {
-                    $errors[] = $uploadFileException->getMessage();
-                }
+            if(empty($repitePassword)){
+
+                $errors[] = "Debe repetir el password";
+            }
+
+            if($repitePassword !== $password){
+
+                $errors[] = "Debe introcir el mismo password";
             }
 
             if (empty($errors)) {
                 try {
                     // Instead of creating a new object we load the current data object.
-                    $movie = $movieModel->find($id);
+                    $usuario = $usuarioModel->find($id);
 
                     //then we set the new values
-                    $movie->setTitle($title);
-                    $movie->setOverview($overview);
-                    $movie->setReleaseDate($releaseDate);
-                    $movie->setTagline($tagline);
-                    $movie->setPoster($poster);
+                    $usuario->setNombre($nombre);
+                    $usuario->setApellidos($apellidos);
+                    $usuario->setTelefono($telefono);
+                    $usuario->setEmail($email);
+                    $usuario->setUsername($username);
+                    $usuario->setPassword($password);
 
-                    $movieModel->update($movie);
+                    $usuario->update($usuario);
 
                 } catch (PDOException $e) {
                     $errors[] = "Error: " . $e->getMessage();
@@ -336,33 +363,72 @@ class UsuarioController extends Controller
             }
         }
 
-        return $this->response->renderView("movies-edit", "default", compact("isGetMethod",
-            "errors", "movie"));
+        return $this->response->renderView("usuarios-edit", "back", compact(
+            "errors", "isGetMethod", "usuario"));
+    }
+
+
+
+    public function deleteUsuario(int $id): string
+    {
+        $errors = [];
+        $usuario = null;
+        $usuarioModel = App::getModel(UsuarioModel::class);
+
+        if (empty($id)) {
+            $errors[] = '404 Not Found';
+        } else {
+            try {
+                $usuario = $usuarioModel->find($id);
+            } catch (NotFoundException $e) {
+
+                $errors[] = '404 Usuario no encontrado';
+
+            }
+        }
+
+        $router = App::get(Router::class);
+
+        return $this->response->renderView("usuarios-delete", "back", compact(
+            "errors", "usuario", 'router'));
     }
 
     /**
-     * @param int $id
      * @return string
-     * @throws Exception
+     * @throws ModelException
+     * @throws NotFoundException
      */
-    public function show(int $id): string
+    public function destroyUsuario(): string
     {
         $errors = [];
-        if (!empty($id)) {
-            try {
-                $movieModel = new MovieModel(App::get("DB"));
-                $movie = $movieModel->find($id);
-                $title = $movie->getTitle() . " (" . $movie->getReleaseDate()->format("Y") . ") - Movie FX";
-                return $this->response->renderView("single-page", "default", compact(
-                    "errors", "movie"));
+        $usuarioModel = App::getModel(UsuarioModel::class);
+        $usuario = null;
 
-            } catch (NotFoundException $notFoundException) {
-                $errors[] = $notFoundException->getMessage();
+        $id = filter_input(INPUT_POST, "id", FILTER_VALIDATE_INT);
+        if (empty($id)) {
+            $errors[] = '404 Not Found';
+        } else {
+            $usuario = $usuarioModel->find($id);
+        }
+        $userAnswer = filter_input(INPUT_POST, "userAnswer");
+        if ($userAnswer === 'yes') {
+            if (empty($errors)) {
+                try {
+                    $usuario = $usuarioModel->find($id);
+                    $result = $usuarioModel->delete($usuario);
+                } catch (PDOException $e) {
+                    $errors[] = "Error: " . $e->getMessage();
+                }
             }
         }
         else
-            return $this->response->renderView("single-page", "default", compact(
-                "errors"));
+            App::get(Router::class)->redirect('back-usuarios');
+
+        if (empty($errors))
+            App::get(Router::class)->redirect('back-usuarios');
+        else
+            return $this->response->renderView("usuarios-destroy", "back",
+                compact("errors", "id", "usuario"));
 
         return "";
     }

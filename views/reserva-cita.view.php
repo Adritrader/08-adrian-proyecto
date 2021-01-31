@@ -18,10 +18,9 @@
                                                                                                         class="input-field" name="field3" value="" /></label>
                         <label for="field4"><span>Servicio<span class="required">*</span></span>
                             <select name="servicios" id="servicios">
-                                <option value="peluqueriaM">Peluquería Mujer</option>
-                                <option value="peluqueriaH">Peluquería Hombre</option>
-                                <option value="manicura">Manicura</option>
-                                <option value="tratamientos">Tratamientos</option>
+                                <?php foreach ($servicios as $servicio): ?>
+                                    <option value="<?=$servicio->getId() ?>"><?=$servicio->getName() ?></option>
+                                <?php endforeach; ?>
                             </select>
                         </label>
                     </fieldset>
