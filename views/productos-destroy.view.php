@@ -1,7 +1,7 @@
 <div class="container">
     <div class="row">
         <div class="col-8">
-            <h1>Delete movie</h1>
+            <h1>Borrar producto</h1>
             <?php if (!empty($errors)) : ?>
                 <ul>
                     <?php foreach ($errors as $error) : ?>

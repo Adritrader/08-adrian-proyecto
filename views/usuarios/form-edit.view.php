@@ -17,6 +17,11 @@
         <input id="email" class="form-control" type="email" name="email" value="<?= $usuario->getEmail() ?>" required>
     </div>
     <div class="form-group">
+        <label for="username">Username:</label>
+        <input id="username" class="form-control" type="text" name="username" value="<?= $usuario->getUsername() ?>" required>
+    </div>
+
+    <div class="form-group">
         <label for="role">Role:</label>
         <input id="role" class="form-control" type="text" name="role" value="<?= $usuario->getRole() ?>" required>
     </div>

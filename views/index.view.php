@@ -1,7 +1,3 @@
-<?php use App\Entity\Movie;
-    use App\Entity\Partner;
-?>
-
 <?php if(!empty($message)):?>
 
     <div class="alert alert-success" role="alert">

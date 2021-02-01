@@ -6,14 +6,14 @@
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
-	margin: 40px 0px 120px 0px;
+	margin: 40px 0px 40px 0px;
 
 
 }
 
 .col-formulario input {
 
-	margin-right: 120px;
+	margin-right: 15px;
 	border: 1px solid black;
 	padding: 10px;
 	background-color: #d2acc2;
@@ -134,7 +134,12 @@
 	-moz-box-shadow: inset 1px 1px 4px #FFD5E7;
 	-webkit-box-shadow: inset 1px 1px 4px #FFD5E7;
 	background: #FFEFF6;
-	width: 50%;
+	width: 100%;
+}
+
+.form-style-3 input[type=email]{
+
+	height: 25px;
 }
 
 .form-style-3 input[type=submit],

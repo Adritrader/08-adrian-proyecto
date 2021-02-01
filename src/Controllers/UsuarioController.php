@@ -61,13 +61,13 @@ class UsuarioController extends Controller
      * @return string
      * @throws ModelException
      */
-    public function filter(): string
+    public function filterUsuario(): string
     {
         // S'executa amb el POST
         $title = "Movies - Movie FX";
         $errors = [];
-        $movieModel = null;
-        $movies = null;
+        $usuarioModel = null;
+        $usuario = null;
 
         $router = App::get(Router::class);
 
@@ -76,19 +76,19 @@ class UsuarioController extends Controller
         $tipo_busqueda = filter_input(INPUT_POST, "optradio", FILTER_SANITIZE_STRING);
 
         if (!empty($text)) {
-            $movieModel = App::getModel(MovieModel::class);
+            $usuarioModel = App::getModel(UsuarioModel::class);
             if ($tipo_busqueda == "both") {
-                $movies = $movieModel->executeQuery("SELECT * FROM movie WHERE title LIKE :text OR tagline LIKE :text",
+                $usuario = $usuarioModel->executeQuery("SELECT * FROM usuario WHERE username LIKE :text OR email LIKE :text",
                     ["text" => "%$text%"]);
 
             }
-            if ($tipo_busqueda == "title") {
-                $movies = $movieModel->executeQuery("SELECT * FROM movie WHERE title LIKE :text",
+            if ($tipo_busqueda == "username") {
+                $usuario = $usuarioModel->executeQuery("SELECT * FROM usuario WHERE username LIKE :text",
                     ["text" => "%$text%"]);
 
             }
-            if ($tipo_busqueda == "tagline") {
-                $movies = $movieModel->executeQuery("SELECT * FROM movie WHERE tagline LIKE :text",
+            if ($tipo_busqueda == "email") {
+                $usuario = $usuarioModel->executeQuery("SELECT * FROM usuario WHERE email LIKE :text",
                     ["text" => "%$text%"]);
             }
 
@@ -96,21 +96,87 @@ class UsuarioController extends Controller
             $error = "Cal introduir una paraula de búsqueda";
         }
 
-        return $this->response->renderView("movies", "default", compact('title', 'movies',
-            'movieModel', 'errors', 'router'));
+        return $this->response->renderView("movies", "default", compact('title', 'usuario',
+            'usuarioModel', 'errors', 'router'));
     }
 
-    /**
-     * @return string
-     * @throws Exception
-     */
-    public function create(): string
+
+    public function registrar(): string
     {
-        $genreModel = new GenreModel(App::get("DB"));
-        $genres = $genreModel->findAll(["name" => "ASC"]);
+        $errors = [];
+        $pdo = App::get("DB");
 
-        return $this->response->renderView("movies-create-form", "default", compact("genres"));
+        $nombre = filter_input(INPUT_POST, "nombre", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        $apellidos = filter_input(INPUT_POST, "apellidos", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        $telefono = filter_input(INPUT_POST, "telefono", FILTER_VALIDATE_INT);
+        $email = filter_input(INPUT_POST, "email", FILTER_VALIDATE_EMAIL);
+        $username = filter_input(INPUT_POST, "username");
+        $password = filter_input(INPUT_POST, "password");
+        $repitePassword = filter_input(INPUT_POST, "repitePassword");
+
+        if (empty($nombre)) {
+            $errors[] = "El nombre es obligatorio";
+        }
+        if (empty($apellidos)) {
+            $errors[] = "Los apellidos son obligatorios";
+        }
+
+        if (empty($telefono)) {
+            $errors[] = "El teléfono es obligatorio";
+        }
+
+        if (empty($email)) {
+            $errors[] = "El email es obligatorio";
+        }
+
+        if (empty($username)) {
+            $errors[] = "El username es obligatorio";
+        }
+
+        if (empty($password)) {
+            $errors[] = "El password es obligtorio";
+        }
+
+        if(empty($repitePassword)){
+
+            $errors[] = "Debe repetir el password";
+        }
+
+        if($repitePassword !== $password){
+
+            $errors[] = "Debe introcir el mismo password";
+        }
+
+
+        if (empty($errors)) {
+            try {
+                $usuarioModel = new UsuarioModel($pdo);
+                $usuario = new Usuario();
+
+                $usuario->setNombre($nombre);
+                $usuario->setApellidos($apellidos);
+                $usuario->setTelefono($telefono);
+                $usuario->setEmail($email);
+                $usuario->setUsername($username);
+                $usuario->setPassword($password);
+                $usuario->setRole("ROLE_USER");
+
+                $usuarioModel->saveTransaction($usuario);
+                App::get(MyLogger::class)->info("Se ha creado un nuevo usuario");
+
+            } catch (PDOException | ModelException | Exception $e) {
+                $errors[] = "Error: " . $e->getMessage();
+            }
+        }
+
+        if (empty($errors)) {
+            App::get(Router::class)->redirect("usuarios");
+        }
+
+        return $this->response->renderView("usuarios-create", "my", compact(
+            "errors", "nombre"));
     }
+
 
     /**
      * @return string

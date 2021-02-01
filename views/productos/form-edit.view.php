@@ -16,11 +16,11 @@
     </div>
     <div class="form-group">
         <label for="descripcion">Descripcion:</label>
-        <textarea id="descripcion" name="descripcion" class="form-control rounded-0" rows="3"></textarea>
+        <textarea id="descripcion" name="descripcion" class="form-control rounded-0" rows="3"><?= $producto->getDescripcion() ?></textarea>
     </div>
     <div class="form-group">
         <label for="precio">Precio:</label>
-        <input id="precio" class="form-control" type="text" name="precio" required>
+        <input id="precio" class="form-control" value="<?= $producto->getPrecio() ?>" type="text" name="precio" required>
     </div>
     <div class="form-group">
         <label for="imagen">Logo:</label>
