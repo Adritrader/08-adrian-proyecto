@@ -19,6 +19,36 @@ $router->get("signup", "MyController", "signup");
 $router->get("perfil", "MyController", "perfil");
 
 
+/* Movies routes
+
+$router->get("movies", "MovieController", "index", [], "", "ROLE_USER");
+$router->post("movies", "MovieController", "filter", [], "", "ROLE_USER");
+
+$router->get("movies/:id/show", "MovieController", "show",
+    ["id" => "number"], "movies_show");
+
+$router->get("movies/create", "MovieController", "create");
+$router->post("movies/create", "MovieController", "store");
+
+$router->get("movies/:id/edit", "MovieController", "edit", ["id" => "number"]);
+$router->post("movies/:id/edit", "MovieController", "edit", ["id" => "number"]);
+
+$router->get("movies/:id/delete", "MovieController", "delete", ["id"=>"number"], "movies_delete");
+$router->post("movies/delete", "MovieController", "destroy", [],"movies_destroy");
+
+/* Partners routes */
+$router->get("partners", "PartnerController", "index", [], "partners_index", "ROLE_ADMIN");
+$router->post("partners", "PartnerController", "filter", [], "partners_filter", "ROLE_ADMIN");
+
+$router->get("partners/create", "PartnerController", "create", [], "partners_create", "ROLE_ADMIN");
+$router->post("partners/create", "PartnerController", "store", [], "partners_store", "ROLE_ADMIN");
+
+$router->get("partners/:id/edit", "PartnerController", "edit", ["id"=>"number"], "partners_edit", "ROLE_ADMIN");
+$router->post("partners/:id/edit", "PartnerController", "update", ["id"=>"number"], "partners_update", "ROLE_ADMIN");
+
+$router->get("partners/:id/delete", "PartnerController", "delete", ["id"=>"number"], "partners_delete", "ROLE_ADMIN");
+$router->post("partners/delete", "PartnerController", "destroy", [], "partners_destroy", "ROLE_ADMIN");
+
 
 /*Login routes */
 $router->get("login", "AuthController", "login");
@@ -61,8 +91,8 @@ $router->get("pedidos", "BackController", "index", [], "pedidos_index", "ROLE_AD
 $router->post("pedidos", "BackController", "filter", [], "pedidos_filter", "ROLE_ADMIN");
 $router->get("pedidos/create", "BackController", "createPedido", [], "pedidos_create", "ROLE_ADMIN");
 $router->post("pedidos/create", "BackController", "storePedido", [], "pedidos_store", "ROLE_ADMIN");
-$router->get("pedidos/:id/edit", "MovieController", "edit", ["id" => "number"]);
-$router->post("pedidos/:id/edit", "MovieController", "edit", ["id" => "number"]);
+$router->get("movies/:id/edit", "MovieController", "edit", ["id" => "number"]);
+$router->post("movies/:id/edit", "MovieController", "edit", ["id" => "number"]);
 $router->get("pedidos/:id/show", "BackController", "showPedido",
     ["id" => "number"], "pedidos_show");
 $router->get("pedidos/delete", "BackController", "deletePedido", [],"pedidos_delete", "ROLE_ADMIN");

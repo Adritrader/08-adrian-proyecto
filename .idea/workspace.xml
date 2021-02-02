@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="0432efab-530b-4b44-8316-d979927d7394" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/deployment.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/moviesfx.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/php.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/php.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/webServers.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/config/routes.php" beforeDir="false" afterPath="$PROJECT_DIR$/config/routes.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/my_app.log" beforeDir="false" afterPath="$PROJECT_DIR$/my_app.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/css/footer.css" beforeDir="false" afterPath="$PROJECT_DIR$/public/css/footer.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/css/formulario-reserva.css" beforeDir="false" afterPath="$PROJECT_DIR$/public/css/formulario-reserva.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/css/header.css" beforeDir="false" afterPath="$PROJECT_DIR$/public/css/header.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/css/perfil.css" beforeDir="false" afterPath="$PROJECT_DIR$/public/css/perfil.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/css/styles-back.css" beforeDir="false" afterPath="$PROJECT_DIR$/public/css/styles-back.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/css/styles.css" beforeDir="false" afterPath="$PROJECT_DIR$/public/css/styles.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/css/table.css" beforeDir="false" afterPath="$PROJECT_DIR$/public/css/table.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/css/template-grid3.css" beforeDir="false" afterPath="$PROJECT_DIR$/public/css/template-grid3.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/images/design/productos/kerastase-discipline.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/public/images/design/productos/kerastase-discipline.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/images/design/productos/proteina.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/public/images/design/productos/proteina.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/js/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/js/app.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Controllers/AuthController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controllers/AuthController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Controllers/BackController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controllers/BackController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Controllers/PedidoController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controllers/PedidoController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Controllers/ProductoController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controllers/ProductoController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Controllers/RegistraController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controllers/RegistraController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Controllers/UsuarioController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controllers/UsuarioController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Core/Exception/AppException.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Core/Exception/AppException.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Core/Exception/AuthorizationException.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Core/Exception/AuthorizationException.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Core/Helpers/FlashMessage.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Core/Helpers/FlashMessage.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Core/Security.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Core/Security.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Entity/Contiene.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/Contiene.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Entity/Pedido.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/Pedido.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Entity/Producto.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/Producto.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Entity/Realiza.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/Realiza.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Entity/Registra.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/Registra.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Entity/Servicio.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/Servicio.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Entity/User.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/User.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Entity/Usuario.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/Usuario.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Model/ContieneModel.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Model/ContieneModel.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Model/PedidoModel.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Model/PedidoModel.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Model/ProductoModel.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Model/ProductoModel.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Model/RealizaModel.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Model/RealizaModel.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Model/RegistraModel.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Model/RegistraModel.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Model/ServicioModel.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Model/ServicioModel.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Model/UserModel.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Model/UserModel.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Model/UsuarioModel.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Model/UsuarioModel.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/bootstrap.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/bootstrap.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/_layouts/back.layout.php" beforeDir="false" afterPath="$PROJECT_DIR$/views/_layouts/back.layout.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/auth/login.view.php" beforeDir="false" afterPath="$PROJECT_DIR$/views/auth/login.view.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/back/back-blog.view.php" beforeDir="false" afterPath="$PROJECT_DIR$/views/back/back-blog.view.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/back/back-galeria.view.php" beforeDir="false" afterPath="$PROJECT_DIR$/views/back/back-galeria.view.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/back/back-index.view.php" beforeDir="false" afterPath="$PROJECT_DIR$/views/back/back-index.view.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/back/back-pedidos.view.php" beforeDir="false" afterPath="$PROJECT_DIR$/views/back/back-pedidos.view.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/back/back-productos.view.php" beforeDir="false" afterPath="$PROJECT_DIR$/views/back/back-productos.view.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/back/back-reservas.view.php" beforeDir="false" afterPath="$PROJECT_DIR$/views/back/back-reservas.view.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/back/back-usuarios.view.php" beforeDir="false" afterPath="$PROJECT_DIR$/views/back/back-usuarios.view.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/blog.view.php" beforeDir="false" afterPath="$PROJECT_DIR$/views/blog.view.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/contacto.view.php" beforeDir="false" afterPath="$PROJECT_DIR$/views/contacto.view.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/galeria.view.php" beforeDir="false" afterPath="$PROJECT_DIR$/views/galeria.view.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/myindex.view.php" beforeDir="false" afterPath="$PROJECT_DIR$/views/myindex.view.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/paginamovies/movies-create-form.view.php" beforeDir="false" afterPath="$PROJECT_DIR$/views/paginamovies/movies-create-form.view.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/paginamovies/movies-create.view.php" beforeDir="false" afterPath="$PROJECT_DIR$/views/paginamovies/movies-create.view.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/paginamovies/movies-delete.view.php" beforeDir="false" afterPath="$PROJECT_DIR$/views/paginamovies/movies-delete.view.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/paginamovies/movies-destroy.view.php" beforeDir="false" afterPath="$PROJECT_DIR$/views/paginamovies/movies-destroy.view.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/paginamovies/movies-edit.view.php" beforeDir="false" afterPath="$PROJECT_DIR$/views/paginamovies/movies-edit.view.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/paginamovies/movies.view.php" beforeDir="false" afterPath="$PROJECT_DIR$/views/paginamovies/movies.view.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/paginamovies/partners-create.view.php" beforeDir="false" afterPath="$PROJECT_DIR$/views/paginamovies/partners-create.view.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/paginamovies/partners-delete.view.php" beforeDir="false" afterPath="$PROJECT_DIR$/views/paginamovies/partners-delete.view.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/paginamovies/partners-destroy.view.php" beforeDir="false" afterPath="$PROJECT_DIR$/views/paginamovies/partners-destroy.view.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/paginamovies/partners-edit.view.php" beforeDir="false" afterPath="$PROJECT_DIR$/views/paginamovies/partners-edit.view.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/paginamovies/partners-store.view.php" beforeDir="false" afterPath="$PROJECT_DIR$/views/paginamovies/partners-store.view.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/paginamovies/partners-update.view.php" beforeDir="false" afterPath="$PROJECT_DIR$/views/paginamovies/partners-update.view.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/paginamovies/partners.view.php" beforeDir="false" afterPath="$PROJECT_DIR$/views/paginamovies/partners.view.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/paginamovies/single-page.view.php" beforeDir="false" afterPath="$PROJECT_DIR$/views/paginamovies/single-page.view.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/perfil.view.php" beforeDir="false" afterPath="$PROJECT_DIR$/views/perfil.view.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/productos-edit.view.php" beforeDir="false" afterPath="$PROJECT_DIR$/views/productos-edit.view.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/productos/form-create.view.php" beforeDir="false" afterPath="$PROJECT_DIR$/views/productos/form-create.view.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/productos/form-delete.view.php" beforeDir="false" afterPath="$PROJECT_DIR$/views/productos/form-delete.view.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/productos/form-edit.view.php" beforeDir="false" afterPath="$PROJECT_DIR$/views/productos/form-edit.view.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/quienes-somos.view.php" beforeDir="false" afterPath="$PROJECT_DIR$/views/quienes-somos.view.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/reserva-cita.view.php" beforeDir="false" afterPath="$PROJECT_DIR$/views/reserva-cita.view.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/reservas/form-create.view.php" beforeDir="false" afterPath="$PROJECT_DIR$/views/reservas/form-create.view.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/reservas/form-delete.view.php" beforeDir="false" afterPath="$PROJECT_DIR$/views/reservas/form-delete.view.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/reservas/form-edit.view.php" beforeDir="false" afterPath="$PROJECT_DIR$/views/reservas/form-edit.view.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/servicios.view.php" beforeDir="false" afterPath="$PROJECT_DIR$/views/servicios.view.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/signup.view.php" beforeDir="false" afterPath="$PROJECT_DIR$/views/signup.view.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/tienda.view.php" beforeDir="false" afterPath="$PROJECT_DIR$/views/tienda.view.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/usuarios-create-form.view.php" beforeDir="false" afterPath="$PROJECT_DIR$/views/usuarios-create-form.view.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/usuarios-create.view.php" beforeDir="false" afterPath="$PROJECT_DIR$/views/usuarios-create.view.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/usuarios-delete.view.php" beforeDir="false" afterPath="$PROJECT_DIR$/views/usuarios-delete.view.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/usuarios-destroy.php" beforeDir="false" afterPath="$PROJECT_DIR$/views/usuarios-destroy.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/usuarios-edit.view.php" beforeDir="false" afterPath="$PROJECT_DIR$/views/usuarios-edit.view.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/usuarios/form-create.view.php" beforeDir="false" afterPath="$PROJECT_DIR$/views/usuarios/form-create.view.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/usuarios/form-delete.view.php" beforeDir="false" afterPath="$PROJECT_DIR$/views/usuarios/form-delete.view.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/usuarios/form-edit.view.php" beforeDir="false" afterPath="$PROJECT_DIR$/views/usuarios/form-edit.view.php" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ComposerSettings" synchronizationState="SYNCHRONIZE">
+    <pharConfigPath>$PROJECT_DIR$/composer.json</pharConfigPath>
+    <execution />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="PhpServers">
+    <servers>
+      <server host="08-adrian-proyecto" id="8b6fb837-ee6a-432a-a565-06c8ec395b64" name="08-adrian-proyecto" use_path_mappings="true" />
+    </servers>
+  </component>
+  <component name="PhpWorkspaceProjectConfiguration" interpreter_name="PHP">
+    <include_path>
+      <path value="$PROJECT_DIR$/vendor/composer" />
+      <path value="$PROJECT_DIR$/vendor/psr/log" />
+      <path value="$PROJECT_DIR$/vendor/egulias/email-validator" />
+      <path value="$PROJECT_DIR$/vendor/monolog/monolog" />
+      <path value="$PROJECT_DIR$/vendor/phpstan/phpstan" />
+      <path value="$PROJECT_DIR$/vendor/symfony/polyfill-iconv" />
+      <path value="$PROJECT_DIR$/vendor/symfony/polyfill-mbstring" />
+      <path value="$PROJECT_DIR$/vendor/symfony/polyfill-php72" />
+      <path value="$PROJECT_DIR$/vendor/symfony/polyfill-intl-normalizer" />
+      <path value="$PROJECT_DIR$/vendor/symfony/polyfill-intl-idn" />
+      <path value="$PROJECT_DIR$/vendor/doctrine/lexer" />
+      <path value="$PROJECT_DIR$/vendor/swiftmailer/swiftmailer" />
+    </include_path>
+  </component>
+  <component name="ProjectId" id="1nsbtnE6htU2VXeAmWSAG6sWq9q" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <OptionsSetting value="false" id="Update" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="settings.editor.selected.configurable" value="reference.webide.settings.project.settings.php" />
+    <property name="vue.rearranger.settings.migration" value="true" />
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="0432efab-530b-4b44-8316-d979927d7394" name="Default Changelist" comment="" />
+      <created>1612181967728</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1612181967728</updated>
+      <workItem from="1612181975484" duration="2008000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
+  </component>
+</project>
