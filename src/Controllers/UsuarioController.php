@@ -251,11 +251,97 @@ class UsuarioController extends Controller
         }
 
         if (empty($errors)) {
-            App::get(Router::class)->redirect("back-usuarios");
+            App::get('flash')->set("message", "Se ha registrado correctamente");
+            App::get(Router::class)->redirect("back/back-usuarios");
         }
 
-        return $this->response->renderView("usuarios-create", "back", compact(
+        return $this->response->renderView("usuarios/create", "back", compact(
             "errors", "nombre"));
+    }
+
+    public function registrar(): string
+    {
+        $errors = [];
+        $pdo = App::get("DB");
+
+        $nombre = filter_input(INPUT_POST, "nombre", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        $apellidos = filter_input(INPUT_POST, "apellidos", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        $telefono = filter_input(INPUT_POST, "telefono", FILTER_VALIDATE_INT);
+        $email = filter_input(INPUT_POST, "email", FILTER_VALIDATE_EMAIL);
+        $username = filter_input(INPUT_POST, "username");
+        $password = filter_input(INPUT_POST, "password");
+        $repitePassword = filter_input(INPUT_POST, "repitePassword");
+
+        if (empty($nombre)) {
+            $errors[] = "El nombre es obligatorio";
+        }
+        if (empty($apellidos)) {
+            $errors[] = "Los apellidos son obligatorios";
+        }
+
+        if (empty($telefono)) {
+            $errors[] = "El teléfono es obligatorio";
+        }
+
+        if (empty($email)) {
+            $errors[] = "El email es obligatorio";
+        }
+
+        if (empty($username)) {
+            $errors[] = "El username es obligatorio";
+        }
+
+        if (empty($password)) {
+            $errors[] = "El password es obligtorio";
+        }
+
+        if(empty($repitePassword)){
+
+            $errors[] = "Debe repetir el password";
+        }
+
+        if($repitePassword !== $password){
+
+            $errors[] = "Debe introcir el mismo password";
+        }
+
+        var_dump($errors);
+
+        if (empty($errors)) {
+            try {
+                $usuarioModel = new UsuarioModel($pdo);
+                $usuario = new Usuario();
+
+                $usuario->setNombre($nombre);
+                $usuario->setApellidos($apellidos);
+                $usuario->setTelefono($telefono);
+                $usuario->setEmail($email);
+                $usuario->setUsername($username);
+                $usuario->setPassword($password);
+                $usuario->setRole("ROLE_USER");
+
+                $usuarioModel->saveTransaction($usuario);
+                App::get(MyLogger::class)->info("Se ha registrado un nuevo usuario");
+
+            } catch (PDOException | ModelException | Exception $e) {
+                $errors[] = "Error: " . $e->getMessage();
+                var_dump($errors);
+            }
+        }
+
+        if (empty($errors)) {
+            App::get('flash')->set("message", "Se ha registrado correctamente");
+            //App::get(Router::class)->redirect("login");
+            var_dump($errors);
+        } else {
+
+            App::get('flash')->set("message", "No se ha podido registrar");
+
+            var_dump($errors);
+        }
+
+        return $this->response->renderView("", "my", compact(
+            "errors", "nombre", "message"));
     }
 
     /**

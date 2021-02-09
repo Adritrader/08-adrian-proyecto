@@ -1,0 +1,421 @@
+Index: src/Controllers/UsuarioController.php
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?php\ndeclare(strict_types=1);\n\nnamespace App\\Controllers;\n\n\nuse App\\Core\\Controller;\nuse App\\Core\\Exception\\ModelException;\nuse App\\Core\\Exception\\NotFoundException;\nuse App\\Core\\Router;\nuse App\\Entity\\Usuario;\nuse App\\Model\\GenreModel;\nuse App\\Model\\MovieModel;\nuse App\\Core\\App;\nuse App\\Core\\Security;\nuse App\\Model\\UsuarioModel;\nuse App\\Utils\\MyLogger;\nuse DateTime;\nuse Exception;\nuse PDOException;\n\n/**\n * Class MovieController\n * @package App\\Controllers\n */\nclass UsuarioController extends Controller\n{\n    /**\n     * @return string\n     * @throws Exception\n     */\n    public function index(): string\n    {\n\n        $title = \"BackOffice | Usuarios\";\n        $errors = [];\n        $usuarioModel = App::getModel(UsuarioModel::class);\n        $usuarios = $usuarioModel->findAll();\n\n        $order = filter_input(INPUT_GET, \"order\", FILTER_SANITIZE_STRING);\n\n        if (!empty($_GET['order'])) {\n            $orderBy = [$_GET[\"order\"] => $_GET[\"tipo\"]];\n            try {\n                $usuarios = $usuarioModel->findAll($orderBy);\n            } catch (Exception $e) {\n                $errors[] = $e->getMessage();\n            }\n        }\n\n        $router = App::get(Router::class);\n\n        $message = App::get(\"flash\")::get(\"message\");\n\n\n        return $this->response->renderView(\"back/back-usuarios\", \"back\", compact('title', 'usuarios',\n            'usuarioModel', 'errors', 'router', 'message'));\n    }\n\n    /**\n     * @return string\n     * @throws ModelException\n     */\n    public function filter(): string\n    {\n        // S'executa amb el POST\n        $title = \"Movies - Movie FX\";\n        $errors = [];\n        $movieModel = null;\n        $movies = null;\n\n        $router = App::get(Router::class);\n\n        $text = filter_input(INPUT_POST, \"text\", FILTER_SANITIZE_STRING);\n\n        $tipo_busqueda = filter_input(INPUT_POST, \"optradio\", FILTER_SANITIZE_STRING);\n\n        if (!empty($text)) {\n            $movieModel = App::getModel(MovieModel::class);\n            if ($tipo_busqueda == \"both\") {\n                $movies = $movieModel->executeQuery(\"SELECT * FROM movie WHERE title LIKE :text OR tagline LIKE :text\",\n                    [\"text\" => \"%$text%\"]);\n\n            }\n            if ($tipo_busqueda == \"title\") {\n                $movies = $movieModel->executeQuery(\"SELECT * FROM movie WHERE title LIKE :text\",\n                    [\"text\" => \"%$text%\"]);\n\n            }\n            if ($tipo_busqueda == \"tagline\") {\n                $movies = $movieModel->executeQuery(\"SELECT * FROM movie WHERE tagline LIKE :text\",\n                    [\"text\" => \"%$text%\"]);\n            }\n\n        } else {\n            $error = \"Cal introduir una paraula de búsqueda\";\n        }\n\n        return $this->response->renderView(\"movies\", \"default\", compact('title', 'movies',\n            'movieModel', 'errors', 'router'));\n    }\n\n    /**\n     * @return string\n     * @throws Exception\n     */\n    public function create(): string\n    {\n        $genreModel = new GenreModel(App::get(\"DB\"));\n        $genres = $genreModel->findAll([\"name\" => \"ASC\"]);\n\n        return $this->response->renderView(\"movies-create-form\", \"default\", compact(\"genres\"));\n    }\n\n    /**\n     * @return string\n     * @throws Exception\n     */\n    public function storeUsuario(): string\n    {\n        $errors = [];\n        $pdo = App::get(\"DB\");\n\n        $nombre = filter_input(INPUT_POST, \"nombre\", FILTER_SANITIZE_FULL_SPECIAL_CHARS);\n        $apellidos = filter_input(INPUT_POST, \"apellidos\", FILTER_SANITIZE_FULL_SPECIAL_CHARS);\n        $telefono = filter_input(INPUT_POST, \"telefono\", FILTER_VALIDATE_INT);\n        $email = filter_input(INPUT_POST, \"email\", FILTER_VALIDATE_EMAIL);\n        $username = filter_input(INPUT_POST, \"username\");\n        $password = filter_input(INPUT_POST, \"password\");\n        $repitePassword = filter_input(INPUT_POST, \"repitePassword\");\n\n        if (empty($nombre)) {\n            $errors[] = \"El nombre es obligatorio\";\n        }\n        if (empty($apellidos)) {\n            $errors[] = \"Los apellidos son obligatorios\";\n        }\n\n        if (empty($telefono)) {\n            $errors[] = \"El teléfono es obligatorio\";\n        }\n\n        if (empty($email)) {\n            $errors[] = \"El email es obligatorio\";\n        }\n\n        if (empty($username)) {\n            $errors[] = \"El username es obligatorio\";\n        }\n\n        if (empty($password)) {\n            $errors[] = \"El password es obligtorio\";\n        }\n\n        if(empty($repitePassword)){\n\n            $errors[] = \"Debe repetir el password\";\n        }\n\n        if($repitePassword !== $password){\n\n            $errors[] = \"Debe introcir el mismo password\";\n        }\n\n\n        if (empty($errors)) {\n            try {\n                $usuarioModel = new UsuarioModel($pdo);\n                $usuario = new Usuario();\n\n                $usuario->setNombre($nombre);\n                $usuario->setApellidos($apellidos);\n                $usuario->setTelefono($telefono);\n                $usuario->setEmail($email);\n                $usuario->setUsername($username);\n                $usuario->setPassword($password);\n                $usuario->setRole(\"ROLE_USER\");\n\n                $usuarioModel->saveTransaction($usuario);\n                App::get(MyLogger::class)->info(\"Se ha creado un nuevo usuario\");\n\n            } catch (PDOException | ModelException | Exception $e) {\n                $errors[] = \"Error: \" . $e->getMessage();\n            }\n        }\n\n        if (empty($errors)) {\n            App::get(Router::class)->redirect(\"back-usuarios\");\n        }\n\n        return $this->response->renderView(\"usuarios-create\", \"back\", compact(\n            \"errors\", \"nombre\"));\n    }\n\n    /**\n     * @param int $id\n     * @return string\n     * @throws Exception\n     */\n    public function updateUsuario(int $id): string\n    {\n        $isGetMethod = true;\n        $errors = [];\n\n        $id = filter_input(INPUT_POST, \"id\", FILTER_VALIDATE_INT);\n        if (empty($id)) {\n            $errors[] = \"Wrong ID\";\n        }\n\n        $errors = [];\n        $pdo = App::get(\"DB\");\n\n        $nombre = filter_input(INPUT_POST, \"nombre\", FILTER_SANITIZE_FULL_SPECIAL_CHARS);\n        $apellidos = filter_input(INPUT_POST, \"apellidos\", FILTER_SANITIZE_FULL_SPECIAL_CHARS);\n        $telefono = filter_input(INPUT_POST, \"telefono\", FILTER_VALIDATE_INT);\n        $email = filter_input(INPUT_POST, \"email\", FILTER_VALIDATE_EMAIL);\n        $username = filter_input(INPUT_POST, \"username\");\n        $password = filter_input(INPUT_POST, \"password\");\n        $repitePassword = filter_input(INPUT_POST, \"repitePassword\");\n\n        if (empty($nombre)) {\n            $errors[] = \"El nombre es obligatorio\";\n        }\n        if (empty($apellidos)) {\n            $errors[] = \"Los apellidos son obligatorios\";\n        }\n\n        if (empty($telefono)) {\n            $errors[] = \"El teléfono es obligatorio\";\n        }\n\n        if (empty($email)) {\n            $errors[] = \"El email es obligatorio\";\n        }\n\n        if (empty($username)) {\n            $errors[] = \"El username es obligatorio\";\n        }\n\n        if (empty($password)) {\n            $errors[] = \"El password es obligtorio\";\n        }\n\n        if(empty($repitePassword)){\n\n            $errors[] = \"Debe repetir el password\";\n        }\n\n        if($repitePassword !== $password){\n\n            $errors[] = \"Debe introcir el mismo password\";\n        }\n\n        if (empty($errors)) {\n\n            try {\n\n                $usuarioModel = App::getModel(UsuarioModel::class);\n                // getting the partner by its identifier\n                $usuario = $usuarioModel->find($id);\n                $usuario->setNombre($nombre);\n                $usuario->setApellidos($apellidos);\n                $usuario->setTelefono($telefono);\n                $usuario->setEmail($email);\n                $usuario->setUsername($username);\n                $usuario->setPassword($password);\n                $usuario->setRole(\"ROLE_USER\");\n\n\n\n\n                // updating changes\n                $usuarioModel->update($usuario);\n            } catch (Exception $e) {\n                $errors[] = 'Error: ' . $e->getMessage();\n            }\n        }\n        return $this->response->renderView(\"usuarios-edit\", \"back\", compact(\n            \"errors\", \"isGetMethod\", \"usuario\"));\n    }\n\n\n\n    public function editUsuario(int $id): string\n    {\n        $isGetMethod = true;\n        $errors = [];\n        $usuarioModel = App::getModel(UsuarioModel::class);\n        $usuario = null;\n\n        if (empty($id)) {\n            $errors[] = '404 No encontrado';\n        } else {\n            $usuario = $usuarioModel->find($id);\n\n        }\n\n        if ($_SERVER['REQUEST_METHOD'] === 'POST') {\n            $isGetMethod = false;\n\n            $id = filter_input(INPUT_POST, \"id\", FILTER_VALIDATE_INT);\n            if (empty($id)) {\n                $errors[] = \"ID Erronea\";\n            }\n\n            $nombre = filter_input(INPUT_POST, \"nombre\", FILTER_SANITIZE_FULL_SPECIAL_CHARS);\n            $apellidos = filter_input(INPUT_POST, \"apellidos\", FILTER_SANITIZE_FULL_SPECIAL_CHARS);\n            $telefono = filter_input(INPUT_POST, \"telefono\", FILTER_VALIDATE_INT);\n            $email = filter_input(INPUT_POST, \"email\", FILTER_VALIDATE_EMAIL);\n            $username = filter_input(INPUT_POST, \"username\");\n\n            if (empty($nombre)) {\n                $errors[] = \"El nombre es obligatorio\";\n            }\n            if (empty($apellidos)) {\n                $errors[] = \"Los apellidos son obligatorios\";\n            }\n\n            if (empty($telefono)) {\n                $errors[] = \"El teléfono es obligatorio\";\n            }\n\n            if (empty($email)) {\n                $errors[] = \"El email es obligatorio\";\n            }\n\n            if (empty($username)) {\n                $errors[] = \"El username es obligatorio\";\n            }\n\n            if (empty($password)) {\n                $errors[] = \"El password es obligtorio\";\n            }\n\n            if(empty($repitePassword)){\n\n                $errors[] = \"Debe repetir el password\";\n            }\n\n            if($repitePassword !== $password){\n\n                $errors[] = \"Debe introcir el mismo password\";\n            }\n\n            if (empty($errors)) {\n                try {\n                    // Instead of creating a new object we load the current data object.\n                    $usuario = $usuarioModel->find($id);\n\n                    //then we set the new values\n                    $usuario->setNombre($nombre);\n                    $usuario->setApellidos($apellidos);\n                    $usuario->setTelefono($telefono);\n                    $usuario->setEmail($email);\n                    $usuario->setUsername($username);\n                    $usuario->setPassword($password);\n\n                    $usuario->update($usuario);\n\n                } catch (PDOException $e) {\n                    $errors[] = \"Error: \" . $e->getMessage();\n                }\n            }\n        }\n\n        return $this->response->renderView(\"usuarios-edit\", \"back\", compact(\n            \"errors\", \"isGetMethod\", \"usuario\"));\n    }\n\n\n\n    public function deleteUsuario(int $id): string\n    {\n        $errors = [];\n        $usuario = null;\n        $usuarioModel = App::getModel(UsuarioModel::class);\n\n        if (empty($id)) {\n            $errors[] = '404 Not Found';\n        } else {\n            try {\n                $usuario = $usuarioModel->find($id);\n            } catch (NotFoundException $e) {\n\n                $errors[] = '404 Usuario no encontrado';\n\n            }\n        }\n\n        $router = App::get(Router::class);\n\n        return $this->response->renderView(\"usuarios-delete\", \"back\", compact(\n            \"errors\", \"usuario\", 'router'));\n    }\n\n    /**\n     * @return string\n     * @throws ModelException\n     * @throws NotFoundException\n     */\n    public function destroyUsuario(): string\n    {\n        $errors = [];\n        $usuarioModel = App::getModel(UsuarioModel::class);\n        $usuario = null;\n\n        $id = filter_input(INPUT_POST, \"id\", FILTER_VALIDATE_INT);\n        if (empty($id)) {\n            $errors[] = '404 Not Found';\n        } else {\n            $usuario = $usuarioModel->find($id);\n        }\n        $userAnswer = filter_input(INPUT_POST, \"userAnswer\");\n        if ($userAnswer === 'yes') {\n            if (empty($errors)) {\n                try {\n                    $usuario = $usuarioModel->find($id);\n                    $result = $usuarioModel->delete($usuario);\n                } catch (PDOException $e) {\n                    $errors[] = \"Error: \" . $e->getMessage();\n                }\n            }\n        }\n        else\n            App::get(Router::class)->redirect('back-usuarios');\n\n        if (empty($errors))\n            App::get(Router::class)->redirect('back-usuarios');\n        else\n            return $this->response->renderView(\"usuarios-destroy\", \"back\",\n                compact(\"errors\", \"id\", \"usuario\"));\n\n        return \"\";\n    }\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/Controllers/UsuarioController.php b/src/Controllers/UsuarioController.php
+--- a/src/Controllers/UsuarioController.php	(revision 6b72abedd0b66f6d110cf1f0d949b182891b08ed)
++++ b/src/Controllers/UsuarioController.php	(date 1612183935405)
+@@ -185,13 +185,99 @@
+         }
+ 
+         if (empty($errors)) {
+-            App::get(Router::class)->redirect("back-usuarios");
++            App::get('flash')->set("message", "Se ha registrado correctamente");
++            App::get(Router::class)->redirect("back/back-usuarios");
+         }
+ 
+-        return $this->response->renderView("usuarios-create", "back", compact(
++        return $this->response->renderView("usuarios/create", "back", compact(
+             "errors", "nombre"));
+     }
+ 
++    public function registrar(): string
++    {
++        $errors = [];
++        $pdo = App::get("DB");
++
++        $nombre = filter_input(INPUT_POST, "nombre", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
++        $apellidos = filter_input(INPUT_POST, "apellidos", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
++        $telefono = filter_input(INPUT_POST, "telefono", FILTER_VALIDATE_INT);
++        $email = filter_input(INPUT_POST, "email", FILTER_VALIDATE_EMAIL);
++        $username = filter_input(INPUT_POST, "username");
++        $password = filter_input(INPUT_POST, "password");
++        $repitePassword = filter_input(INPUT_POST, "repitePassword");
++
++        if (empty($nombre)) {
++            $errors[] = "El nombre es obligatorio";
++        }
++        if (empty($apellidos)) {
++            $errors[] = "Los apellidos son obligatorios";
++        }
++
++        if (empty($telefono)) {
++            $errors[] = "El teléfono es obligatorio";
++        }
++
++        if (empty($email)) {
++            $errors[] = "El email es obligatorio";
++        }
++
++        if (empty($username)) {
++            $errors[] = "El username es obligatorio";
++        }
++
++        if (empty($password)) {
++            $errors[] = "El password es obligtorio";
++        }
++
++        if(empty($repitePassword)){
++
++            $errors[] = "Debe repetir el password";
++        }
++
++        if($repitePassword !== $password){
++
++            $errors[] = "Debe introcir el mismo password";
++        }
++
++        var_dump($errors);
++
++        if (empty($errors)) {
++            try {
++                $usuarioModel = new UsuarioModel($pdo);
++                $usuario = new Usuario();
++
++                $usuario->setNombre($nombre);
++                $usuario->setApellidos($apellidos);
++                $usuario->setTelefono($telefono);
++                $usuario->setEmail($email);
++                $usuario->setUsername($username);
++                $usuario->setPassword($password);
++                $usuario->setRole("ROLE_USER");
++
++                $usuarioModel->saveTransaction($usuario);
++                App::get(MyLogger::class)->info("Se ha registrado un nuevo usuario");
++
++            } catch (PDOException | ModelException | Exception $e) {
++                $errors[] = "Error: " . $e->getMessage();
++                var_dump($errors);
++            }
++        }
++
++        if (empty($errors)) {
++            App::get('flash')->set("message", "Se ha registrado correctamente");
++            //App::get(Router::class)->redirect("login");
++            var_dump($errors);
++        } else {
++
++            App::get('flash')->set("message", "No se ha podido registrar");
++
++            var_dump($errors);
++        }
++
++        return $this->response->renderView("", "my", compact(
++            "errors", "nombre", "message"));
++    }
++
+     /**
+      * @param int $id
+      * @return string
+Index: config/routes.php
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?php\n\n/* Default routes */\n$router->get(\"old\", \"DefaultController\", \"index\");\n$router->get(\"contact\", \"DefaultController\", \"contact\");\n$router->post(\"contact\", \"DefaultController\", \"contact\");\n$router->get(\"api/demo\", \"DefaultController\", \"demo\");\n\n/* My routes Front-End */\n$router->get(\"\", \"MyController\", \"index\");\n$router->get(\"servicios\", \"MyController\", \"servicios\");\n$router->get(\"quienes-somos\", \"MyController\", \"quienesSomos\");\n$router->get(\"galeria\", \"MyController\", \"galeria\");\n$router->get(\"blog\", \"MyController\", \"blog\");\n$router->get(\"reserva-cita\", \"MyController\", \"reservaCita\");\n$router->get(\"contacto\", \"MyController\", \"contacto\");\n$router->get(\"tienda\", \"MyController\", \"tienda\");\n$router->get(\"signup\", \"MyController\", \"signup\");\n$router->get(\"perfil\", \"MyController\", \"perfil\");\n\n\n/* Movies routes\n\n$router->get(\"movies\", \"MovieController\", \"index\", [], \"\", \"ROLE_USER\");\n$router->post(\"movies\", \"MovieController\", \"filter\", [], \"\", \"ROLE_USER\");\n\n$router->get(\"movies/:id/show\", \"MovieController\", \"show\",\n    [\"id\" => \"number\"], \"movies_show\");\n\n$router->get(\"movies/create\", \"MovieController\", \"create\");\n$router->post(\"movies/create\", \"MovieController\", \"store\");\n\n$router->get(\"movies/:id/edit\", \"MovieController\", \"edit\", [\"id\" => \"number\"]);\n$router->post(\"movies/:id/edit\", \"MovieController\", \"edit\", [\"id\" => \"number\"]);\n\n$router->get(\"movies/:id/delete\", \"MovieController\", \"delete\", [\"id\"=>\"number\"], \"movies_delete\");\n$router->post(\"movies/delete\", \"MovieController\", \"destroy\", [],\"movies_destroy\");\n\n/* Partners routes */\n$router->get(\"partners\", \"PartnerController\", \"index\", [], \"partners_index\", \"ROLE_ADMIN\");\n$router->post(\"partners\", \"PartnerController\", \"filter\", [], \"partners_filter\", \"ROLE_ADMIN\");\n\n$router->get(\"partners/create\", \"PartnerController\", \"create\", [], \"partners_create\", \"ROLE_ADMIN\");\n$router->post(\"partners/create\", \"PartnerController\", \"store\", [], \"partners_store\", \"ROLE_ADMIN\");\n\n$router->get(\"partners/:id/edit\", \"PartnerController\", \"edit\", [\"id\"=>\"number\"], \"partners_edit\", \"ROLE_ADMIN\");\n$router->post(\"partners/:id/edit\", \"PartnerController\", \"update\", [\"id\"=>\"number\"], \"partners_update\", \"ROLE_ADMIN\");\n\n$router->get(\"partners/:id/delete\", \"PartnerController\", \"delete\", [\"id\"=>\"number\"], \"partners_delete\", \"ROLE_ADMIN\");\n$router->post(\"partners/delete\", \"PartnerController\", \"destroy\", [], \"partners_destroy\", \"ROLE_ADMIN\");\n\n\n/*Login routes */\n$router->get(\"login\", \"AuthController\", \"login\");\n$router->post(\"login\", \"AuthController\", \"checkLogin\");\n\n/*Logout routes */\n\n$router->get(\"logout\", \"AuthController\", \"logout\");\n$router->post(\"logout\", \"AuthController\", \"checkLogin\");\n\n\n/* BackOffice routes */\n\n$router->get(\"back-index\", \"BackController\", \"backIndex\");\n$router->get(\"back-reservas\", \"BackController\", \"backReservas\");\n$router->get(\"back-galeria\", \"BackController\", \"backGaleria\");\n$router->get(\"back-blog\", \"BackController\", \"backBlog\");\n$router->get(\"back-productos\", \"BackController\", \"backProductos\");\n$router->get(\"back-pedidos\", \"BackController\", \"backPedidos\");\n$router->get(\"back-usuarios\", \"BackController\", \"backUsuarios\");\n\n\n/*BackOffice Productos routes*/\n\n$router->get(\"productos\", \"BackController\", \"index\", [], \"producto_index\", \"ROLE_ADMIN\");\n$router->post(\"productos\", \"BackController\", \"filter\", [], \"producto_filter\", \"ROLE_ADMIN\");\n$router->get(\"productos/create\", \"BackController\", \"createProducto\", [], \"producto_create\", \"ROLE_ADMIN\");\n$router->post(\"productos/create\", \"BackController\", \"storeProducto\", [], \"producto_store\", \"ROLE_ADMIN\");\n$router->get(\"productos/:id/edit\", \"BackController\", \"editProducto\", [\"id\" => \"number\"], \"producto_edit\", \"ROLE_ADMIN\");\n$router->post(\"productos/:id/edit\", \"BackController\", \"updateProducto\", [\"id\" => \"number\"], \"producto_update\", \"ROLE_ADMIN\");\n$router->get(\"productos/:id/show\", \"BackController\", \"show\",\n    [\"id\" => \"number\"], \"movies_show\");\n$router->get(\"productos/:id/delete\", \"BackController\", \"deleteProducto\", [\"id\" => \"number\"],\"productos_delete\", \"ROLE_ADMIN\");\n$router->post(\"productos/delete\", \"BackController\", \"destroyProducto\", [], \"productos_destroy\", \"ROLE_ADMIN\");\n\n\n/*BackOffice Pedidos routes */\n\n$router->get(\"pedidos\", \"BackController\", \"index\", [], \"pedidos_index\", \"ROLE_ADMIN\");\n$router->post(\"pedidos\", \"BackController\", \"filter\", [], \"pedidos_filter\", \"ROLE_ADMIN\");\n$router->get(\"pedidos/create\", \"BackController\", \"createPedido\", [], \"pedidos_create\", \"ROLE_ADMIN\");\n$router->post(\"pedidos/create\", \"BackController\", \"storePedido\", [], \"pedidos_store\", \"ROLE_ADMIN\");\n$router->get(\"movies/:id/edit\", \"MovieController\", \"edit\", [\"id\" => \"number\"]);\n$router->post(\"movies/:id/edit\", \"MovieController\", \"edit\", [\"id\" => \"number\"]);\n$router->get(\"pedidos/:id/show\", \"BackController\", \"showPedido\",\n    [\"id\" => \"number\"], \"pedidos_show\");\n$router->get(\"pedidos/delete\", \"BackController\", \"deletePedido\", [],\"pedidos_delete\", \"ROLE_ADMIN\");\n\n\n/* BackOffice Usuarios routes */\n\n$router->get(\"usuarios\", \"BackController\", \"index\", [], \"usuarios_index\", \"ROLE_ADMIN\");\n$router->post(\"usuarios\", \"BackController\", \"filter\", [], \"usuarios_filter\", \"ROLE_ADMIN\");\n$router->get(\"usuarios/create\", \"BackController\", \"createUsuario\", [], \"usuarios_create\", \"ROLE_ADMIN\");\n$router->post(\"usuarios/create\", \"BackController\", \"storeUsuario\", [], \"usuarios_store\", \"ROLE_ADMIN\");\n$router->get(\"usuarios/:id/edit\", \"UsuarioController\", \"editUsuario\", [\"id\" => \"number\"],\"usuarios_edit\", \"ROLE_ADMIN\");\n$router->post(\"usuarios/:id/edit\", \"UsuarioController\", \"editUsuario\", [\"id\" => \"number\"], \"usuarios_update\", \"ROLE_ADMIN\");\n$router->get(\"usuarios/:id/show\", \"BackController\", \"showUsuario\",\n    [\"id\" => \"number\"], \"usuarios_show\");\n$router->get(\"usuarios/:id/delete\", \"UsuarioController\", \"deleteUsuario\", [\"id\" => \"number\"],\"usuarios_delete\", \"ROLE_ADMIN\");\n$router->post(\"usuarios/delete\", \"UsuarioController\", \"destroyUsuario\", [], \"usuarios_destroy\", \"ROLE_ADMIN\");\n\n\n/* BackOffice Reservas routes */\n\n$router->get(\"registra\", \"BackController\", \"index\", [], \"registra_index\", \"ROLE_ADMIN\");\n$router->post(\"registra\", \"BackController\", \"filter\", [], \"registra_filter\", \"ROLE_ADMIN\");\n$router->get(\"registra/create\", \"BackController\", \"createRegistra\", [], \"registra_create\", \"ROLE_ADMIN\");\n$router->post(\"registra/create\", \"BackController\", \"storeRegistra\", [], \"registra_store\", \"ROLE_ADMIN\");\n$router->get(\"movies/:id/edit\", \"MovieController\", \"edit\", [\"id\" => \"number\"]);\n$router->post(\"movies/:id/edit\", \"MovieController\", \"edit\", [\"id\" => \"number\"]);\n$router->get(\"registra/:id/show\", \"BackController\", \"show\",\n    [\"id\" => \"number\"], \"usuarios_show\");\n$router->get(\"usuarios/delete\", \"BackController\", \"delete\", [],\"usuarios_delete\", \"ROLE_ADMIN\");\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/config/routes.php b/config/routes.php
+--- a/config/routes.php	(revision 6b72abedd0b66f6d110cf1f0d949b182891b08ed)
++++ b/config/routes.php	(date 1612183493573)
+@@ -1,12 +1,14 @@
+ <?php
+ 
+ /* Default routes */
++
+ $router->get("old", "DefaultController", "index");
+ $router->get("contact", "DefaultController", "contact");
+ $router->post("contact", "DefaultController", "contact");
+ $router->get("api/demo", "DefaultController", "demo");
+ 
+ /* My routes Front-End */
++
+ $router->get("", "MyController", "index");
+ $router->get("servicios", "MyController", "servicios");
+ $router->get("quienes-somos", "MyController", "quienesSomos");
+@@ -19,37 +21,6 @@
+ $router->get("perfil", "MyController", "perfil");
+ 
+ 
+-/* Movies routes
+-
+-$router->get("movies", "MovieController", "index", [], "", "ROLE_USER");
+-$router->post("movies", "MovieController", "filter", [], "", "ROLE_USER");
+-
+-$router->get("movies/:id/show", "MovieController", "show",
+-    ["id" => "number"], "movies_show");
+-
+-$router->get("movies/create", "MovieController", "create");
+-$router->post("movies/create", "MovieController", "store");
+-
+-$router->get("movies/:id/edit", "MovieController", "edit", ["id" => "number"]);
+-$router->post("movies/:id/edit", "MovieController", "edit", ["id" => "number"]);
+-
+-$router->get("movies/:id/delete", "MovieController", "delete", ["id"=>"number"], "movies_delete");
+-$router->post("movies/delete", "MovieController", "destroy", [],"movies_destroy");
+-
+-/* Partners routes */
+-$router->get("partners", "PartnerController", "index", [], "partners_index", "ROLE_ADMIN");
+-$router->post("partners", "PartnerController", "filter", [], "partners_filter", "ROLE_ADMIN");
+-
+-$router->get("partners/create", "PartnerController", "create", [], "partners_create", "ROLE_ADMIN");
+-$router->post("partners/create", "PartnerController", "store", [], "partners_store", "ROLE_ADMIN");
+-
+-$router->get("partners/:id/edit", "PartnerController", "edit", ["id"=>"number"], "partners_edit", "ROLE_ADMIN");
+-$router->post("partners/:id/edit", "PartnerController", "update", ["id"=>"number"], "partners_update", "ROLE_ADMIN");
+-
+-$router->get("partners/:id/delete", "PartnerController", "delete", ["id"=>"number"], "partners_delete", "ROLE_ADMIN");
+-$router->post("partners/delete", "PartnerController", "destroy", [], "partners_destroy", "ROLE_ADMIN");
+-
+-
+ /*Login routes */
+ $router->get("login", "AuthController", "login");
+ $router->post("login", "AuthController", "checkLogin");
+@@ -98,6 +69,10 @@
+ $router->get("pedidos/delete", "BackController", "deletePedido", [],"pedidos_delete", "ROLE_ADMIN");
+ 
+ 
++/* Front-end Usuarios routes */
++
++$router->post("usuarios/create", "UsuarioController", "registrar", [], "usuarios_store");
++
+ /* BackOffice Usuarios routes */
+ 
+ $router->get("usuarios", "BackController", "index", [], "usuarios_index", "ROLE_ADMIN");
+Index: views/signup.view.php
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><div class=\"container-fluid\">\n    <div class=\"row fila-ruta\">\n        <div class=\"col-5 col-ruta\">\n            <div><span>Estas aquí: </span><a href=\"/\">Home</a><span><i\n                            class=\"fa fa-caret-right\"></i><a href=\"signup\"\n                                                             class=\"active\">Sign Up</a></span><span></span></div>\n        </div>\n    </div>\n</div>\n\n<div class=\"container-fluid\">\n    <div class=\"row titulo-formulario\">\n        <div class=\"col-6\">\n            <h1>SignUp</h1>\n        </div>\n\n\n        <div class=\"row fila-formulario\">\n            <div class=\"form-style-3 col-4 col-formulario\">\n                <form action=\"/contact\" method=\"post\">\n                    <fieldset>\n                        <legend>Datos Personales</legend>\n                        <label for=\"field1\"><span>Nombre <span class=\"required\">*</span></span><input type=\"text\"\n                                                                                                      class=\"input-field\" name=\"nombre\"></label>\n                        <label for=\"field2\"><span>Apellidos <span class=\"required\">*</span></span><input type=\"text\"\n                                                                                                        class=\"input-field\" name=\"apellidos\"></label>\n                        <label for=\"field3\"><span>Telefono <span class=\"required\">*</span></span><input type=\"text\"\n                                                                                                        class=\"input-field\" name=\"telefono\"></label>\n                        <label for=\"field4\"><span>Email<span class=\"required\">*</span></span><input type=\"email\"\n                                                                                                    class=\"input-field\" name=\"email\"></label>\n                        <label for=\"field4\"><span>Password<span class=\"required\">*</span></span><input type=\"text\"\n                                                                                                    class=\"input-field\" name=\"password\"></label>\n                        <label for=\"field4\"><span>Repite Password<span class=\"required\">*</span></span><input type=\"text\"\n                                                                                                    class=\"input-field\" name=\"repitepassword\"></label>\n\n                    </fieldset>\n                    <input type=\"submit\" value=\"Sign Up\">\n                </form>\n            </div>\n\n            <div class=\"row\">\n\n            </div>\n        </div>\n    </div>\n</div>\n</div>\n\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/views/signup.view.php b/views/signup.view.php
+--- a/views/signup.view.php	(revision 6b72abedd0b66f6d110cf1f0d949b182891b08ed)
++++ b/views/signup.view.php	(date 1612183583273)
+@@ -13,11 +13,20 @@
+         <div class="col-6">
+             <h1>SignUp</h1>
+         </div>
++        <?php if(!empty($message)):?>
+ 
++            <div class="alert alert-success" role="alert">
++                <?= $message ?>
++                <button type="button" class="close" data-dismiss="alert" aria-label="close">
++                    <span aria-hidden="true">x</span>
++                </button>
++            </div>
++        <?php endif;
++        ?>
+ 
+         <div class="row fila-formulario">
+             <div class="form-style-3 col-4 col-formulario">
+-                <form action="/contact" method="post">
++                <form action="/usuarios/create" method="post">
+                     <fieldset>
+                         <legend>Datos Personales</legend>
+                         <label for="field1"><span>Nombre <span class="required">*</span></span><input type="text"
+@@ -28,9 +37,11 @@
+                                                                                                         class="input-field" name="telefono"></label>
+                         <label for="field4"><span>Email<span class="required">*</span></span><input type="email"
+                                                                                                     class="input-field" name="email"></label>
+-                        <label for="field4"><span>Password<span class="required">*</span></span><input type="text"
++                        <label for="field5"><span>Username<span class="required">*</span></span><input type="text"
++                                                                                                    class="input-field" name="username"></label>
++                        <label for="field6"><span>Password<span class="required">*</span></span><input type="text"
+                                                                                                     class="input-field" name="password"></label>
+-                        <label for="field4"><span>Repite Password<span class="required">*</span></span><input type="text"
++                        <label for="field7"><span>Repite Password<span class="required">*</span></span><input type="text"
+                                                                                                     class="input-field" name="repitepassword"></label>
+ 
+                     </fieldset>
+Index: .idea/.gitignore
+===================================================================
+diff --git a/.idea/.gitignore b/.idea/.gitignore
+deleted file mode 100644
+--- a/.idea/.gitignore	(revision 6b72abedd0b66f6d110cf1f0d949b182891b08ed)
++++ /dev/null	(revision 6b72abedd0b66f6d110cf1f0d949b182891b08ed)
+@@ -1,8 +0,0 @@
+-# Default ignored files
+-/shelf/
+-/workspace.xml
+-# Datasource local storage ignored files
+-/dataSources/
+-/dataSources.local.xml
+-# Editor-based HTTP Client requests
+-/httpRequests/
+Index: .idea/webServers.xml
+===================================================================
+diff --git a/.idea/webServers.xml b/.idea/webServers.xml
+deleted file mode 100644
+--- a/.idea/webServers.xml	(revision 6b72abedd0b66f6d110cf1f0d949b182891b08ed)
++++ /dev/null	(revision 6b72abedd0b66f6d110cf1f0d949b182891b08ed)
+@@ -1,10 +0,0 @@
+-<?xml version="1.0" encoding="UTF-8"?>
+-<project version="4">
+-  <component name="WebServers">
+-    <option name="servers">
+-      <webServer id="1964fed7-2d10-483b-974f-b13d1bd3c338" name="Local" url="http://moviesfx">
+-        <fileTransfer port="0" accessType="LOCAL" />
+-      </webServer>
+-    </option>
+-  </component>
+-</project>
+\ No newline at end of file
+Index: .idea/deployment.xml
+===================================================================
+diff --git a/.idea/deployment.xml b/.idea/deployment.xml
+deleted file mode 100644
+--- a/.idea/deployment.xml	(revision 6b72abedd0b66f6d110cf1f0d949b182891b08ed)
++++ /dev/null	(revision 6b72abedd0b66f6d110cf1f0d949b182891b08ed)
+@@ -1,14 +0,0 @@
+-<?xml version="1.0" encoding="UTF-8"?>
+-<project version="4">
+-  <component name="PublishConfigData" serverName="Local">
+-    <serverData>
+-      <paths name="Local">
+-        <serverdata>
+-          <mappings>
+-            <mapping local="$PROJECT_DIR$" web="/" />
+-          </mappings>
+-        </serverdata>
+-      </paths>
+-    </serverData>
+-  </component>
+-</project>
+\ No newline at end of file
+Index: .idea/moviesfx.iml
+===================================================================
+diff --git a/.idea/moviesfx.iml b/.idea/moviesfx.iml
+deleted file mode 100644
+--- a/.idea/moviesfx.iml	(revision 6b72abedd0b66f6d110cf1f0d949b182891b08ed)
++++ /dev/null	(revision 6b72abedd0b66f6d110cf1f0d949b182891b08ed)
+@@ -1,24 +0,0 @@
+-<?xml version="1.0" encoding="UTF-8"?>
+-<module type="WEB_MODULE" version="4">
+-  <component name="NewModuleRootManager">
+-    <content url="file://$MODULE_DIR$">
+-      <sourceFolder url="file://$MODULE_DIR$/spec" isTestSource="true" />
+-      <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" packagePrefix="App\" />
+-      <sourceFolder url="file://$MODULE_DIR$/tests" isTestSource="true" />
+-      <excludeFolder url="file://$MODULE_DIR$/vendor/composer" />
+-      <excludeFolder url="file://$MODULE_DIR$/vendor/doctrine/lexer" />
+-      <excludeFolder url="file://$MODULE_DIR$/vendor/egulias/email-validator" />
+-      <excludeFolder url="file://$MODULE_DIR$/vendor/monolog/monolog" />
+-      <excludeFolder url="file://$MODULE_DIR$/vendor/phpstan/phpstan" />
+-      <excludeFolder url="file://$MODULE_DIR$/vendor/psr/log" />
+-      <excludeFolder url="file://$MODULE_DIR$/vendor/swiftmailer/swiftmailer" />
+-      <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/polyfill-iconv" />
+-      <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/polyfill-intl-idn" />
+-      <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/polyfill-intl-normalizer" />
+-      <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/polyfill-mbstring" />
+-      <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/polyfill-php72" />
+-    </content>
+-    <orderEntry type="inheritedJdk" />
+-    <orderEntry type="sourceFolder" forTests="false" />
+-  </component>
+-</module>
+\ No newline at end of file
+Index: my_app.log
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>[2020-12-15T20:04:54.049559+01:00] app.DEBUG: Prova debug [] []\n[2020-12-15T20:04:54.051040+01:00] app.INFO: Prova info [] []\n[2020-12-15T20:04:54.051437+01:00] app.NOTICE: Prova notice [] []\n[2020-12-15T20:04:54.051780+01:00] app.ERROR: Prova error [] []\n[2020-12-15T20:04:54.052123+01:00] app.CRITICAL: Prova crítica [] []\n[2020-12-15T20:04:54.271806+01:00] app.DEBUG: Prova debug [] []\n[2020-12-15T20:04:54.273032+01:00] app.INFO: Prova info [] []\n[2020-12-15T20:04:54.273301+01:00] app.NOTICE: Prova notice [] []\n[2020-12-15T20:04:54.273559+01:00] app.ERROR: Prova error [] []\n[2020-12-15T20:04:54.273806+01:00] app.CRITICAL: Prova crítica [] []\n[2020-12-15T20:04:54.464170+01:00] app.DEBUG: Prova debug [] []\n[2020-12-15T20:04:54.465085+01:00] app.INFO: Prova info [] []\n[2020-12-15T20:04:54.465313+01:00] app.NOTICE: Prova notice [] []\n[2020-12-15T20:04:54.465535+01:00] app.ERROR: Prova error [] []\n[2020-12-15T20:04:54.465749+01:00] app.CRITICAL: Prova crítica [] []\n[2020-12-15T20:08:01.885787+01:00] app.DEBUG: Prova debug [] []\n[2020-12-15T20:08:01.886870+01:00] app.INFO: Prova info [] []\n[2020-12-15T20:08:01.887131+01:00] app.NOTICE: Prova notice [] []\n[2020-12-15T20:08:01.887378+01:00] app.ERROR: Prova error [] []\n[2020-12-15T20:08:01.887665+01:00] app.CRITICAL: Prova crítica [] []\n[2020-12-15T20:08:02.132794+01:00] app.DEBUG: Prova debug [] []\n[2020-12-15T20:08:02.134668+01:00] app.INFO: Prova info [] []\n[2020-12-15T20:08:02.135206+01:00] app.NOTICE: Prova notice [] []\n[2020-12-15T20:08:02.135740+01:00] app.ERROR: Prova error [] []\n[2020-12-15T20:08:02.136282+01:00] app.CRITICAL: Prova crítica [] []\n[2020-12-15T20:08:02.395411+01:00] app.DEBUG: Prova debug [] []\n[2020-12-15T20:08:02.396446+01:00] app.INFO: Prova info [] []\n[2020-12-15T20:08:02.396704+01:00] app.NOTICE: Prova notice [] []\n[2020-12-15T20:08:02.396952+01:00] app.ERROR: Prova error [] []\n[2020-12-15T20:08:02.397198+01:00] app.CRITICAL: Prova crítica [] []\n[2020-12-15T20:13:25.670193+01:00] app.ERROR: La grandària de la imatge (6104)              supera el límit establert: 300 [] []\n[2020-12-15T20:14:11.781458+01:00] app.ERROR: La grandària de la imatge (6104)              supera el límit establert: 300 [] []\n[2020-12-15T20:14:25.693017+01:00] app.ERROR: La grandària de la imatge (6795)              supera el límit establert: 300 [] []\n[2020-12-15T20:15:44.127283+01:00] app.ERROR: La grandària de la imatge (6763)              supera el límit establert: 300 [] []\n[2020-12-15T20:16:07.833440+01:00] app.ERROR: La grandària de la imatge (6763)              supera el límit establert: 300 [] []\n[2020-12-15T20:16:40.010306+01:00] app.ERROR: La grandària de la imatge (6795)              supera el límit establert: 300 [] []\n[2020-12-29T10:57:47.324294+01:00] app.ERROR: La grandària de la imatge (76947)              supera el límit establert: 300 [] []\n[2020-12-29T10:57:58.274378+01:00] app.ERROR: La grandària de la imatge (84840)              supera el límit establert: 300 [] []\n[2021-01-13T11:48:21.387766+01:00] app.ERROR: La grandària de la imatge (3043)              supera el límit establert: 300 [] []\n[2021-01-15T13:18:44.960016+01:00] app.ERROR: La grandària de la imatge (393628)              supera el límit establert: 50000 [] []\n[2021-01-18T13:30:05.075246+01:00] app.INFO: S'ha creat una nova pel·lícula [] []\n[2021-01-28T11:41:29.439313+01:00] app.INFO: Se ha creado un nuevo usuario [] []\n[2021-01-28T12:33:45.825466+01:00] app.INFO: Se ha creado un nuevo producto [] []\n[2021-01-28T12:33:55.034444+01:00] app.INFO: Se ha creado un nuevo producto [] []\n[2021-01-28T12:38:19.483831+01:00] app.INFO: Se ha creado un nuevo producto [] []\n[2021-01-28T12:46:36.296367+01:00] app.INFO: Se ha creado un nuevo producto [] []\n[2021-01-28T12:47:27.047538+01:00] app.INFO: Se ha creado un nuevo producto [] []\n[2021-01-31T19:24:35.826177+00:00] app.INFO: Se ha creado un nuevo usuario [] []\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/my_app.log b/my_app.log
+--- a/my_app.log	(revision 6b72abedd0b66f6d110cf1f0d949b182891b08ed)
++++ b/my_app.log	(date 1612180596057)
+@@ -46,3 +46,4 @@
+ [2021-01-28T12:46:36.296367+01:00] app.INFO: Se ha creado un nuevo producto [] []
+ [2021-01-28T12:47:27.047538+01:00] app.INFO: Se ha creado un nuevo producto [] []
+ [2021-01-31T19:24:35.826177+00:00] app.INFO: Se ha creado un nuevo usuario [] []
++[2021-02-01T12:56:36.058886+01:00] app.INFO: Se ha creado un nuevo usuario [] []
+Index: src/bootstrap.php
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?php\n\nrequire_once __DIR__ . '/../vendor/autoload.php';\n\n\n\nuse App\\Core\\App;\nuse App\\Core\\Response;\nuse App\\Database;\nuse App\\Model\\UserModel;\nuse App\\Utils\\MyLogger;\nuse App\\Utils\\MyMail;\nuse App\\Core\\Helpers\\FlashMessage;\nuse Monolog\\Handler\\StreamHandler;\nuse Monolog\\Logger;\nuse App\\Core\\Router;\n\nini_set('session.cookie_secure', \"0\");\nini_set('session.cookie_httponly', true);\nsession_start();\n\n$sessionKey = \"error\";\n\n$errors = $_SESSION[$sessionKey]??[];\n\n\n\nif (isset($_SESSION['LAST_ACTIVITY']) && (time() - $_SESSION['LAST_ACTIVITY'] > 9000)) {\n    // last request was more than 15 minutes ago\n    session_unset();     // unset $_SESSION variable for the run-time\n    session_destroy();   // destroy session data in storage\n    session_regenerate_id(true);\n    header(\"Location: /login\");\n\n}\n$_SESSION['LAST_ACTIVITY'] = time(); // update last activity time stamp\n\n$config = require_once __DIR__ . '/../config/config.php';\n\n$_flash = new FlashMessage();\n$redirect = new Router();\n\nApp::bind(\"redirect\", $redirect);\nApp::bind(\"flash\", $_flash);\nApp::bind(\"config\", $config);\nApp::bind(\"DB\", Database::getConnection());\nApp::bind(Response::class, new Response());\n\n$myLogger = new MyLogger(\"app\");\n$myLogger->pushHandler(new StreamHandler(__DIR__.\"/../{$config[\"logfile\"]}\", $config[\"loglevel\"]));\nApp::bind(MyLogger::class, $myLogger);\n\n// The load method acts as a factory. We pass the config\n// data and returns a myMail object\n$myMail = MyMail::load($config[\"mailer\"]);\nApp::bind(MyMail::class, $myMail);\n\n// we use the coalesce operator to check if loggedUser is set\n// if not we assign 0 to $loggedUser.\n\n$loggedUser = $_SESSION[\"loggedUser\"] ?? 0;\n\n//we check if loggedUser is a valid integer\n\n$id = filter_var($loggedUser, FILTER_VALIDATE_INT);\nif (!empty($id)) {\n    try {\n        App::bind('user', App::getModel(UserModel::class)->find($id));            \n    } \n    catch (NotFoundException $notFoundException) {\n        App::bind('user',null);            \n    }\n}\nelse\n    App::bind('user', null);\n?>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/bootstrap.php b/src/bootstrap.php
+--- a/src/bootstrap.php	(revision 6b72abedd0b66f6d110cf1f0d949b182891b08ed)
++++ b/src/bootstrap.php	(date 1612177065825)
+@@ -25,7 +25,7 @@
+ 
+ 
+ 
+-if (isset($_SESSION['LAST_ACTIVITY']) && (time() - $_SESSION['LAST_ACTIVITY'] > 9000)) {
++if (isset($_SESSION['LAST_ACTIVITY']) && (time() - $_SESSION['LAST_ACTIVITY'] > 900)) {
+     // last request was more than 15 minutes ago
+     session_unset();     // unset $_SESSION variable for the run-time
+     session_destroy();   // destroy session data in storage
+Index: .idea/php.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<project version=\"4\">\n  <component name=\"PhpIncludePathManager\">\n    <include_path>\n      <path value=\"$PROJECT_DIR$/vendor/composer\" />\n      <path value=\"$PROJECT_DIR$/vendor/psr/log\" />\n      <path value=\"$PROJECT_DIR$/vendor/egulias/email-validator\" />\n      <path value=\"$PROJECT_DIR$/vendor/monolog/monolog\" />\n      <path value=\"$PROJECT_DIR$/vendor/phpstan/phpstan\" />\n      <path value=\"$PROJECT_DIR$/vendor/symfony/polyfill-iconv\" />\n      <path value=\"$PROJECT_DIR$/vendor/symfony/polyfill-mbstring\" />\n      <path value=\"$PROJECT_DIR$/vendor/symfony/polyfill-intl-normalizer\" />\n      <path value=\"$PROJECT_DIR$/vendor/symfony/polyfill-intl-idn\" />\n      <path value=\"$PROJECT_DIR$/vendor/doctrine/lexer\" />\n      <path value=\"$PROJECT_DIR$/vendor/swiftmailer/swiftmailer\" />\n      <path value=\"$PROJECT_DIR$/vendor/symfony/polyfill-php72\" />\n    </include_path>\n  </component>\n  <component name=\"PhpProjectSharedConfiguration\" php_language_level=\"7.4\" />\n  <component name=\"PhpStan\">\n    <PhpStan_settings>\n      <PhpStanConfiguration tool_path=\"$PROJECT_DIR$/vendor/bin/phpstan\" />\n    </PhpStan_settings>\n  </component>\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/php.xml b/.idea/php.xml
+--- a/.idea/php.xml	(revision 6b72abedd0b66f6d110cf1f0d949b182891b08ed)
++++ b/.idea/php.xml	(date 1612181998913)
+@@ -9,14 +9,16 @@
+       <path value="$PROJECT_DIR$/vendor/phpstan/phpstan" />
+       <path value="$PROJECT_DIR$/vendor/symfony/polyfill-iconv" />
+       <path value="$PROJECT_DIR$/vendor/symfony/polyfill-mbstring" />
++      <path value="$PROJECT_DIR$/vendor/symfony/polyfill-php72" />
+       <path value="$PROJECT_DIR$/vendor/symfony/polyfill-intl-normalizer" />
+       <path value="$PROJECT_DIR$/vendor/symfony/polyfill-intl-idn" />
+       <path value="$PROJECT_DIR$/vendor/doctrine/lexer" />
+       <path value="$PROJECT_DIR$/vendor/swiftmailer/swiftmailer" />
+-      <path value="$PROJECT_DIR$/vendor/symfony/polyfill-php72" />
+     </include_path>
+   </component>
+-  <component name="PhpProjectSharedConfiguration" php_language_level="7.4" />
++  <component name="PhpProjectSharedConfiguration" php_language_level="7.4">
++    <option name="suggestChangeDefaultLanguageLevel" value="false" />
++  </component>
+   <component name="PhpStan">
+     <PhpStan_settings>
+       <PhpStanConfiguration tool_path="$PROJECT_DIR$/vendor/bin/phpstan" />
+Index: .idea/modules.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<project version=\"4\">\n  <component name=\"ProjectModuleManager\">\n    <modules>\n      <module fileurl=\"file://$PROJECT_DIR$/.idea/moviesfx.iml\" filepath=\"$PROJECT_DIR$/.idea/moviesfx.iml\" />\n    </modules>\n  </component>\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/modules.xml b/.idea/modules.xml
+--- a/.idea/modules.xml	(revision 6b72abedd0b66f6d110cf1f0d949b182891b08ed)
++++ b/.idea/modules.xml	(date 1612181998869)
+@@ -2,7 +2,7 @@
+ <project version="4">
+   <component name="ProjectModuleManager">
+     <modules>
+-      <module fileurl="file://$PROJECT_DIR$/.idea/moviesfx.iml" filepath="$PROJECT_DIR$/.idea/moviesfx.iml" />
++      <module fileurl="file://$PROJECT_DIR$/.idea/08-adrian-proyecto.iml" filepath="$PROJECT_DIR$/.idea/08-adrian-proyecto.iml" />
+     </modules>
+   </component>
+ </project>
+\ No newline at end of file
+Index: views/contacto.view.php
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>\n<div class=\"container-fluid\">\n    <div class=\"row titulo-formulario\">\n        <div class=\"col-5\">\n            <h1 style=\"color: black;\">Contacta con nosotros</h1>\n        </div>\n        <div class=\"row fila-formulario\">\n            <div class=\"form-style-3 col-5 col-formulario\">\n                <form>\n                    <fieldset><legend>Datos Personales</legend>\n                        <label for=\"field1\"><span>Nombre <span class=\"required\">*</span></span><input type=\"text\" class=\"input-field\" name=\"field1\" value=\"\" /></label>\n                        <label for=\"field2\"><span>Email <span class=\"required\">*</span></span><input type=\"email\" class=\"input-field\" name=\"field2\" value=\"\" /></label>\n                        <label for=\"field3\"><span>Asunto <span class=\"required\">*</span></span><input type=\"text\" class=\"input-field\" name=\"field3\" value=\"\" /></label>\n                    </fieldset>\n                    <fieldset><legend>Mensaje</legend>\n                        <label for=\"field6\"><span>Mensaje <span class=\"required\">*</span></span><textarea cols=\"30\" rows=\"6\"></textarea></label>\n                        <label><span></span><input type=\"submit\" value=\"Enviar\" /></label>\n                    </fieldset>\n                </form>\n            </div>\n\n            <div class=\"row\">\n\n            </div>\n        </div>\n    </div>\n</div>\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/views/contacto.view.php b/views/contacto.view.php
+--- a/views/contacto.view.php	(revision 6b72abedd0b66f6d110cf1f0d949b182891b08ed)
++++ b/views/contacto.view.php	(date 1612177065953)
+@@ -5,7 +5,7 @@
+             <h1 style="color: black;">Contacta con nosotros</h1>
+         </div>
+         <div class="row fila-formulario">
+-            <div class="form-style-3 col-5 col-formulario">
++            <div class="form-style-3 col-12 col-formulario">
+                 <form>
+                     <fieldset><legend>Datos Personales</legend>
+                         <label for="field1"><span>Nombre <span class="required">*</span></span><input type="text" class="input-field" name="field1" value="" /></label>
