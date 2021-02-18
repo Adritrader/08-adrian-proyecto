@@ -48,7 +48,7 @@ class Servicio implements Entity, JsonSerializable {
     {
         return [
             "id"=>$this->getId(),
-            "name"=>$this->getNombre()
+            "nombre"=>$this->getNombre()
         ];
     }
 

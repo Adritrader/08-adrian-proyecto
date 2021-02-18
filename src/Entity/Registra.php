@@ -11,10 +11,22 @@ use DateTime;
 class Registra implements Entity, JsonSerializable {
 
     private ?int $id = null;
-    private string $usuario_id;
-    private string $servicio_id;
-    private DateTime $hora;
-    private DateTime $fecha;
+    private int $USUARIO_id;
+    private int $SERVICIO_id;
+    private DateTime $hora_cita;
+    private DateTime $fecha_cita;
+
+    public function __set(string $name, $value)
+    {
+        switch ($name) {
+            case "hora":
+                $this->hora_cita = DateTime::createFromFormat("H:i:s", $value);
+                break;
+            case "fecha":
+                $this->fecha_cita = DateTime::createFromFormat("Y-m-d", $value);
+                break;
+        }
+    }
 
     /**
      * @return null
@@ -33,77 +45,81 @@ class Registra implements Entity, JsonSerializable {
     }
 
     /**
-     * @return mixed
+     * @return int
      */
-    public function getUsuarioId()
+    public function getUSUARIOId(): int
     {
-        return $this->usuario_id;
+        return $this->USUARIO_id;
     }
 
     /**
-     * @param mixed $usuario_id
+     * @param int $USUARIO_id
      */
-    public function setUsuarioId($usuario_id): void
+    public function setUSUARIOId(int $USUARIO_id): void
     {
-        $this->usuario_id = $usuario_id;
+        $this->USUARIO_id = $USUARIO_id;
     }
 
     /**
-     * @return mixed
+     * @return int
      */
-    public function getServicioId()
+    public function getSERVICIOId(): int
     {
-        return $this->servicio_id;
+        return $this->SERVICIO_id;
     }
 
     /**
-     * @param mixed $servicio_id
+     * @param int $SERVICIO_id
      */
-    public function setServicioId($servicio_id): void
+    public function setSERVICIOId(int $SERVICIO_id): void
     {
-        $this->servicio_id = $servicio_id;
+        $this->SERVICIO_id = $SERVICIO_id;
+    }
+
+
+
+
+    /**
+     * @return DateTime
+     */
+    public function getHoraCita(): DateTime
+    {
+        return $this->hora_cita;
     }
 
     /**
-     * @return mixed
+     * @param DateTime $hora_cita
      */
-    public function getHora()
+    public function setHoraCita(DateTime $hora_cita): void
     {
-        return $this->hora;
+        $this->hora_cita = $hora_cita;
     }
 
     /**
-     * @param mixed $hora
+     * @return DateTime
      */
-    public function setHora($hora): void
+    public function getFechaCita(): DateTime
     {
-        $this->hora = $hora;
+        return $this->fecha_cita;
     }
 
     /**
-     * @return mixed
+     * @param DateTime $fecha_cita
      */
-    public function getFecha()
+    public function setFechaCita(DateTime $fecha_cita): void
     {
-        return $this->fecha;
+        $this->fecha_cita = $fecha_cita;
     }
 
-    /**
-     * @param mixed $fecha
-     */
-    public function setFecha($fecha): void
-    {
-        $this->fecha = $fecha;
-    }
 
     public function toArray(): array
     {
         return [
             "id"=>$this->getId(),
-            "usuario_id"=>$this->getUsuarioId(),
-            "servicio_id"=>$this->getServicioId(),
-            "hora"=>$this->getHora(),
-            "fecha"=>$this->getFecha()
+            "USUARIO_id"=>$this->getUsuarioId(),
+            "SERVICIO_id"=>$this->getServicioId(),
+            "hora"=>$this->getHoraCita(),
+            "fecha"=>$this->getFechaCita()
         ];
     }
 

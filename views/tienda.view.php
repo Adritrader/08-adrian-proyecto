@@ -86,39 +86,21 @@
             <h2>Destacados</h2>
             <hr>
             <div class="row productos-miniaturas">
-                <div class="col-2 miniatura"><img src="/images/design/productos/kerastase-discipline.jpg" alt="kerastase-discipline">
-                    <span>27,50 €</span>
-                    <p>Kerastase Discipline es un térmico para el pelo. Destaca todo tipo de cabellos y repara las zonas dañadas. Disponible en envase de 500ml.</p>
-                    <button class="button-three"><i class="fas fa-info-circle"></i>Ver detalles</button>
-                    <button class="button-three"><i class="fas fa-shopping-cart"></i>Añadir compra</button>
-                </div>
-                <div class="col-2 miniatura"><img src="/images/design/productos/kerastase-soleil-kit.jpg" alt="kerastase-kit">
-                    <span>82,50 €</span>
-                    <p>Kerastase Soleil Kit se compone de una alta gama de productos para el pelo mascarillas, champú, acondicionadores y aceites esenciales.</p>
-                    <button class="button-three"><i class="fas fa-info-circle"></i>Ver detalles</button>
-                    <button class="button-three"><i class="fas fa-shopping-cart"></i>Añadir compra</button>
+            <?php use App\Entity\Producto;
 
-                </div>
-                <div class="col-2 miniatura"><img src="/images/design/productos/sebastian-mascarilla.jpg" alt="sebastian-mascarilla">
-                    <span>18,95 €</span>
-                    <p>Mascarilla Sebastian Penetrate. Mascarilla de alta calidad, textura sedosa, después de cada aplicación el cabello tendrá un brillo y volumen únicos.</p>
-                    <button class="button-three"><i class="fas fa-info-circle"></i>Ver detalles</button>
-                    <button class="button-three"><i class="fas fa-shopping-cart"></i>Añadir compra</button>
+            foreach ($productos as $producto) { ?>
 
-                </div>
-                <div class="col-2 miniatura"><img src="/images/design/productos/serum.jpg" alt="serum">
-                    <span>22,80 €</span>
-                    <p>Serum capilar reparador. Recupera la salud de tu cabello y dale una textura sedosa gracias a la calidad del Serum Reparador Kalogen. Formato 300ml.</p>
+                <div class="col-2 miniatura"><?= generar_imagen_local(Producto::IMAGEN_PATH . '/', $producto->getImagen(),
+                        $producto->getNombre(), 300, 200) ?>
+                    <span><?= $producto->getPrecio() . " " . "€"?></span>
+                    <p><?= $producto->getDescripcion() ?></p>
                     <button class="button-three"><i class="fas fa-info-circle"></i>Ver detalles</button>
                     <button class="button-three"><i class="fas fa-shopping-cart"></i>Añadir compra</button>
+                </div>
+                <?php
+                }
+                ?>
 
-                </div>
-                <div class="col-2 miniatura"><img src="/images/design/productos/ghd-plancha-pro.jpg" alt="ghd-plancha-pro">
-                    <span>244,95 €</span>
-                    <p>Plancha para Pelo GHD Proffesional Pro. Acabados profesionales y una alta calidad. No daña el cabello y no lo quema. Deja una textura sedosa.</p>
-                    <button class="button-three"><i class="fas fa-info-circle"></i>Ver detalles</button>
-                    <button class="button-three"><i class="fas fa-shopping-cart"></i>Añadir compra</button>
-                </div>
             </div>
         </div>
     </div>

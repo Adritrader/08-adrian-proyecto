@@ -2,7 +2,6 @@
     <div class="row fila-inputs-productos">
         <div class="col-4">
             <form method="post" action="<?php use App\Entity\Registra;
-
             $_SERVER["PHP_SELF"]; ?>"
                   class="form-inline">
                 <div class="form-group">
@@ -52,14 +51,15 @@
                             <th>Servicio</th>
                             <th>Hora</th>
                             <th>Fecha</th>
+                            <th>Acciones</th>
                         </tr>
+
                         <?php foreach ($registra as $reserva) { ?>
                             <tr>
-                                <td><?= $reserva->getId() ?></td>
-                                <td><?= $reserva->getNombre() ?></td>
-                                <td><?= $reserva->getApellidos() ?></td>
-                                <td><?= $reserva->getTelefono() ?></td>
-                                <td><?= $reserva->getEmail() ?></td>
+                                <td><?= $reserva->getUsuarioId() ?></td>
+                                <td><?= $reserva->getServicioId() ?></td>
+                                <td><?= $reserva->getHoraCita()->format("H:i:s") ?></td>
+                                <td><?= $reserva->getFechaCita()->format("Y-m-d") ?></td>
                                 <td><a href="/reservas/<?= $reserva->getId() ?>/edit">
                                         <button type="button" class="button-two"><i class="fa fa-edit"></i>Editar</button>
                                     </a>

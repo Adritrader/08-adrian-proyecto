@@ -19,7 +19,7 @@
                         <label for="field4"><span>Servicio<span class="required">*</span></span>
                             <select name="servicios" id="servicios">
                                 <?php foreach ($servicios as $servicio): ?>
-                                    <option value="<?=$servicio->getId() ?>"><?=$servicio->getName() ?></option>
+                                    <option value="<?=$servicio->getId() ?>"><?=$servicio->getNombre() ?></option>
                                 <?php endforeach; ?>
                             </select>
                         </label>
