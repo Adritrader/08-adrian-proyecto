@@ -1,8 +1,7 @@
 <div class="container-fluid">
     <div class="row fila-inputs-productos">
         <div class="col-4">
-            <form method="post" action="<?php use App\Entity\Registra;
-            $_SERVER["PHP_SELF"]; ?>"
+            <form method="post" action="<?= $router->getUrl("reservas_filter")?>"
                   class="form-inline">
                 <div class="form-group">
                     <input name="text" id="text" value="<?= ($_POST["text"]) ?? "" ?>"
@@ -23,7 +22,7 @@
                     </label></div>
                 <div class="form-check-inline">
                     <label class="form-check-inline">
-                        <input class="form-check-input" type="radio" name="optradio" id="both" value="Ambos" checked>&nbsp;Ambos
+                        <input class="form-check-input" type="radio" name="optradio" id="both" value="both" checked>&nbsp;Ambos
                         &nbsp;
                     </label>
                 </div></div>

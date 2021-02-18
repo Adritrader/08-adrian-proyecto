@@ -1,9 +1,8 @@
-
+<?php use App\Entity\Producto; ?>
 <div class="container-fluid">
     <div class="row fila-inputs-productos">
         <div class="col-4">
-            <form method="post" action="<?php use App\Entity\Producto;
-            $_SERVER["PHP_SELF"]; ?>"
+            <form method="post" action="<?= $router->getUrl("producto_filter")?>"
                   class="form-inline">
                 <div class="form-group">
                     <input name="text"
@@ -21,7 +20,7 @@
                     </label></div>
                 <div class="form-check-inline">
                     <label class="form-check-inline">
-                        <input class="form-check-input" type="radio" name="optradio" id="both" value="Ambos" checked>&nbsp;Ambos                        &nbsp;
+                        <input class="form-check-input" type="radio" name="optradio" id="both" value="both" checked>&nbsp;Ambos                        &nbsp;
                     </label>
                 </div>
                 <div class="form-group">
@@ -35,7 +34,7 @@
     </div>
     <?php if (empty($productos)) : ?>
 
-        <h3>No se ha encontrado ningún producto</h3>
+        <div class="col-8"><h3>No se ha encontrado ningún producto</h3></div>
     <?php else: ?>
     <div class="container">
         <div class="row">

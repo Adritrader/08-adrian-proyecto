@@ -70,7 +70,7 @@ class MyController extends Controller
         $servicios= $servicioModel->findAll();
 
 
-        return $this->response->renderView("reserva-cita", "my", compact("servicios"));
+        return $this->response->renderView("reserva-cita", "my", compact("servicios", "errors"));
 
 
     }

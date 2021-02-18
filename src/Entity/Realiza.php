@@ -10,7 +10,7 @@ use JsonSerializable;
 class Realiza implements Entity, JsonSerializable {
 
     private ?int $id = null;
-    private int $usuario_id;
+    private int $USUARIO_id;
 
     /**
      * @return null
@@ -29,19 +29,19 @@ class Realiza implements Entity, JsonSerializable {
     }
 
     /**
-     * @return int|null
+     * @return mixed
      */
-    public function getUsuarioId(): ?int
+    public function getUSUARIOId()
     {
-        return $this->usuario_id;
+        return $this->USUARIO_id;
     }
 
     /**
-     * @param int|null $usuario_id
+     * @param mixed $USUARIO_id
      */
-    public function setUsuarioId(?int $usuario_id): void
+    public function setUSUARIOId($USUARIO_id): void
     {
-        $this->usuario_id = $usuario_id;
+        $this->USUARIO_id = $USUARIO_id;
     }
 
 
@@ -50,7 +50,7 @@ class Realiza implements Entity, JsonSerializable {
     {
         return [
             "id"=>$this->getId(),
-            "nombre"=>$this->getUsuarioId()
+            "USUARIO_id"=>$this->getUSUARIOId()
         ];
     }
 

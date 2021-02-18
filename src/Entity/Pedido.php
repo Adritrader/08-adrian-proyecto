@@ -11,20 +11,19 @@ class Pedido implements Entity, JsonSerializable {
 
     private ?int $id = null;
     private int $precio;
-    private DateTime $fecha;
+    private DateTime $fecha_pedido;
     private string $estado;
-    private string $realiza_id;
-    private string $realiza_usuario_id;
+    private string $REALIZA_id;
+    private string $REALIZA_USUARIO_id;
 
 
     public function __set(string $name, $value){
         switch ($name) {
             case "fecha":
-                $this->fecha = DateTime::createFromFormat("Y-m-d", $value ?? date("Y-m-d"));
+                $this->fecha_pedido = DateTime::createFromFormat("Y-m-d", $value);
                 break;
         }
     }
-
     /**
      * @return null
      */
@@ -60,18 +59,22 @@ class Pedido implements Entity, JsonSerializable {
     /**
      * @return mixed
      */
-    public function getFecha()
+    public function getFechaPedido()
     {
-        return $this->fecha;
+        return $this->fecha_pedido;
     }
 
     /**
-     * @param mixed $fecha
+     * @param mixed $fecha_pedido
      */
-    public function setFecha($fecha): void
+    public function setFechaPedido($fecha_pedido): void
     {
-        $this->fecha = $fecha;
+        $this->fecha_pedido = $fecha_pedido;
     }
+
+
+
+
 
     /**
      * @return mixed
@@ -92,44 +95,46 @@ class Pedido implements Entity, JsonSerializable {
     /**
      * @return mixed
      */
-    public function getRealizaId()
+    public function getREALIZAId()
     {
-        return $this->realiza_id;
+        return $this->REALIZA_id;
     }
 
     /**
-     * @param mixed $realiza_id
+     * @param mixed $REALIZA_id
      */
-    public function setRealizaId($realiza_id): void
+    public function setREALIZAId($REALIZA_id): void
     {
-        $this->realiza_id = $realiza_id;
+        $this->REALIZA_id = $REALIZA_id;
     }
 
     /**
      * @return mixed
      */
-    public function getRealizaUsuarioId()
+    public function getREALIZAUSUARIOId()
     {
-        return $this->realiza_usuario_id;
+        return $this->REALIZA_USUARIO_id;
     }
 
     /**
-     * @param mixed $realiza_usuario_id
+     * @param mixed $REALIZA_USUARIO_id
      */
-    public function setRealizaUsuarioId($realiza_usuario_id): void
+    public function setREALIZAUSUARIOId($REALIZA_USUARIO_id): void
     {
-        $this->realiza_usuario_id = $realiza_usuario_id;
+        $this->REALIZA_USUARIO_id = $REALIZA_USUARIO_id;
     }
+
+
 
     public function toArray(): array
     {
         return [
             "id"=>$this->getId(),
             "precio"=>$this->getPrecio(),
-            "fecha"=>$this->getFecha()->format("Y-m-d"),
+            "fecha"=>$this->getFechaPedido(),
             "estado"=>$this->getEstado(),
-            "realiza_id"=>$this->getRealizaId(),
-            "realiza_usuario_id"=>$this->getRealizaUsuarioId()
+            "REALIZA_id"=>$this->getREALIZAId(),
+            "REALIZA_USUARIO_id"=>$this->getREALIZAUSUARIOId()
 
         ];
     }

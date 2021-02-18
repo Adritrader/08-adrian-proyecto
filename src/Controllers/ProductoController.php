@@ -8,16 +8,13 @@ use App\Core\Controller;
 use App\Core\Exception\ModelException;
 use App\Core\Exception\NotFoundException;
 use App\Core\Router;
-
 use App\Entity\Producto;
 use App\Exception\UploadedFileException;
 use App\Exception\UploadedFileNoFileException;
 use App\Model\ProductoModel;
 use App\Core\App;
-use App\Core\Security;
 use App\Utils\MyLogger;
 use App\Utils\UploadedFile;
-use DateTime;
 use Exception;
 use PDOException;
 
@@ -75,6 +72,7 @@ class ProductoController extends Controller {
         $tipo_busqueda = filter_input(INPUT_POST, "optradio", FILTER_SANITIZE_STRING);
 
         if (!empty($text)) {
+
             $productoModel = App::getModel(ProductoModel::class);
             if ($tipo_busqueda == "both") {
                 $productos = $productoModel->executeQuery("SELECT * FROM producto WHERE nombre LIKE :text OR descripcion LIKE :text",
@@ -95,8 +93,13 @@ class ProductoController extends Controller {
             $error = "Debe introducir una palabra de búsqueda";
         }
 
+        var_dump($productos);
+        var_dump($text);
+
         return $this->response->renderView("back/back-productos", "back", compact('title', 'productos',
             'productoModel', 'errors', 'router'));
+
+
     }
 
 

@@ -9,13 +9,9 @@ use App\Core\Exception\ModelException;
 use App\Core\Exception\NotFoundException;
 use App\Core\Router;
 use App\Entity\Usuario;
-use App\Model\GenreModel;
-use App\Model\MovieModel;
 use App\Core\App;
-use App\Core\Security;
 use App\Model\UsuarioModel;
 use App\Utils\MyLogger;
-use DateTime;
 use Exception;
 use PDOException;
 
@@ -64,10 +60,10 @@ class UsuarioController extends Controller
     public function filterUsuario(): string
     {
         // S'executa amb el POST
-        $title = "Movies - Movie FX";
+        $title = "BackOffice | Usuarios";
         $errors = [];
         $usuarioModel = null;
-        $usuario = null;
+        $usuarios = null;
 
         $router = App::get(Router::class);
 
@@ -77,26 +73,29 @@ class UsuarioController extends Controller
 
         if (!empty($text)) {
             $usuarioModel = App::getModel(UsuarioModel::class);
+
             if ($tipo_busqueda == "both") {
-                $usuario = $usuarioModel->executeQuery("SELECT * FROM usuario WHERE username LIKE :text OR email LIKE :text",
+                $usuarios = $usuarioModel->executeQuery("SELECT * FROM usuario WHERE username LIKE :text OR email LIKE :text",
                     ["text" => "%$text%"]);
+
 
             }
             if ($tipo_busqueda == "username") {
-                $usuario = $usuarioModel->executeQuery("SELECT * FROM usuario WHERE username LIKE :text",
+                $usuarios = $usuarioModel->executeQuery("SELECT * FROM usuario WHERE username LIKE :text",
                     ["text" => "%$text%"]);
+
 
             }
             if ($tipo_busqueda == "email") {
-                $usuario = $usuarioModel->executeQuery("SELECT * FROM usuario WHERE email LIKE :text",
+                $usuarios = $usuarioModel->executeQuery("SELECT * FROM usuario WHERE email LIKE :text",
                     ["text" => "%$text%"]);
             }
 
         } else {
-            $error = "Cal introduir una paraula de búsqueda";
+            $error = "Hay que introducir una palabra de búsqueda";
         }
 
-        return $this->response->renderView("movies", "default", compact('title', 'usuario',
+        return $this->response->renderView("back/back-usuarios", "back", compact('title', 'usuarios',
             'usuarioModel', 'errors', 'router'));
     }
 
@@ -259,7 +258,7 @@ class UsuarioController extends Controller
             "errors", "nombre"));
     }
 
-    public function registrar(): string
+    public function registrarUsuario(): string
     {
         $errors = [];
         $pdo = App::get("DB");

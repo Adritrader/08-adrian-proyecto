@@ -10,7 +10,6 @@ use App\Core\Exception\NotFoundException;
 use App\Core\Router;
 use App\Exception\UploadedFileException;
 use App\Exception\UploadedFileNoFileException;
-use App\Model\ContieneModel;
 use App\Core\App;
 use App\Model\PedidoModel;
 use App\Model\RealizaModel;
@@ -24,7 +23,7 @@ use PDOException;
  * Class MovieController
  * @package App\Controllers
  */
-class PedidoController extends Controller
+class RealizaController extends Controller
 {
     /**
      * @return string
@@ -36,11 +35,9 @@ class PedidoController extends Controller
         $title = "Pedidos";
         $errors = [];
         $pedidoModel = App::getModel(PedidoModel::class);
-        $realiza_usuarioModel = App::getModel( RealizaModel::class);
-        $contieneModel = App::getModel(ContieneModel::class);
-        $realizaUsuario = $realiza_usuarioModel->findAll();
         $pedidos = $pedidoModel->findAll();
-        $contiene = $contieneModel->findAll();
+        $realiza_usuarioModel = App::getModel( RealizaModel::class);
+        $realizaUsuario = $realiza_usuarioModel->findAll();
 
         $order = filter_input(INPUT_GET, "order", FILTER_SANITIZE_STRING);
 
@@ -48,7 +45,6 @@ class PedidoController extends Controller
             $orderBy = [$_GET["order"] => $_GET["tipo"]];
             try {
                 $realizaUsuario = $realiza_usuarioModel->findAll($orderBy);
-
             } catch (Exception $e) {
                 $errors[] = $e->getMessage();
             }
@@ -57,11 +53,10 @@ class PedidoController extends Controller
 
         $message = App::get("flash")::get("message");
 
-        var_dump($pedidos);
         var_dump($realizaUsuario);
 
-        return $this->response->renderView("back/back-pedidos", "back", compact('title', 'pedidos', 'realizaUsuario',
-            'pedidoModel', 'realiza_usuarioModel', 'contiene','contieneModel', 'errors', 'router', 'message'));
+        return $this->response->renderView("back/back-pedidos", "back", compact('title', 'realizaUsuario',
+            'pedidoModel', 'pedidos', 'errors', 'router', 'message'));
     }
 
     /**
@@ -84,7 +79,7 @@ class PedidoController extends Controller
 
         if (!empty($text)) {
 
-            $pedidoModel = App::getModel(PedidoModel::class);
+            $pedidoModel = App::getModel(MovieModel::class);
             if ($tipo_busqueda == "both") {
                 $pedido = $pedidoModel->executeQuery("SELECT * FROM pedido WHERE precio LIKE :text OR estado LIKE :text",
                     ["text" => "%$text%"]);
