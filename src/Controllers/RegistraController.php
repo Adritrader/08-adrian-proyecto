@@ -55,7 +55,7 @@ class RegistraController extends Controller {
         $router = App::get(Router::class);
 
         $message = App::get("flash")::get("message");
-        var_dump($registra);
+
 
         return $this->response->renderView("back/back-reservas", "back", compact('title', 'registra', "servicios",
             'registraModel', 'errors', 'router', 'message'));
@@ -102,7 +102,7 @@ class RegistraController extends Controller {
         }
 
         return $this->response->renderView("back/back-reservas", "back", compact('title', 'registra',
-            'productoModel', 'errors', 'router'));
+            'registraModel', 'errors', 'router'));
     }
 
 
@@ -352,27 +352,27 @@ class RegistraController extends Controller {
             "errors", "isGetMethod", "producto"));
     }
 
-    public function deleteProducto(int $id): string
+    public function deleteRegistra(int $id): string
     {
         $errors = [];
-        $producto = null;
-        $productoModel = App::getModel(ProductoModel::class);
+        $reserva = null;
+        $registraModel = App::getModel(RegistraModel::class);
 
         if (empty($id)) {
             $errors[] = '404 Not Found';
         } else {
             try {
-                $producto = $productoModel->find($id);
+                $reserva = $registraModel->find($id);
             } catch (NotFoundException $e) {
                 $errors[] = '404 Movie Not Found';
             }
         }
 
         $router = App::get(Router::class);
-        $productosPath = App::get("config")["imagen_path"];
 
-        return $this->response->renderView("productos-delete", "back", compact(
-            "errors", "producto", 'productosPath', 'router'));
+
+        return $this->response->renderView("reservas-delete", "back", compact(
+            "errors", "reserva", 'router'));
     }
 
     /**
@@ -383,34 +383,34 @@ class RegistraController extends Controller {
     public function destroyProducto(): string
     {
         $errors = [];
-        $productoModel = App::getModel(ProductoModel::class);
-        $producto = null;
+        $registraModel = App::getModel(RegistraModel::class);
+        $reserva = null;
 
         $id = filter_input(INPUT_POST, "id", FILTER_VALIDATE_INT);
         if (empty($id)) {
             $errors[] = '404 Not Found';
         } else {
-            $producto = $productoModel->find($id);
+            $reserva = $registraModel->find($id);
         }
         $userAnswer = filter_input(INPUT_POST, "userAnswer");
         if ($userAnswer === 'yes') {
             if (empty($errors)) {
                 try {
-                    $producto = $productoModel->find($id);
-                    $result = $productoModel->delete($producto);
+                    $reserva = $registraModel->find($id);
+                    $result = $registraModel->delete($reserva);
                 } catch (PDOException $e) {
                     $errors[] = "Error: " . $e->getMessage();
                 }
             }
         }
         else
-            App::get(Router::class)->redirect('back-productos');
+            App::get(Router::class)->redirect('back-reservas');
 
         if (empty($errors))
-            App::get(Router::class)->redirect('back-productos');
+            App::get(Router::class)->redirect('back-reservas');
         else
-            return $this->response->renderView("productos-destroy", "back",
-                compact("errors", "id", "producto"));
+            return $this->response->renderView("reservas-destroy", "back",
+                compact("errors", "id", "reserva"));
 
         return "";
     }

@@ -1,3 +1,5 @@
+<div class="container">
+
 <form action="<?php $_SERVER['PHP_SELF']; ?>" method="post" enctype="multipart/form-data" novalidate>
     <div class="form-group">
         <label for="nombre">Servicio:</label>
@@ -24,3 +26,4 @@
         <button type="submit" class="btn btn-primary">Reservar</button>
     </div>
 </form>
+</div>

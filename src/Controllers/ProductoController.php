@@ -178,22 +178,25 @@ class ProductoController extends Controller {
         $errors = [];
         if (!empty($id)) {
             try {
-                $productoModel = new MovieModel(App::get("DB"));
+                $productoModel = App::getModel(ProductoModel::class);
                 $producto = $productoModel->find($id);
-                $nombre = $producto->getNombre() . " (" . $producto->getDescripcion();
-                return $this->response->renderView("single-page", "back", compact(
-                    "errors", "prodcuto"));
+                $productos = $productoModel->findAll();
+                $nombre = $producto->getNombre() . "" . $producto->getDescripcion();
+                return $this->response->renderView("single-page", "my", compact(
+                    "errors", "producto", "productos"));
 
             } catch (NotFoundException $notFoundException) {
                 $errors[] = $notFoundException->getMessage();
             }
         }
         else
-            return $this->response->renderView("single-page", "back", compact(
-                "errors"));
+            return $this->response->renderView("single-page", "my", compact(
+                "errors", "producto", "productos"));
 
         return "";
     }
+
+
 
     public function updateProducto(int $id): string
     {

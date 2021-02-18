@@ -69,6 +69,7 @@ class MyController extends Controller
         $servicioModel = App::getModel(ServicioModel::class);
         $servicios= $servicioModel->findAll();
 
+
         return $this->response->renderView("reserva-cita", "my", compact("servicios"));
 
 
@@ -86,8 +87,10 @@ class MyController extends Controller
         $errors = [];
         $productoModel = App::getModel(ProductoModel::class);
         $productos = $productoModel->findAll();
+        $router = App::get(Router::class);
 
-        return $this->response->renderView("tienda", "my", compact("productos"));
+
+        return $this->response->renderView("tienda", "my", compact("productos","router", "errors"));
 
 
     }
@@ -104,6 +107,16 @@ class MyController extends Controller
     {
 
         return $this->response->renderView("perfil", "my");
+
+
+    }
+
+    public function singlePage(): string
+    {
+
+
+
+        return $this->response->renderView("single-page", "my");
 
 
     }

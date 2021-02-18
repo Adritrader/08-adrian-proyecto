@@ -88,13 +88,15 @@
             <div class="row productos-miniaturas">
             <?php use App\Entity\Producto;
 
+
             foreach ($productos as $producto) { ?>
 
                 <div class="col-2 miniatura"><?= generar_imagen_local(Producto::IMAGEN_PATH . '/', $producto->getImagen(),
                         $producto->getNombre(), 300, 200) ?>
                     <span><?= $producto->getPrecio() . " " . "€"?></span>
                     <p><?= $producto->getDescripcion() ?></p>
-                    <button class="button-three"><i class="fas fa-info-circle"></i>Ver detalles</button>
+                    <a href="<?=$router->getUrl("producto_show", ["id"=>$producto->getId()])?>">
+                        <button class="button-three"><i class="fas fa-info-circle"></i>Ver detalles</button></a>
                     <button class="button-three"><i class="fas fa-shopping-cart"></i>Añadir compra</button>
                 </div>
                 <?php

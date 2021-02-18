@@ -8,6 +8,8 @@
                     <input name="text" id="text" value="<?= ($_POST["text"]) ?? "" ?>"
                            type="text" placeholder="Buscar" aria-label="Search">
                 </div>
+
+                <div class="row">
                 <div class="form-check-inline">
                     <label class="form-check-label">
                         <input class="form-check-input" type="radio" name="optradio" id="hora" value="hora">&nbsp;Hora
@@ -24,11 +26,13 @@
                         <input class="form-check-input" type="radio" name="optradio" id="both" value="Ambos" checked>&nbsp;Ambos
                         &nbsp;
                     </label>
-                </div>
+                </div></div>
+                <div class="row">
                 <div class="form-group">
                     <button style="margin-top: 15px; margin-left: 0px" class="button-four" type="submit" name="botonFiltrar">
                         Buscar
                     </button>
+                </div>
                 </div>
             </form>
         </div>
@@ -56,6 +60,7 @@
 
                         <?php foreach ($registra as $reserva) { ?>
                             <tr>
+                                <td><?= $reserva->getId()?></td>
                                 <td><?= $reserva->getUsuarioId() ?></td>
                                 <td><?= $reserva->getServicioId() ?></td>
                                 <td><?= $reserva->getHoraCita()->format("H:i:s") ?></td>
