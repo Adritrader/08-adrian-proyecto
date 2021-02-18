@@ -12,10 +12,12 @@ use App\Core\Router;
 use App\Entity\Producto;
 use App\Exception\UploadedFileException;
 use App\Exception\UploadedFileNoFileException;
+use App\Model\MovieModel;
 use App\Model\ProductoModel;
 use App\Core\App;
 use App\Core\Security;
 use App\Model\RegistraModel;
+use App\Model\ServicioModel;
 use App\Utils\MyLogger;
 use App\Utils\UploadedFile;
 use DateTime;
@@ -36,6 +38,8 @@ class RegistraController extends Controller {
         $errors = [];
         $registraModel = App::getModel(RegistraModel::class);
         $registra = $registraModel->findAll();
+        $servicioModel = App::getModel(ServicioModel::class);
+        $servicios = $servicioModel->findAll();
 
         $order = filter_input(INPUT_GET, "order", FILTER_SANITIZE_STRING);
 
@@ -51,8 +55,9 @@ class RegistraController extends Controller {
         $router = App::get(Router::class);
 
         $message = App::get("flash")::get("message");
+        var_dump($registra);
 
-        return $this->response->renderView("back/back-reservas", "back", compact('title', 'registra',
+        return $this->response->renderView("back/back-reservas", "back", compact('title', 'registra', "servicios",
             'registraModel', 'errors', 'router', 'message'));
 
     }

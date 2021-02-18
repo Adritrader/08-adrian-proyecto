@@ -8,6 +8,9 @@ use App\Core\Router;
 use App\Model\GenreModel;
 use App\Model\MovieModel;
 use App\Model\PartnerModel;
+use App\Model\ProductoModel;
+use App\Model\RegistraModel;
+use App\Model\ServicioModel;
 use App\Utils\MyMail;
 use DateTime;
 use Exception;
@@ -62,8 +65,11 @@ class MyController extends Controller
     }
     public function reservaCita(): string
     {
+        $errors = [];
+        $servicioModel = App::getModel(ServicioModel::class);
+        $servicios= $servicioModel->findAll();
 
-        return $this->response->renderView("reserva-cita", "my");
+        return $this->response->renderView("reserva-cita", "my", compact("servicios"));
 
 
     }
@@ -77,7 +83,11 @@ class MyController extends Controller
     public function tienda(): string
     {
 
-        return $this->response->renderView("tienda", "my");
+        $errors = [];
+        $productoModel = App::getModel(ProductoModel::class);
+        $productos = $productoModel->findAll();
+
+        return $this->response->renderView("tienda", "my", compact("productos"));
 
 
     }

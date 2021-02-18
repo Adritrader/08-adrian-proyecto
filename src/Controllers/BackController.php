@@ -7,7 +7,6 @@ use App\Core\Controller;
 use App\Core\Exception\ModelException;
 use App\Core\Exception\NotFoundException;
 use App\Core\Router;
-use App\Entity\Movie;
 use App\Entity\Usuario;
 use App\Entity\Producto;
 use App\Exception\UploadedFileException;

@@ -74,6 +74,7 @@ $router->get("back-usuarios", "BackController", "backUsuarios");
 /*BackOffice Productos routes*/
 
 $router->get("productos", "BackController", "index", [], "producto_index", "ROLE_ADMIN");
+
 $router->post("productos", "BackController", "filter", [], "producto_filter", "ROLE_ADMIN");
 $router->get("productos/create", "BackController", "createProducto", [], "producto_create", "ROLE_ADMIN");
 $router->post("productos/create", "BackController", "storeProducto", [], "producto_store", "ROLE_ADMIN");
@@ -114,7 +115,7 @@ $router->post("usuarios/delete", "UsuarioController", "destroyUsuario", [], "usu
 
 /* BackOffice Reservas routes */
 
-$router->get("registra", "BackController", "index", [], "registra_index", "ROLE_ADMIN");
+$router->get("back-reservas", "RegistraController", "index", [], "registra_index", "ROLE_ADMIN");
 $router->post("registra", "BackController", "filter", [], "registra_filter", "ROLE_ADMIN");
 $router->get("registra/create", "BackController", "createRegistra", [], "registra_create", "ROLE_ADMIN");
 $router->post("registra/create", "BackController", "storeRegistra", [], "registra_store", "ROLE_ADMIN");

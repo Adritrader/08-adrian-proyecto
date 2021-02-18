@@ -9,14 +9,16 @@
     </div>
     <div class="form-group">
         <select class="form-control" name="hora" id="hora"
-        <?php foreach ($horas as $hora): ?>
-            <option value="<?=$hora->getId() ?>"><?=$hora->getHora() ?></option>
+        <?php foreach ($reservas as $reserva): ?>
+            <option value="<?=$reserva->getId() ?>"><?=$reserva->getHoraCita()->format("H:i:s");  ?></option>
         <?php endforeach; ?>
         </select>
     </div>
     <div class="form-group">
         <label for="fecha">Fecha:</label>
-        <input id="fecha" class="form-control" type="date" name="fecha" required>
+        <?php foreach ($reservas as $reserva): ?>
+            <option value="<?=$reserva->getId() ?>"><?=$reserva->getFechaCita()->format("Y-m-d");  ?></option>
+        <?php endforeach; ?>
     </div>
     <div class="form-group text-right">
         <button type="submit" class="btn btn-primary">Reservar</button>

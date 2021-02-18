@@ -29,20 +29,22 @@ class Realiza implements Entity, JsonSerializable {
     }
 
     /**
-     * @return mixed
+     * @return int|null
      */
-    public function getUsuarioId()
+    public function getUsuarioId(): ?int
     {
         return $this->usuario_id;
     }
 
     /**
-     * @param mixed $usuario_id
+     * @param int|null $usuario_id
      */
-    public function setUsuarioId($usuario_id): void
+    public function setUsuarioId(?int $usuario_id): void
     {
         $this->usuario_id = $usuario_id;
     }
+
+
 
     public function toArray(): array
     {
