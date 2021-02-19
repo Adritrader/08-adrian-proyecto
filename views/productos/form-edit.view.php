@@ -23,8 +23,8 @@
         <input id="precio" class="form-control" value="<?= $producto->getPrecio() ?>" type="text" name="precio" required>
     </div>
     <div class="form-group">
-        <label for="imagen">Logo:</label>
-        <input type="hidden" name="poster" value="<?= $producto->getImagen() ?>">
+        <label for="imagen">Imagen:</label>
+        <input type="hidden" name="imagen" value="<?= $producto->getImagen() ?>">
         <input id="imagen" class="form-control" type="file" name="imagen" value="<?= $producto->getImagen() ?>" required>
         <small><?= $producto->getImagen() ?></small>
     </div>

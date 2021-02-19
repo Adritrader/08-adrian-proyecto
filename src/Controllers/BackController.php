@@ -359,22 +359,13 @@ class BackController extends Controller
 
     public function updateProducto(int $id): string
     {
-        $isGetMethod = true;
         $errors = [];
-
-        $id = filter_input(INPUT_POST, "id", FILTER_VALIDATE_INT);
-        if (empty($id)) {
-            $errors[] = "Wrong ID";
-        }
-
-        $errors = [];
-        $pdo = App::get("DB");
-
+        $isGetMethod = false;
         $nombre = filter_input(INPUT_POST, "nombre", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         $categoria = filter_input(INPUT_POST, "categoria", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         $precio = filter_input(INPUT_POST, "precio", FILTER_VALIDATE_INT);
         $descripcion = filter_input(INPUT_POST, "descripcion", FILTER_SANITIZE_SPECIAL_CHARS);
-        $imagen = "nofoto.jpg";
+        $imagen = filter_input(INPUT_POST, "imagen");
 
         if (empty($nombre)) {
             $errors[] = "El nombre es obligatorio";
@@ -394,15 +385,19 @@ class BackController extends Controller
         // Si hay errores no necesitamos subir la imagen
         if (empty($errors)) {
             try {
-                $uploadedFile = new UploadedFile("imagen", 2000 * 1024, ["image/jpeg", "image/jpg"]);
-                if ($uploadedFile->validate()) {
-                    $uploadedFile->save(Producto::IMAGEN_PATH);
-                    $imagen = $uploadedFile->getFileName();
+                $imagenSubida = new UploadedFile('imagen', 300000, ['image/jpg', 'image/jpeg']);
+                if ($imagenSubida->validate()) {
+                    $imagenSubida->save(Producto::IMAGEN_PATH, uniqid("PRO"));
+                    $imagen = $imagenSubida->getFileName();
                 }
-            } catch (Exception $exception) {
-                $errors[] = "Error uploading file ($exception)";
+                //Al estar editando no nos interesa que se muestre este error ya que puede ser que no suba archivo
+            } catch (UploadedFileNoFileException $uploadFileNoFileException) {
+                //$errors[] = $uploadFileNoFileException->getMessage();
+            } catch (UploadedFileException $uploadFileException) {
+                $errors[] = $uploadFileException->getMessage();
             }
         }
+
 
         if (empty($errors)) {
             try {
@@ -421,7 +416,7 @@ class BackController extends Controller
             }
         }
         return $this->response->renderView("productos-edit", "back", compact(
-            "errors", "isGetMethod", "producto"));
+            "errors", "isGetMethod"));
     }
 
     public function editProducto(int $id): string

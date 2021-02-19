@@ -43,9 +43,11 @@
                         <i class="fa fa-plus-circle">
                         </i> Añadir usuario</button></a>
         </div>
+
         <table id="tabla-usuarios">
             <tr>
                 <th>ID</th>
+                <th>Avatar</th>
                 <th>Nombre</th>
                 <th>Apellidos</th>
                 <th>Telefono</th>
@@ -57,6 +59,7 @@
             <?php foreach ($usuarios as $usuario) { ?>
                 <tr>
                     <td><?= $usuario->getId() ?></td>
+                    <td><?= $usuario->getAvatar() ?></td>
                     <td><?= $usuario->getNombre() ?></td>
                     <td><?= $usuario->getApellidos() ?></td>
                     <td><?= $usuario->getTelefono() ?></td>

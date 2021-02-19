@@ -15,6 +15,7 @@ class Usuario implements Entity, JsonSerializable {
     private string $email;
     private string $username;
     private string $password;
+    private string $avatar;
     private string $role;
 
     /**
@@ -131,6 +132,23 @@ class Usuario implements Entity, JsonSerializable {
     }
 
     /**
+     * @return string
+     */
+    public function getAvatar(): string
+    {
+        return $this->avatar;
+    }
+
+    /**
+     * @param string $avatar
+     */
+    public function setAvatar(string $avatar): void
+    {
+        $this->avatar = $avatar;
+    }
+
+
+    /**
      * @return mixed
      */
     public function getRole()
@@ -157,6 +175,7 @@ class Usuario implements Entity, JsonSerializable {
             "email"=>$this->getEmail(),
             "username"=>$this->getUsername(),
             "password"=>$this->getPassword(),
+            "avatar"=>$this->getAvatar(),
             "role"=>$this->getRole()
         ];
     }

@@ -201,72 +201,7 @@ class ProductoController extends Controller {
 
 
 
-    public function updateProducto(int $id): string
-    {
-        $isGetMethod = true;
-        $errors = [];
 
-        $id = filter_input(INPUT_POST, "id", FILTER_VALIDATE_INT);
-        if (empty($id)) {
-            $errors[] = "Wrong ID";
-        }
-
-        $errors = [];
-        $pdo = App::get("DB");
-
-        $nombre = filter_input(INPUT_POST, "nombre", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-        $categoria = filter_input(INPUT_POST, "categoria", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-        $precio = filter_input(INPUT_POST, "precio", FILTER_VALIDATE_INT);
-        $descripcion = filter_input(INPUT_POST, "descripcion", FILTER_SANITIZE_SPECIAL_CHARS);
-        $imagen = "nofoto.jpg";
-
-        if (empty($nombre)) {
-            $errors[] = "El nombre es obligatorio";
-        }
-        if (empty($categoria)) {
-            $errors[] = "La categoria es obligatorios";
-        }
-
-        if (empty($precio)) {
-            $errors[] = "El precio es obligatorio";
-        }
-
-        if (empty($descripcion)) {
-            $errors[] = "La descripcion es obligatoria";
-        }
-
-        // Si hay errores no necesitamos subir la imagen
-        if (empty($errors)) {
-            try {
-                $uploadedFile = new UploadedFile("imagen", 2000 * 1024, ["image/jpeg", "image/jpg"]);
-                if ($uploadedFile->validate()) {
-                    $uploadedFile->save(Producto::IMAGEN_PATH);
-                    $imagen = $uploadedFile->getFileName();
-                }
-            } catch (Exception $exception) {
-                $errors[] = "Error uploading file ($exception)";
-            }
-        }
-
-        if (empty($errors)) {
-            try {
-                $productoModel = App::getModel(ProductoModel::class);
-                // getting the partner by its identifier
-                $producto = $productoModel->find($id);
-                $producto->setNombre($nombre);
-                $producto->setCategoria($categoria);
-                $producto->setDescripcion($descripcion);
-                $producto->setPrecio($precio);
-                $producto->setImagen($imagen);
-                // updating changes
-                $productoModel->update($producto);
-            } catch (Exception $e) {
-                $errors[] = 'Error: ' . $e->getMessage();
-            }
-        }
-        return $this->response->renderView("productos-edit", "back", compact(
-            "errors", "isGetMethod", "producto"));
-    }
 
     public function editProducto(int $id): string
     {

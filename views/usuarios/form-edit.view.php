@@ -25,6 +25,10 @@
         <label for="role">Role:</label>
         <input id="role" class="form-control" type="text" name="role" value="<?= $usuario->getRole() ?>" required>
     </div>
+    <div class="form-group">
+        <label for="avatar">Avatar:</label>
+        <input id="avatar" class="form-control" type="file" name="avatar" value="<?= $usuario->getAvatar() ?>" required>
+    </div>
     <div class="form-group text-right">
         <button type="submit" class="btn btn-primary">Guardar usuario</button>
     </div>

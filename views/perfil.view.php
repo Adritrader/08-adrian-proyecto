@@ -1,63 +1,30 @@
 <!-- Load an icon library to show a hamburger menu (bars) on small screens -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <link rel="stylesheet" href="/public/css/perfil.css">
-<script>
 
-    function myFunction() {
-        var x = document.getElementById("myTopnav");
-        if (x.className === "topnav") {
-            x.className += " responsive";
-        } else {
-            x.className = "topnav";
-        }
-    }
 
-</script>
+<div class="container-fluid">
+    <div class="row d-flex">
+        <div class="col-10">
+            <h1>Perfil de usuario</h1>
+        </div>
+        <div class="col-2 py-2"><button class="btn btn-primary"><i class="fa fa-trash mr-1"></i>Borrar Cuenta</button></div>
+    </div>
+    <div class="row py-2 px-2 mx-2">
+        <div class="card col-lg-3 col-md-6 py-2">
+            <img class="rounded w-100" src="/images/design/productos/ghd-peine-rizado.jpg" alt="avatar">
+        </div>
 
-<div class="topnav">
-    <a href="#datospersonales" class="active">Datos Personales</a>
-    <a href="#reservas">Reservas</a>
-    <a href="#pedidos">Pedidos</a>
-    <a href="#pedidos">Borrar Cuenta</a>
-    <a href="javascript:void(0);" class="icon" onclick="myFunction()">
-        <i class="fa fa-bars"></i>
-    </a>
+        <div class="card col-lg-9 col-md-6 py-2">
+            <h2><strong>Nombre:</strong> {{ movie.releaseDate | date("Y/m/d")}}</h2>
+            <h2><strong>Apellidos:</strong> {{ movie.releaseDate | date("Y/m/d")}}</h2>
+            <h2 class="card-title"><strong>Username:</strong> {{ movie.title }}</h2>
+            <h2 class="text-muted mt-2"><strong>Email:</strong> {{ movie.tagline }}</h2>
+            <h2><strong>Teléfono:</strong> {{ movie.releaseDate | date("Y/m/d")}}</h2>
+            <h2><strong>Direccion:</strong> {{ movie.releaseDate | date("Y/m/d")}}</h2>
+        </div>
+        <div class="col-12">
+            <button class="btn bg-danger"><i class="fa fa-edit mr-1"></i>Editar</button>
+        </div>
+    </div>
 </div>
-
-<form  id="datospersonales"class="form-style-3" action="" method="post" enctype="multipart/form-data" novalidate>
-    <fieldset>
-        <div class="form-group">
-            <label for="nombre">Nombre:</label>
-            <input id="nombre" class="form-control" type="text" name="nombre" required>
-        </div>
-        <div class="form-group">
-            <label for="apellidos">Apellidos:</label>
-            <input id="apellidos" type="text" name="apellidos" class="form-control" required>
-        </div>
-        <div class="form-group">
-            <label for="telefono">Telefono:</label>
-            <input id="telefono" name="telefono" type="text" class="form-control rounded-0" rows="4">
-        </div>
-        <div class="form-group">
-            <label for="email">Email:</label>
-            <input id="email" class="form-control" type="email" name="email" required>
-        </div>
-        <div class="form-group">
-            <label for="username">Username:</label>
-            <input id="username" class="form-control" type="text" name="username" required>
-        </div>
-        <div class="form-group">
-            <label for="password">Password:</label>
-            <input id="password" class="form-control" type="password" name="password" required>
-        </div>
-        <div class="form-group">
-            <label for="repitePassword">Repite Password:</label>
-            <input id="repitePassword" class="form-control" type="password" name="repitePassword" required>
-        </div>
-        <div class="botones-form">
-            <div class="form-group text-right">
-                <button type="submit" class="button-two">Guardar</button>
-            </div>
-        </div>
-    </fieldset>
-</form>

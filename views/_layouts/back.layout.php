@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="/css/styles.css">
     <link rel="stylesheet" href="/css/template-grid3.css">
     <link rel="stylesheet" href="/css/formulario-reserva.css">
-    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+    <link rel="stylesheet" href="//use.fontawesome.com/releases/v5.0.13/css/all.css">
     <!--<script src="../js/calendar.js"></script>-->
     <title>BackOffice | Joan Bisquert Peluqueros</title>
 </head>
@@ -56,7 +56,7 @@
                 <a class="<?=isActiveOption(trim($_SERVER['REQUEST_URI'],  "/"), "back-blog");?>"href="/back-blog"><i class="fab fa-blogger-b"></i>BLOG</a>
                 <a class="<?=isActiveOption(trim($_SERVER['REQUEST_URI'],  "/"), "back-productos");?>"href="/back-productos"><i class="fas fa-store-alt"></i>PRODUCTOS</a>
                 <a class="<?=isActiveOption(trim($_SERVER['REQUEST_URI'],  "/"), "back-pedidos");?>"href="/back-pedidos"><i class="far fa-newspaper"></i>PEDIDOS</a>
-                <a class="<?=isActiveOption(trim($_SERVER['REQUEST_URI'],  "/"), "back-usuarios");?>"href="/back-usuarios"><i class="fas fa-border-all"></i>USUARIOS</a>
+                <a class="<?=isActiveOption(trim($_SERVER['REQUEST_URI'],  "/"), "back-usuarios");?>"href="/back-usuarios"><i class="fas fa-user"></i>USUARIOS</a>
             </div>
         </div>
     </div>

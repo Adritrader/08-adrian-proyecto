@@ -17,7 +17,7 @@
 
         <div class="row fila-formulario">
             <div class="form-style-3 col-4 col-formulario">
-                <form action="/contact" method="post">
+                <form action="/registrarUsuario" method="post">
                     <fieldset>
                         <legend>Datos Personales</legend>
                         <label for="field1"><span>Nombre <span class="required">*</span></span><input type="text"
@@ -32,6 +32,8 @@
                                                                                                     class="input-field" name="password"></label>
                         <label for="field4"><span>Repite Password<span class="required">*</span></span><input type="text"
                                                                                                     class="input-field" name="repitepassword"></label>
+                        <label for="field4"><span>Avatar<span class="required">*</span></span><input type="file"
+                                                                                                    class="input-field" name="avatar"></label>
 
                     </fieldset>
                     <input type="submit" value="Sign Up">

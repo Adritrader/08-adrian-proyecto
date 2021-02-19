@@ -32,6 +32,10 @@
                         <label for="repitePassword">Repite Password:</label>
                         <input id="repitePassword" class="form-control" type="password" name="repitePassword" required>
                     </div>
+                    <div class="form-group">
+                        <label for="repitePassword">Avatar:</label>
+                        <input id="repitePassword" class="form-control" type="file" name="avatar" required>
+                    </div>
                     <div class="botones-form">
                         <div class="form-group text-right">
                             <button type="submit" class="button-two">Guardar</button>

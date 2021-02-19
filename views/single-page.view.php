@@ -2,6 +2,7 @@
 
 use App\Entity\Producto;
 
+
 ?>
 <div class="container-fluid">
         <div class="row fila-servicios">
@@ -27,7 +28,7 @@ use App\Entity\Producto;
                     if (empty($errors)) : ?>
                     <div class="gallery-item">
                         <div class="image">
-                            <?= generar_imagen_local(Producto::IMAGEN_PATH . '/', $producto->getImagen(),
+                            <?= generar_imagen_local('/' . Producto::IMAGEN_PATH . '/', $producto->getImagen(),
                                 $producto->getNombre()) ?>
                         </div>
                         <div class="row fila-thumbnail">
