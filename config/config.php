@@ -17,6 +17,7 @@ return [
     "partners_path" => "images/partners/",
     "posters_path" => "images/posters/",
     "imagen_path" => "images/design/productos/",
+    "avatar_path" => "images/design/",
     'mailer' => [
         'smtp_server' => "smtp.gmail.com",
         'smtp_port' => 587,

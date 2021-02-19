@@ -1,6 +1,6 @@
 <div class="container">
     <div class="row">
-        <div class="col-8">
+        <div class="col-12">
             <h1>Borrar producto</h1>
             <?php if (!empty($errors)) : ?>
                 <ul>
@@ -8,7 +8,7 @@
                         <li><?= $error ?></li>
                     <?php endforeach; ?>
                 </ul>
-            <?else: ?>
+            <?php else: ?>
                 <?php require __DIR__ . '/productos/form-delete.view.php' ?>
             <?php endif; ?>
         </div>

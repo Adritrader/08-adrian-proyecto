@@ -8,10 +8,12 @@ use App\Core\Controller;
 use App\Core\Exception\ModelException;
 use App\Core\Exception\NotFoundException;
 use App\Core\Router;
+use App\Entity\Producto;
 use App\Entity\Usuario;
 use App\Core\App;
 use App\Model\UsuarioModel;
 use App\Utils\MyLogger;
+use App\Utils\UploadedFile;
 use Exception;
 use PDOException;
 
@@ -99,82 +101,16 @@ class UsuarioController extends Controller
             'usuarioModel', 'errors', 'router'));
     }
 
+public function createUsuario(): string
+{
 
-    public function registrar(): string
-    {
-        $errors = [];
-        $pdo = App::get("DB");
+    $title = "SignUp";
+    $router = App::get(Router::class);
 
-        $nombre = filter_input(INPUT_POST, "nombre", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-        $apellidos = filter_input(INPUT_POST, "apellidos", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-        $telefono = filter_input(INPUT_POST, "telefono", FILTER_VALIDATE_INT);
-        $email = filter_input(INPUT_POST, "email", FILTER_VALIDATE_EMAIL);
-        $username = filter_input(INPUT_POST, "username");
-        $password = filter_input(INPUT_POST, "password");
-        $repitePassword = filter_input(INPUT_POST, "repitePassword");
-
-        if (empty($nombre)) {
-            $errors[] = "El nombre es obligatorio";
-        }
-        if (empty($apellidos)) {
-            $errors[] = "Los apellidos son obligatorios";
-        }
-
-        if (empty($telefono)) {
-            $errors[] = "El teléfono es obligatorio";
-        }
-
-        if (empty($email)) {
-            $errors[] = "El email es obligatorio";
-        }
-
-        if (empty($username)) {
-            $errors[] = "El username es obligatorio";
-        }
-
-        if (empty($password)) {
-            $errors[] = "El password es obligtorio";
-        }
-
-        if(empty($repitePassword)){
-
-            $errors[] = "Debe repetir el password";
-        }
-
-        if($repitePassword !== $password){
-
-            $errors[] = "Debe introcir el mismo password";
-        }
+    return $this->response->renderView("usuarios-create-form", "my", compact('title', 'router'));
+}
 
 
-        if (empty($errors)) {
-            try {
-                $usuarioModel = new UsuarioModel($pdo);
-                $usuario = new Usuario();
-
-                $usuario->setNombre($nombre);
-                $usuario->setApellidos($apellidos);
-                $usuario->setTelefono($telefono);
-                $usuario->setEmail($email);
-                $usuario->setUsername($username);
-                $usuario->setPassword($password);
-                $usuario->setRole("ROLE_USER");
-
-                $usuarioModel->saveTransaction($usuario);
-                App::get(MyLogger::class)->info("Se ha creado un nuevo usuario");
-
-            } catch (PDOException | ModelException | Exception $e) {
-                $errors[] = "Error: " . $e->getMessage();
-            }
-        }
-
-        if (empty($errors)) {
-            App::get(Router::class)->redirect("usuarios");
-        }
-
-        return $this->response->renderView("usuarios-create", "my", compact(
-            "errors", "nombre"));
-    }
 
 
     /**
@@ -186,6 +122,7 @@ class UsuarioController extends Controller
         $errors = [];
         $pdo = App::get("DB");
 
+
         $nombre = filter_input(INPUT_POST, "nombre", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         $apellidos = filter_input(INPUT_POST, "apellidos", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         $telefono = filter_input(INPUT_POST, "telefono", FILTER_VALIDATE_INT);
@@ -193,6 +130,7 @@ class UsuarioController extends Controller
         $username = filter_input(INPUT_POST, "username");
         $password = filter_input(INPUT_POST, "password");
         $repitePassword = filter_input(INPUT_POST, "repitePassword");
+        $avatar = filter_input(INPUT_POST, "avatar");
 
         if (empty($nombre)) {
             $errors[] = "El nombre es obligatorio";
@@ -227,8 +165,23 @@ class UsuarioController extends Controller
             $errors[] = "Debe introcir el mismo password";
         }
 
+        // Si hay errores no necesitamos subir la imagen
+        if (empty($errors)) {
+            try {
+                $uploadedFile = new UploadedFile("avatar", 2000 * 1024, ["image/jpeg", "image/jpg", "image/png"]);
+                if ($uploadedFile->validate()) {
+                    $uploadedFile->save(Usuario::AVATAR_PATH);
+                    $avatar = $uploadedFile->getFileName();
+                }
+            } catch (Exception $exception) {
+                $errors[] = "Error uploading file ($exception)";
+            }
+        }
+        var_dump($errors);
 
         if (empty($errors)) {
+
+
             try {
                 $usuarioModel = new UsuarioModel($pdo);
                 $usuario = new Usuario();
@@ -239,7 +192,10 @@ class UsuarioController extends Controller
                 $usuario->setEmail($email);
                 $usuario->setUsername($username);
                 $usuario->setPassword($password);
+                $usuario->setAvatar($avatar);
                 $usuario->setRole("ROLE_USER");
+
+
 
                 $usuarioModel->saveTransaction($usuario);
                 App::get(MyLogger::class)->info("Se ha creado un nuevo usuario");
@@ -251,10 +207,10 @@ class UsuarioController extends Controller
 
         if (empty($errors)) {
             App::get('flash')->set("message", "Se ha registrado correctamente");
-            App::get(Router::class)->redirect("back/back-usuarios");
+            App::get(Router::class)->redirect("login");
         }
 
-        return $this->response->renderView("usuarios/create", "back", compact(
+        return $this->response->renderView("auth/login", "my", compact(
             "errors", "nombre"));
     }
 
@@ -539,9 +495,10 @@ class UsuarioController extends Controller
         }
 
         $router = App::get(Router::class);
+        $avatarPath = App::get("config")["avatar_path"];
 
         return $this->response->renderView("usuarios-delete", "back", compact(
-            "errors", "usuario", 'router'));
+            "errors", "usuario", 'router', 'avatarPath'));
     }
 
     /**
@@ -579,7 +536,7 @@ class UsuarioController extends Controller
             App::get(Router::class)->redirect('back-usuarios');
         else
             return $this->response->renderView("usuarios-destroy", "back",
-                compact("errors", "id", "usuario"));
+                compact("errors", "usuario"));
 
         return "";
     }

@@ -80,7 +80,7 @@
                                aria-expanded="false" href="/login" class="button-two">
                                 Log in
                             </a>
-                            <a href="/signup" class="button-two">Sign Up</a>
+                            <a href="/usuarios/create" class="button-two">Sign Up</a>
 
                     <?php endif;?>
 
@@ -124,13 +124,9 @@
 
 </header>
 
-
-
 <?=$content?>
 
-
-
-<footer>
+<footer style="margin-top: 800px;">
     <div class="container-fluid">
         <div class="row fila-footer">
             <div class="col-2 col-footer-enlaces enlaces-first">

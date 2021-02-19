@@ -11,8 +11,7 @@
             <h5 class="text-muted">Precio</h5>
             <p><?= $producto->getPrecio() ?></p>
         </div>
-    </div> <!-- /.row -->
-</div> <!-- /.container -->
+    </div>
 <form action="<?=$router->getUrl("productos_destroy") ?>" method="post" novalidate>
     <input type="hidden" name="id" value="<?= $producto->getId() ?>">
     <div class="form-group text-left">
@@ -21,6 +20,6 @@
         <button type="submit" name="userAnswer" value="no" class="btn btn-info btn-lg">No</button>
     </div>
 </form>
-<br><br>
+</div>
 
 

@@ -39,10 +39,7 @@
     <?php if (empty($usuarios)) : ?>
         <h3>No se ha encontrado ningún usuario</h3>
     <?php else: ?>
-        <div><a style="text-decoration: none; color: white" class="btn btn-primary" href="/usuarios/create"><button class="button-two">
-                        <i class="fa fa-plus-circle">
-                        </i> Añadir usuario</button></a>
-        </div>
+
 
         <table id="tabla-usuarios">
             <tr>

@@ -72,8 +72,13 @@ $router->get("pedidos/delete", "BackController", "deletePedido", [],"pedidos_del
 
 $router->get("usuarios", "UsuarioController", "index", [], "usuario_index", "ROLE_ADMIN");
 $router->post("usuarios", "UsuarioController", "filterUsuario", [], "usuario_filter", "ROLE_ADMIN");
-$router->get("usuarios/create", "BackController", "createUsuario", [], "usuarios_create", "ROLE_ADMIN");
-$router->post("usuarios/create", "BackController", "storeUsuario", [], "usuarios_store", "ROLE_ADMIN");
+
+$router->get("usuarios/create", "BackController", "createUsuario", [], "usuarios_create");
+
+$router->post("usuarios/create", "UsuarioController", "storeUsuario", [], "usuarios_store");
+
+
+/*$router->post("usuarios/create", "BackController", "storeUsuario", [], "usuarios_store", "ROLE_ADMIN"); */
 $router->get("usuarios/:id/edit", "UsuarioController", "editUsuario", ["id" => "number"],"usuarios_edit", "ROLE_ADMIN");
 $router->post("usuarios/:id/edit", "UsuarioController", "editUsuario", ["id" => "number"], "usuarios_update", "ROLE_ADMIN");
 $router->get("usuarios/:id/show", "BackController", "showUsuario",

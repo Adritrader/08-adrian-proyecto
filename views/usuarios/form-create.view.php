@@ -1,8 +1,5 @@
-<div class="container">
-    <div class="row fila-formulario">
-        <div class="col-6 col-formulario">
 
-            <form class="form-style-3" action="" method="post" enctype="multipart/form-data" novalidate>
+        <form class="form-style-3" action="" method="post" enctype="multipart/form-data" novalidate>
                 <fieldset>
                     <div class="form-group">
                         <label for="nombre">Nombre:</label>
@@ -43,11 +40,6 @@
                     </div>
                 </fieldset>
             </form>
-        </div>
-    </div>
-</div>
-
-
 
 
 

@@ -8,6 +8,8 @@ use JsonSerializable;
 
 class Usuario implements Entity, JsonSerializable {
 
+    const AVATAR_PATH = 'images/design/';
+
     private ?int $id = null;
     private string $nombre;
     private string $apellidos;

@@ -17,7 +17,7 @@
 
         <div class="row fila-formulario">
             <div class="form-style-3 col-4 col-formulario">
-                <form action="/registrarUsuario" method="post">
+                <form action="/registrar" method="post">
                     <fieldset>
                         <legend>Datos Personales</legend>
                         <label for="field1"><span>Nombre <span class="required">*</span></span><input type="text"
@@ -28,11 +28,13 @@
                                                                                                         class="input-field" name="telefono"></label>
                         <label for="field4"><span>Email<span class="required">*</span></span><input type="email"
                                                                                                     class="input-field" name="email"></label>
-                        <label for="field4"><span>Password<span class="required">*</span></span><input type="text"
+                        <label for="field5"><span>Username<span class="required">*</span></span><input type="text"
+                                                                                                    class="input-field" name="username"></label>
+                        <label for="field6"><span>Password<span class="required">*</span></span><input type="text"
                                                                                                     class="input-field" name="password"></label>
-                        <label for="field4"><span>Repite Password<span class="required">*</span></span><input type="text"
+                        <label for="field7"><span>Repite Password<span class="required">*</span></span><input type="text"
                                                                                                     class="input-field" name="repitepassword"></label>
-                        <label for="field4"><span>Avatar<span class="required">*</span></span><input type="file"
+                        <label for="field8"><span>Avatar<span class="required">*</span></span><input type="file"
                                                                                                     class="input-field" name="avatar"></label>
 
                     </fieldset>
