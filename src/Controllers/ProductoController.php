@@ -93,8 +93,6 @@ class ProductoController extends Controller {
             $error = "Debe introducir una palabra de búsqueda";
         }
 
-        var_dump($productos);
-        var_dump($text);
 
         return $this->response->renderView("back/back-productos", "back", compact('title', 'productos',
             'productoModel', 'errors', 'router'));

@@ -16,7 +16,7 @@ $router->get("reserva-cita", "MyController", "reservaCita");
 $router->get("contacto", "MyController", "contacto");
 $router->get("tienda", "MyController", "tienda");
 $router->get("signup", "MyController", "signup");
-$router->get("usuarios/:id/show", "UsuarioController", "perfilUsuario", ["id" => "number"], "usuario_show", "ROLE_USER");
+$router->get("perfil", "UsuarioController", "perfilUsuario", ["id" => "number"], "usuario_show", "ROLE_USER");
 $router->get("single-page", "MyController", "single-page");
 
 

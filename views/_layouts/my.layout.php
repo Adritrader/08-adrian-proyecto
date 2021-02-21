@@ -63,18 +63,25 @@
                     <?php
 
                     use App\Core\App;
+                    use App\Core\Router;
+                    use App\Model\UsuarioModel;
+
+
 
 
                     $loggedUser = $_SESSION["loggedUser"]??[];
 
                 if($loggedUser != []):?>
-
+                            <?php $router = App::get(Router::class);
+                                    $usuarioModel = App::getModel(UsuarioModel::class);
+                                    $user = App::get("user");
+                                    $usuario = $usuarioModel->find($user->getId());?>
                             <a id="bd-versions" aria-haspopup="false"
                                aria-expanded="false" href="/logout" class="button-two">
                                 Log Out
                             </a>
 
-                            <a href="<?=$router->getUrl("usuario_show", ["id"=>$usuario->getId()])?>"><i class="fa fa-user">Perfil</i></a>
+                            <a href="<?= $router->getUrl("usuario_show", ["id"=>$usuario->getId()])?>"><i class="fa fa-user">Perfil</i></a>
                     <?php else: ?>
 
                             <a id="bd-versions" aria-haspopup="false"

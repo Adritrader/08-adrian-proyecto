@@ -21,6 +21,7 @@
                 use App\Core\App;
 
                 $user = App::get("user");
+
                 if(!empty($user) && ($user->getRole() === "ROLE_USER" || $user->getRole() === "ROLE_ADMIN")):?>
                     <a href="/reserva-cita" class="button-three" alt="">Reservar cita</a>
 
