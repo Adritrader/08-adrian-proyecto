@@ -10,6 +10,7 @@ use App\Core\Exception\NotFoundException;
 use App\Core\Router;
 
 use App\Entity\Producto;
+use App\Entity\Registra;
 use App\Exception\UploadedFileException;
 use App\Exception\UploadedFileNoFileException;
 use App\Model\MovieModel;
@@ -105,6 +106,15 @@ class RegistraController extends Controller {
             'registraModel', 'errors', 'router'));
     }
 
+    public function createRegistra(): string
+    {
+
+        $title = "Reserva cita";
+        $router = App::get(Router::class);
+
+        return $this->response->renderView("reservas-create-form", "my", compact('title', 'router', 'servicios'));
+    }
+
 
     /**
      * @return string
@@ -113,68 +123,68 @@ class RegistraController extends Controller {
     public function storeRegistra(): string
     {
         $errors = [];
-        $pdo = App::get("DB");
+
 
         $nombre = filter_input(INPUT_POST, "nombre", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-        $categoria = filter_input(INPUT_POST, "categoria", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-        $precio = filter_input(INPUT_POST, "precio", FILTER_VALIDATE_INT);
+        $apellido = filter_input(INPUT_POST, "apellido", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        $telefono = filter_input(INPUT_POST, "telefono", FILTER_VALIDATE_INT);
+        $servicio = filter_input(INPUT_POST, "servicio", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        $fecha = filter_input(INPUT_POST, "servicio", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        $hora = filter_input(INPUT_POST, "servicio", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 
 
         if (empty($nombre)) {
             $errors[] = "El nombre es obligatorio";
         }
-        if (empty($categoria)) {
+        if (empty($apellido)) {
             $errors[] = "La categoria es obligatorios";
         }
 
-        if (empty($precio)) {
+        if (empty($telefono)) {
             $errors[] = "El precio es obligatorio";
         }
 
-        if (empty($descripcion)) {
+        if (empty($servicio)) {
+            $errors[] = "La descripcion es obligatoria";
+        }
+        if (empty($fecha)) {
+            $errors[] = "El precio es obligatorio";
+        }
+
+        if (empty($hora)) {
             $errors[] = "La descripcion es obligatoria";
         }
 
-        // Si hay errores no necesitamos subir la imagen
-        if (empty($errors)) {
-            try {
-                $uploadedFile = new UploadedFile("imagen", 2000 * 1024, ["image/jpeg", "image/jpg"]);
-                if ($uploadedFile->validate()) {
-                    $uploadedFile->save(Producto::IMAGEN_PATH);
-                    $imagen = $uploadedFile->getFileName();
-                }
-            } catch (Exception $exception) {
-                $errors[] = "Error uploading file ($exception)";
-            }
-        }
 
 
         if (empty($errors)) {
             try {
-                $productoModel = new ProductoModel($pdo);
-                $producto = new Producto();
+                $registraModel = App::getModel(RegistraModel::class);
+                $registra = new Registra();
 
-                $producto->setNombre($nombre);
-                $producto->setCategoria($categoria);
-                $producto->setDescripcion($descripcion);
-                $producto->setPrecio($precio);
-                $producto->setImagen($imagen);
+                $registra->setNombre($nombre);
+                $registra->setApellido($apellido);
+                $registra->setTelefono($telefono);
+                $registra->setServicio($servicio);
+                $registra->setFechaCita($fecha);
+                $registra->setHoraCita($hora);
 
 
-                $productoModel->saveTransaction($producto);
-                App::get(MyLogger::class)->info("Se ha creado un nuevo producto");
+
+                $registraModel->saveTransaction($registra);
+                App::get(MyLogger::class)->info("Se ha creado una nueva reserva");
 
             } catch (PDOException | ModelException | Exception $e) {
                 $errors[] = "Error: " . $e->getMessage();
             }
         }
 
-        if (empty($errors)) {
+        if (!empty($errors)) {
 
-            App::get(Router::class)->redirect("back-productos");
+            App::get(Router::class)->redirect("home");
         }
 
-        return $this->response->renderView("productos-create", "back", compact(
+        return $this->response->renderView("productos-create", "my", compact(
             "errors", "nombre"));
     }
 

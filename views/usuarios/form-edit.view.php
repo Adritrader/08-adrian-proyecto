@@ -22,8 +22,11 @@
     </div>
 
     <div class="form-group">
-        <label for="role">Role:</label>
-        <input id="role" class="form-control" type="text" name="role" value="<?= $usuario->getRole() ?>" required>
+        <label for="role">Role:
+            <select name="role" id="role">
+                <option value="ROLE_USER">ROLE_USER</option>
+                <option value="ROLE_ADMIN">ROLE_ADMIN</option>
+            </select></label>
     </div>
     <div class="form-group">
         <label for="avatar">Avatar:</label>

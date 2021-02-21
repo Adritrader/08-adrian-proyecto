@@ -5,16 +5,12 @@ namespace App\Controllers;
 use App\Core\App;
 use App\Core\Controller;
 use App\Core\Router;
-use App\Model\GenreModel;
-use App\Model\MovieModel;
-use App\Model\PartnerModel;
 use App\Model\ProductoModel;
 use App\Model\RegistraModel;
 use App\Model\ServicioModel;
 use App\Utils\MyMail;
 use DateTime;
 use Exception;
-use PDOException;
 use App\Entity\Movie;
 
 /**
@@ -70,7 +66,7 @@ class MyController extends Controller
         $servicios= $servicioModel->findAll();
 
 
-        return $this->response->renderView("reserva-cita", "my", compact("servicios", "errors"));
+        return $this->response->renderView("reservas-create-form", "my", compact("servicios", "errors"));
 
 
     }

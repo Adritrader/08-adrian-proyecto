@@ -102,6 +102,11 @@ class ProductoController extends Controller {
 
     }
 
+    public function createProducto(): string
+    {
+        return $this->response->renderView("productos-create-form", "back");
+    }
+
 
     /**
      * @return string
@@ -110,7 +115,7 @@ class ProductoController extends Controller {
     public function storeProducto(): string
     {
         $errors = [];
-        $pdo = App::get("DB");
+
 
         $nombre = filter_input(INPUT_POST, "nombre", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         $categoria = filter_input(INPUT_POST, "categoria", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
@@ -149,7 +154,7 @@ class ProductoController extends Controller {
 
         if (empty($errors)) {
             try {
-                $productoModel = new ProductoModel($pdo);
+                $productoModel = App::getModel(ProductoModel::class);
                 $producto = new Producto();
 
                 $producto->setNombre($nombre);
@@ -167,7 +172,7 @@ class ProductoController extends Controller {
             }
         }
 
-        if (empty($errors)) {
+        if (!empty($errors)) {
 
             App::get(Router::class)->redirect("back-productos");
         }
@@ -288,6 +293,68 @@ class ProductoController extends Controller {
             "errors", "isGetMethod", "producto"));
     }
 
+    public function updateProducto(int $id): string
+    {
+        $errors = [];
+        $isGetMethod = false;
+        $nombre = filter_input(INPUT_POST, "nombre", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        $categoria = filter_input(INPUT_POST, "categoria", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        $precio = filter_input(INPUT_POST, "precio", FILTER_VALIDATE_INT);
+        $descripcion = filter_input(INPUT_POST, "descripcion", FILTER_SANITIZE_SPECIAL_CHARS);
+        $imagen = filter_input(INPUT_POST, "imagen");
+
+        if (empty($nombre)) {
+            $errors[] = "El nombre es obligatorio";
+        }
+        if (empty($categoria)) {
+            $errors[] = "La categoria es obligatorios";
+        }
+
+        if (empty($precio)) {
+            $errors[] = "El precio es obligatorio";
+        }
+
+        if (empty($descripcion)) {
+            $errors[] = "La descripcion es obligatoria";
+        }
+
+        // Si hay errores no necesitamos subir la imagen
+        if (empty($errors)) {
+            try {
+                $imagenSubida = new UploadedFile('imagen', 300000, ['image/jpg', 'image/jpeg']);
+                if ($imagenSubida->validate()) {
+                    $imagenSubida->save(Producto::IMAGEN_PATH, uniqid("PRO"));
+                    $imagen = $imagenSubida->getFileName();
+                }
+                //Al estar editando no nos interesa que se muestre este error ya que puede ser que no suba archivo
+            } catch (UploadedFileNoFileException $uploadFileNoFileException) {
+                //$errors[] = $uploadFileNoFileException->getMessage();
+            } catch (UploadedFileException $uploadFileException) {
+                $errors[] = $uploadFileException->getMessage();
+            }
+        }
+
+
+        if (empty($errors)) {
+            try {
+                $productoModel = App::getModel(ProductoModel::class);
+                // getting the partner by its identifier
+                $producto = $productoModel->find($id);
+                $producto->setNombre($nombre);
+                $producto->setCategoria($categoria);
+                $producto->setDescripcion($descripcion);
+                $producto->setPrecio($precio);
+                $producto->setImagen($imagen);
+                // updating changes
+                $productoModel->update($producto);
+            } catch (Exception $e) {
+                $errors[] = 'Error: ' . $e->getMessage();
+            }
+        }
+        return $this->response->renderView("productos-edit", "back", compact(
+            "errors", "isGetMethod"));
+    }
+
     public function deleteProducto(int $id): string
     {
         $errors = [];
@@ -342,11 +409,11 @@ class ProductoController extends Controller {
         else
             App::get(Router::class)->redirect('back-productos');
 
-        if (empty($errors))
+        if (!empty($errors))
             App::get(Router::class)->redirect('back-productos');
         else
             return $this->response->renderView("productos-destroy", "back",
-                compact("errors", "id", "producto"));
+                compact("errors", "producto"));
 
         return "";
     }

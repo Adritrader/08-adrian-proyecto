@@ -315,7 +315,6 @@ public function createUsuario(): string
         }
 
         $errors = [];
-        $pdo = App::get("DB");
 
         $nombre = filter_input(INPUT_POST, "nombre", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         $apellidos = filter_input(INPUT_POST, "apellidos", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
@@ -370,7 +369,6 @@ public function createUsuario(): string
                 $usuario->setTelefono($telefono);
                 $usuario->setEmail($email);
                 $usuario->setUsername($username);
-                $usuario->setPassword($password);
                 $usuario->setRole("ROLE_USER");
 
 
@@ -435,19 +433,6 @@ public function createUsuario(): string
                 $errors[] = "El username es obligatorio";
             }
 
-            if (empty($password)) {
-                $errors[] = "El password es obligtorio";
-            }
-
-            if(empty($repitePassword)){
-
-                $errors[] = "Debe repetir el password";
-            }
-
-            if($repitePassword !== $password){
-
-                $errors[] = "Debe introcir el mismo password";
-            }
 
             if (empty($errors)) {
                 try {
@@ -460,7 +445,6 @@ public function createUsuario(): string
                     $usuario->setTelefono($telefono);
                     $usuario->setEmail($email);
                     $usuario->setUsername($username);
-                    $usuario->setPassword($password);
 
                     $usuario->update($usuario);
 
@@ -519,11 +503,15 @@ public function createUsuario(): string
             $usuario = $usuarioModel->find($id);
         }
         $userAnswer = filter_input(INPUT_POST, "userAnswer");
+
+
         if ($userAnswer === 'yes') {
             if (empty($errors)) {
                 try {
                     $usuario = $usuarioModel->find($id);
                     $result = $usuarioModel->delete($usuario);
+
+                    var_dump($result);
                 } catch (PDOException $e) {
                     $errors[] = "Error: " . $e->getMessage();
                 }
@@ -532,9 +520,11 @@ public function createUsuario(): string
         else
             App::get(Router::class)->redirect('back-usuarios');
 
-        if (empty($errors))
+        if (!empty($errors))
+
             App::get(Router::class)->redirect('back-usuarios');
         else
+
             return $this->response->renderView("usuarios-destroy", "back",
                 compact("errors", "usuario"));
 

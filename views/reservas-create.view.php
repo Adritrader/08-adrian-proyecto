@@ -10,7 +10,7 @@
                 </ul>
                 <?php require __DIR__ . '/reservas/form-create.view.php' ?>
             <?php else: ?>
-                <h2>El producto se ha insertado correctamente</h2>
+                <h2>La reserva se ha insertado correctamente</h2>
             <?php endif; ?>
         </div>
     </div>

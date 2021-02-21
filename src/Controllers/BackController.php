@@ -140,10 +140,6 @@ class BackController extends Controller
 
     }
 
-    public function createProducto(): string
-    {
-        return $this->response->renderView("productos-create-form", "back");
-    }
 
     public function createUsuario(): string
     {

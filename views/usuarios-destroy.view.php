@@ -1,6 +1,6 @@
 <div class="container">
     <div class="row">
-        <div class="col-8">
+        <div class="col-12">
             <h1>Borrar Usuario</h1>
             <?php if (!empty($errors)) : ?>
                 <ul>
