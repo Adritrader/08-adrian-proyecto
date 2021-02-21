@@ -64,6 +64,7 @@
 
                     use App\Core\App;
 
+
                     $loggedUser = $_SESSION["loggedUser"]??[];
 
                 if($loggedUser != []):?>
@@ -73,7 +74,7 @@
                                 Log Out
                             </a>
 
-                            <a href="/perfil"><i class="fa fa-user">Perfil</i></a>
+                            <a href="<?=$router->getUrl("usuario_show", ["id"=>$usuario->getId()])?>"><i class="fa fa-user">Perfil</i></a>
                     <?php else: ?>
 
                             <a id="bd-versions" aria-haspopup="false"

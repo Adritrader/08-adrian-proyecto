@@ -11,6 +11,8 @@ use App\Core\Router;
 use App\Entity\Producto;
 use App\Entity\Usuario;
 use App\Core\App;
+use App\Model\producteModel;
+use App\Model\UserModel;
 use App\Model\UsuarioModel;
 use App\Utils\MyLogger;
 use App\Utils\UploadedFile;
@@ -53,6 +55,28 @@ class UsuarioController extends Controller
 
         return $this->response->renderView("back/back-usuarios", "back", compact('title', 'usuarios',
             'usuarioModel', 'errors', 'router', 'message'));
+    }
+
+    public function perfilUsuario(int $id): string
+    {
+
+
+
+        $errors = [];
+        if (!empty($id)) {
+            try {
+
+
+                $usuarioModel = App::getModel(UsuarioModel::class);
+                $usuario = $usuarioModel->find($id);
+
+            } catch (NotFoundException $notFoundException) {
+                $errors[] = $notFoundException->getMessage();
+            }
+        }
+
+
+        return $this->response->renderView("perfil", "my", compact( 'usuario', 'errors', ));
     }
 
     /**
@@ -120,7 +144,6 @@ public function createUsuario(): string
     public function storeUsuario(): string
     {
         $errors = [];
-        $pdo = App::get("DB");
 
 
         $nombre = filter_input(INPUT_POST, "nombre", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
@@ -183,7 +206,7 @@ public function createUsuario(): string
 
 
             try {
-                $usuarioModel = new UsuarioModel($pdo);
+                $usuarioModel = App::getModel(UsuarioModel::class);
                 $usuario = new Usuario();
 
                 $usuario->setNombre($nombre);
@@ -217,7 +240,6 @@ public function createUsuario(): string
     public function registrarUsuario(): string
     {
         $errors = [];
-        $pdo = App::get("DB");
 
         $nombre = filter_input(INPUT_POST, "nombre", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         $apellidos = filter_input(INPUT_POST, "apellidos", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
@@ -264,7 +286,7 @@ public function createUsuario(): string
 
         if (empty($errors)) {
             try {
-                $usuarioModel = new UsuarioModel($pdo);
+                $usuarioModel = App::getModel(UsuarioModel::class);
                 $usuario = new Usuario();
 
                 $usuario->setNombre($nombre);
@@ -306,23 +328,16 @@ public function createUsuario(): string
      */
     public function updateUsuario(int $id): string
     {
-        $isGetMethod = true;
-        $errors = [];
-
-        $id = filter_input(INPUT_POST, "id", FILTER_VALIDATE_INT);
-        if (empty($id)) {
-            $errors[] = "Wrong ID";
-        }
 
         $errors = [];
-
+        $isGetMethod = false;
         $nombre = filter_input(INPUT_POST, "nombre", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         $apellidos = filter_input(INPUT_POST, "apellidos", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         $telefono = filter_input(INPUT_POST, "telefono", FILTER_VALIDATE_INT);
         $email = filter_input(INPUT_POST, "email", FILTER_VALIDATE_EMAIL);
         $username = filter_input(INPUT_POST, "username");
-        $password = filter_input(INPUT_POST, "password");
-        $repitePassword = filter_input(INPUT_POST, "repitePassword");
+        $role = filter_input(INPUT_POST, "role", FILTER_SANITIZE_STRING);
+
 
         if (empty($nombre)) {
             $errors[] = "El nombre es obligatorio";
@@ -343,18 +358,8 @@ public function createUsuario(): string
             $errors[] = "El username es obligatorio";
         }
 
-        if (empty($password)) {
-            $errors[] = "El password es obligtorio";
-        }
-
-        if(empty($repitePassword)){
-
-            $errors[] = "Debe repetir el password";
-        }
-
-        if($repitePassword !== $password){
-
-            $errors[] = "Debe introcir el mismo password";
+        if (empty($role)) {
+            $errors[] = "El rol es obligatorio";
         }
 
         if (empty($errors)) {
@@ -369,10 +374,7 @@ public function createUsuario(): string
                 $usuario->setTelefono($telefono);
                 $usuario->setEmail($email);
                 $usuario->setUsername($username);
-                $usuario->setRole("ROLE_USER");
-
-
-
+                $usuario->setRole($role);
 
                 // updating changes
                 $usuarioModel->update($usuario);

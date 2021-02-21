@@ -12,23 +12,50 @@
 
         <!-- Full-width images with number and caption text -->
 
+
+
         <div class="mySlides fade">
             <div class="button-container">
-                <a href="/reserva-cita" class="button-three" alt="">Reservar cita</a>
+                <?php
+
+                use App\Core\App;
+
+                $user = App::get("user");
+                if(!empty($user) && ($user->getRole() === "ROLE_USER" || $user->getRole() === "ROLE_ADMIN")):?>
+                    <a href="/reserva-cita" class="button-three" alt="">Reservar cita</a>
+
+                <?php else: ?>
+
+                <?php endif;?>
+
                 <img src="/images/design/carrousel-1.jpg" style="width:100%; height: 450px">
             </div>
         </div>
 
         <div class="mySlides fade">
             <div class="button-container">
-                <a href="/reserva-cita" class="button-three" alt="">Reservar cita</a>
+                <?php
+
+                if(!empty($user) && ($user->getRole() === "ROLE_USER" || $user->getRole() === "ROLE_ADMIN")):?>
+                    <a href="/reserva-cita" class="button-three" alt="">Reservar cita</a>
+
+                <?php else: ?>
+
+                <?php endif;?>
                 <img src="/images/design/carrousel-2.jpg" style="width:100%; height: 450px">
             </div>
         </div>
 
         <div class="mySlides fade">
             <div class="button-container">
-                <a href="/reserva-cita" class="button-three" alt="">Reservar cita</a>
+                <?php
+
+                if(!empty($user) && ($user->getRole() === "ROLE_USER" || $user->getRole() === "ROLE_ADMIN")):?>
+                    <a href="/reserva-cita" class="button-three" alt="">Reservar cita</a>
+
+                <?php else: ?>
+
+                <?php endif;?>
                 <img src="/images/design/fondo-estilo.jpg" style="width:100%; height: 450px">
             </div>
         </div>

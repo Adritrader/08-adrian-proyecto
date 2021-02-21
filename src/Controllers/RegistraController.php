@@ -129,8 +129,8 @@ class RegistraController extends Controller {
         $apellido = filter_input(INPUT_POST, "apellido", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         $telefono = filter_input(INPUT_POST, "telefono", FILTER_VALIDATE_INT);
         $servicio = filter_input(INPUT_POST, "servicio", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-        $fecha = filter_input(INPUT_POST, "servicio", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-        $hora = filter_input(INPUT_POST, "servicio", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        $fecha = filter_input(INPUT_POST, "fecha");
+        $hora = filter_input(INPUT_POST, "hora");
 
 
         if (empty($nombre)) {
@@ -180,11 +180,11 @@ class RegistraController extends Controller {
         }
 
         if (!empty($errors)) {
-
-            App::get(Router::class)->redirect("home");
+            App::get('flash')->set("message", "La reserva se ha creado correctamente");
+            App::get(Router::class)->redirect("login");
         }
 
-        return $this->response->renderView("productos-create", "my", compact(
+        return $this->response->renderView("auth/login", "my", compact(
             "errors", "nombre"));
     }
 

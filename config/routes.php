@@ -16,7 +16,7 @@ $router->get("reserva-cita", "MyController", "reservaCita");
 $router->get("contacto", "MyController", "contacto");
 $router->get("tienda", "MyController", "tienda");
 $router->get("signup", "MyController", "signup");
-$router->get("perfil", "MyController", "perfil");
+$router->get("usuarios/:id/show", "UsuarioController", "perfilUsuario", ["id" => "number"], "usuario_show", "ROLE_USER");
 $router->get("single-page", "MyController", "single-page");
 
 
@@ -72,11 +72,14 @@ $router->get("pedidos/delete", "BackController", "deletePedido", [],"pedidos_del
 
 $router->get("usuarios", "UsuarioController", "index", [], "usuario_index", "ROLE_ADMIN");
 $router->post("usuarios", "UsuarioController", "filterUsuario", [], "usuario_filter", "ROLE_ADMIN");
+$router->post("usuarios", "UsuarioController", "perfilUsuario", [], "usuario_perfil", "ROLE_USER");
 $router->get("usuarios/create", "UsuarioController", "createUsuario", [], "usuarios_create");
 $router->post("usuarios/create", "UsuarioController", "storeUsuario", [], "usuarios_store");
 $router->get("usuarios/:id/edit", "UsuarioController", "editUsuario", ["id" => "number"],"usuarios_edit", "ROLE_ADMIN");
 $router->post("usuarios/:id/edit", "UsuarioController", "updateUsuario", ["id" => "number"], "usuarios_update", "ROLE_ADMIN");
 $router->get("usuarios/:id/show", "UsuarioController", "showUsuario",
+    ["id" => "number"], "usuarios_show");
+$router->get("usuarios/:id/show", "UsuarioController", "perfilUsuario",
     ["id" => "number"], "usuarios_show");
 $router->get("usuarios/:id/delete", "UsuarioController", "deleteUsuario", ["id" => "number"],"usuarios_delete", "ROLE_ADMIN");
 $router->post("usuarios/delete", "UsuarioController", "destroyUsuario", [], "usuarios_destroy", "ROLE_ADMIN");
@@ -88,10 +91,8 @@ $router->get("back-reservas", "RegistraController", "index", [], "registra_index
 
 $router->post("registra", "RegistraController", "filterRegistra", [], "reservas_filter", "ROLE_ADMIN");
 
-
-
-$router->get("registra/create", "RegistraController", "createRegistra", [], "reservas_create", "ROLE_ADMIN");
-$router->post("registra/create", "RegistraController", "storeRegistra", [], "reservas_store", "ROLE_ADMIN");
+$router->get("registra/create", "RegistraController", "createRegistra", [], "reservas_create", "ROLE_USER");
+$router->post("registra/create", "RegistraController", "storeRegistra", [], "reservas_store", "ROLE_USER");
 $router->get("movies/:id/edit", "MovieController", "edit", ["id" => "number"]);
 $router->post("movies/:id/edit", "MovieController", "edit", ["id" => "number"]);
 $router->get("registra/:id/show", "BackController", "show",

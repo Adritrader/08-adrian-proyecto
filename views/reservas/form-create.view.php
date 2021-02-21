@@ -1,7 +1,7 @@
 <div class="container-fluid">
         <div class="row fila-formulario">
             <div class="form-style-3 col-4 col-formulario">
-                <form action="/contact" method="post">
+                <form action="" method="post" method="post" enctype="multipart/form-data" novalidate>
                     <fieldset>
                         <legend>Datos Personales</legend>
                         <label for="field1"><span>Nombre <span class="required">*</span></span><input type="text"
@@ -20,10 +20,10 @@
                     </fieldset>
                     <fieldset>
                         <legend>Detalles cita</legend>
-                        <label for="field6"><span>Fecha <span class="required">*</span></span><input
+                        <label for="field6"><span>Fecha <span class="required">*</span></span><input name="fecha" id="fecha"
                                     type="date"></label>
                         <label for="field7"><span>Hora <span class="required">*</span></span>
-                            <select name="servicios" id="servicios">
+                            <select name="hora" id="hora">
                                 <option value="1">09:30</option>
                                 <option value="2">11:00</option>
                                 <option value="3">12:00</option>

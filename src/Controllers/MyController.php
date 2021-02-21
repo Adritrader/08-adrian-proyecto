@@ -4,10 +4,12 @@ namespace App\Controllers;
 
 use App\Core\App;
 use App\Core\Controller;
+use App\Core\Exception\NotFoundException;
 use App\Core\Router;
 use App\Model\ProductoModel;
 use App\Model\RegistraModel;
 use App\Model\ServicioModel;
+use App\Model\UsuarioModel;
 use App\Utils\MyMail;
 use DateTime;
 use Exception;
@@ -99,10 +101,28 @@ class MyController extends Controller
 
     }
 
-    public function perfil(): string
+    public function perfil(int $id): string
     {
 
-        return $this->response->renderView("perfil", "my");
+        $errors = [];
+        if (!empty($id)) {
+            try {
+                $usuarioModel = App::getModel(UsuarioModel::class);
+                $usuario = $usuarioModel->find($id);
+
+                return $this->response->renderView("perfil", "my", compact(
+                    "errors", "usuario"));
+
+            } catch (NotFoundException $notFoundException) {
+                $errors[] = $notFoundException->getMessage();
+            }
+        }
+        else
+            return $this->response->renderView("perfil", "my", compact(
+                "errors", "usuario"));
+
+        return "";
+
 
 
     }
