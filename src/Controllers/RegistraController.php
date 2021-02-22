@@ -13,7 +13,6 @@ use App\Entity\Producto;
 use App\Entity\Registra;
 use App\Exception\UploadedFileException;
 use App\Exception\UploadedFileNoFileException;
-use App\Model\MovieModel;
 use App\Model\ProductoModel;
 use App\Core\App;
 use App\Core\Security;
@@ -131,36 +130,30 @@ class RegistraController extends Controller {
         $errors = [];
 
 
-        $nombre = filter_input(INPUT_POST, "nombre", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-        $apellido = filter_input(INPUT_POST, "apellido", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-        $telefono = filter_input(INPUT_POST, "telefono", FILTER_VALIDATE_INT);
-        $servicio = filter_input(INPUT_POST, "servicio", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-        $fecha = filter_input(INPUT_POST, "fecha");
-        $hora = filter_input(INPUT_POST, "hora");
+        $USUARIO_id = filter_input(INPUT_POST, "USUARIO_id", FILTER_VALIDATE_INT);
+        $SERVICIO_id = filter_input(INPUT_POST, "SERVICIO_id", FILTER_VALIDATE_INT);
+        $hora_cita = filter_input(INPUT_POST, "hora_cita");
 
+        var_dump($hora_cita);
 
-        if (empty($nombre)) {
+        if (empty($USUARIO_id)) {
             $errors[] = "El nombre es obligatorio";
         }
-        if (empty($apellido)) {
-            $errors[] = "La categoria es obligatorios";
+        if (empty($SERVICIO_id)) {
+            $errors[] = "El servicio es obligatorios";
         }
 
-        if (empty($telefono)) {
-            $errors[] = "El precio es obligatorio";
+        $fecha_cita = DateTime::createFromFormat("Y-m-d", $_POST["fecha_cita"]);
+
+        if (empty($fecha_cita)) {
+            $errors[] = "La fecha es obligatoria";
         }
 
-        if (empty($servicio)) {
-            $errors[] = "La descripcion es obligatoria";
-        }
-        if (empty($fecha)) {
-            $errors[] = "El precio es obligatorio";
-        }
+        $hora_cita = DateTime::createFromFormat("H:i:s", $_POST["hora_cita"]);
 
-        if (empty($hora)) {
-            $errors[] = "La descripcion es obligatoria";
+        if (empty($hora_cita)) {
+            $errors[] = "La hora es obligatoria";
         }
-
 
 
         if (empty($errors)) {
@@ -168,17 +161,15 @@ class RegistraController extends Controller {
                 $registraModel = App::getModel(RegistraModel::class);
                 $registra = new Registra();
 
-                $registra->setNombre($nombre);
-                $registra->setApellido($apellido);
-                $registra->setTelefono($telefono);
-                $registra->setServicio($servicio);
-                $registra->setFechaCita($fecha);
-                $registra->setHoraCita($hora);
+                $registra->setUSUARIOId($USUARIO_id);
+                $registra->setSERVICIOId($SERVICIO_id);
+                $registra->setFechaCita($fecha_cita);
+                $registra->setHoraCita($hora_cita);
 
-
-
+                var_dump($registra);
                 $registraModel->saveTransaction($registra);
                 App::get(MyLogger::class)->info("Se ha creado una nueva reserva");
+                App::get('flash')->set("message", "La reserva se ha creado correctamente");
 
             } catch (PDOException | ModelException | Exception $e) {
                 $errors[] = "Error: " . $e->getMessage();
@@ -187,12 +178,12 @@ class RegistraController extends Controller {
 
         if (!empty($errors)) {
             App::get('flash')->set("message", "La reserva no se ha podido crear");
-            //App::get(Router::class)->redirect("login");
+            App::get(Router::class)->redirect("login");
 
         }
     var_dump($errors);
-        return $this->response->renderView("a", "my", compact(
-            "errors", "nombre", 'errors'));
+        return $this->response->renderView("auth/login", "my", compact(
+             'errors'));
     }
 
     public function showProducto(int $id): string

@@ -20,7 +20,7 @@ use App\Entity\Usuario;
         <div class="card col-lg-9 col-md-6 py-2">
             <div class="card col-lg-3 col-md-6 py-2">
                 <?= generar_imagen_local('/' . Usuario::AVATAR_PATH . '/', $user->getAvatar(),
-                    $user->getUsername()) ?>
+                    $user->getUsername(), 300,200) ?>
             </div>
             <input type="hidden" name="id" value="<?= $user->getId() ?>">
             <h2><strong>Nombre:</strong> <?= $user->getNombre()?></h2>
@@ -31,7 +31,7 @@ use App\Entity\Usuario;
 
 
         <div class="col-12">
-            <a href="/usuarios/<?= $user->getId() ?>/edit"><button class="btn bg-danger px-2"><i class="fa fa-edit mr-1"></i>Editar</button></a>
+            <a href="/usuarios/<?= $user->getId() ?>/editPerfil"><button class="btn bg-danger px-2"><i class="fa fa-edit mr-1"></i>Editar</button></a>
             <a href="/usuarios/<?= $user->getId() ?>/editPass"><button class="btn bg-danger"><i class="fa fa-edit mr-1"></i>Cambiar Password</button></a>
             <a href="<?= $router->getUrl("usuarios_delete", ["id" => $user->getId()]) ?>"><button class="btn btn-info mt-2 bg-danger"><i class="fa fa-trash mr-1"></i>Borrar Cuenta</button></a>
         </div>

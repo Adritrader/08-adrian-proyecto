@@ -161,7 +161,7 @@ class ProductoController extends Controller {
                 $producto->setPrecio($precio);
                 $producto->setImagen($imagen);
 
-
+                var_dump($producto);
                 $productoModel->saveTransaction($producto);
                 App::get(MyLogger::class)->info("Se ha creado un nuevo producto");
 

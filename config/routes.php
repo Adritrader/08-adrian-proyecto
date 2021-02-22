@@ -13,7 +13,7 @@ $router->get("quienes-somos", "MyController", "quienesSomos");
 $router->get("galeria", "MyController", "galeria");
 $router->get("blog", "MyController", "blog");
 $router->get("contacto", "MyController", "contacto");
-$router->get("tienda", "MyController", "tienda");
+$router->get("tienda", "MyController", "tienda", [],"tienda");
 $router->get("signup", "MyController", "signup");
 $router->get("single-page", "MyController", "single-page");
 
@@ -77,8 +77,8 @@ $router->post("usuarios/create", "UsuarioController", "storeUsuario", [], "usuar
 $router->get("usuarios/:id/edit", "UsuarioController", "editUsuario", ["id" => "number"],"usuarios_edit", "ROLE_ADMIN");
 $router->post("usuarios/:id/edit", "UsuarioController", "updateUsuario", ["id" => "number"], "usuarios_update", "ROLE_ADMIN");
 
-$router->get("usuarios/:id/edit", "UsuarioController", "editPerfilUsuario", ["id" => "number"],"usuarios_edit_perfil", "ROLE_USER");
-$router->post("usuarios/:id/edit", "UsuarioController", "updatePerfilUsuario", ["id" => "number"], "usuarios_update_perfil", "ROLE_USER");
+$router->get("usuarios/:id/editPerfil", "UsuarioController", "editPerfilUsuario", ["id" => "number"],"usuarios_edit_perfil", "ROLE_USER");
+$router->post("usuarios/:id/editPerfil", "UsuarioController", "updatePerfilUsuario", ["id" => "number"], "usuarios_update_perfil", "ROLE_USER");
 
 $router->get("usuarios/:id/editPass", "UsuarioController", "editPassUsuario", ["id" => "number"],"usuarios_edit_perfil", "ROLE_USER");
 $router->post("usuarios/:id/editPass", "UsuarioController", "updatePassUsuario", ["id" => "number"], "usuarios_update_perfil", "ROLE_USER");

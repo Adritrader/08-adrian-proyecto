@@ -6,6 +6,7 @@ use App\Core\App;
 use App\Core\Controller;
 use App\Core\Exception\NotFoundException;
 use App\Core\Router;
+use App\Entity\Producto;
 use App\Model\ProductoModel;
 use App\Model\RegistraModel;
 use App\Model\ServicioModel;
@@ -81,14 +82,42 @@ class MyController extends Controller
     }
     public function tienda(): string
     {
-
+        try {
         $errors = [];
         $productoModel = App::getModel(ProductoModel::class);
-        $productos = $productoModel->findAll();
+        $producto = $productoModel->findAll();
         $router = App::get(Router::class);
 
+        $pdo = App::get("DB");
 
-        return $this->response->renderView("tienda", "my", compact("productos","router", "errors"));
+        $numberOfRecordsPerPage = 4;
+
+
+        $consulta = $pdo->query("SELECT COUNT(*) as total_productos FROM producto");
+
+        $productos = $consulta->fetch();
+
+
+        $totalPaginas = $productos["total_productos"];
+
+        $totalPaginas = ceil($totalPaginas /$numberOfRecordsPerPage);
+
+        $currentPage = filter_input(INPUT_GET, "page", FILTER_VALIDATE_INT);
+        if (empty($currentPage))
+            $currentPage = 1;
+
+        $limit = $numberOfRecordsPerPage;
+
+        $productos = $productoModel->findAllPaginated($currentPage, $limit);
+
+
+
+        } catch (Exception $PDOException) {
+            echo $PDOException->getMessage();
+        }
+
+
+        return $this->response->renderView("tienda", "my", compact("producto","productos","totalPaginas","router", "errors"));
 
 
     }

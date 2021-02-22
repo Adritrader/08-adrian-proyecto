@@ -339,6 +339,7 @@ public function createUsuario(): string
         $email = filter_input(INPUT_POST, "email", FILTER_VALIDATE_EMAIL);
         $username = filter_input(INPUT_POST, "username");
         $role = filter_input(INPUT_POST, "role", FILTER_SANITIZE_STRING);
+        $avatar = filter_input(INPUT_POST, "avatar");
 
 
         if (empty($nombre)) {
@@ -364,6 +365,19 @@ public function createUsuario(): string
             $errors[] = "El rol es obligatorio";
         }
 
+        // Si hay errores no necesitamos subir la imagen
+        if (empty($errors)) {
+            try {
+                $uploadedFile = new UploadedFile("avatar", 2000 * 1024, ["image/jpeg", "image/jpg", "image/png"]);
+                if ($uploadedFile->validate()) {
+                    $uploadedFile->save(Usuario::AVATAR_PATH);
+                    $avatar = $uploadedFile->getFileName();
+                }
+            } catch (Exception $exception) {
+                $errors[] = "Error uploading file ($exception)";
+            }
+        }
+
         if (empty($errors)) {
 
             try {
@@ -377,6 +391,7 @@ public function createUsuario(): string
                 $usuario->setEmail($email);
                 $usuario->setUsername($username);
                 $usuario->setRole($role);
+                $usuario->setAvatar($avatar);
 
                 // updating changes
                 $usuarioModel->update($usuario);
@@ -384,7 +399,7 @@ public function createUsuario(): string
                 $errors[] = 'Error: ' . $e->getMessage();
             }
         }
-        return $this->response->renderView("usuarios-edit", "back", compact(
+        return $this->response->renderView("usuarios-edit-back", "back", compact(
             "errors", "isGetMethod", "usuario"));
     }
 
@@ -458,7 +473,7 @@ public function createUsuario(): string
             }
         }
 
-        return $this->response->renderView("usuarios-edit", "back", compact(
+        return $this->response->renderView("usuarios-edit-back", "back", compact(
             "errors", "isGetMethod", "usuario"));
     }
 

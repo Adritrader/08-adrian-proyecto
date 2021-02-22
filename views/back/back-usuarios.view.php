@@ -1,3 +1,8 @@
+<?php
+
+use App\Entity\Usuario;
+
+?>
 <div class="container-fluid">
     <div class="row fila-inputs-productos">
         <div class="col-4">
@@ -56,7 +61,8 @@
             <?php foreach ($usuarios as $usuario) { ?>
                 <tr>
                     <td><?= $usuario->getId() ?></td>
-                    <td><?= $usuario->getAvatar() ?></td>
+                    <td><?= generar_imagen_local('/' . Usuario::AVATAR_PATH . '/', $usuario->getAvatar(),
+                            $usuario->getUsername(), 150, 150) ?></td>
                     <td><?= $usuario->getNombre() ?></td>
                     <td><?= $usuario->getApellidos() ?></td>
                     <td><?= $usuario->getTelefono() ?></td>

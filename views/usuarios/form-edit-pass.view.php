@@ -13,6 +13,6 @@
     </div>
 
     <div class="form-group text-right">
-        <button type="submit" class="btn btn-primary">Guardar usuario</button>
+        <button type="submit" class="btn btn-primary">Guardar password</button>
     </div>
 </form>

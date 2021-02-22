@@ -1,3 +1,5 @@
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+
 <div class="container-fluid">
     <div class="row fila-ruta">
         <div class="col-5 col-ruta">
@@ -102,6 +104,31 @@
                 <?php
                 }
                 ?>
+
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination">
+                        <li class="page-item">
+                            <a class="page-link" href="#" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                                <span class="sr-only">Previous</span>
+                            </a>
+                        </li>
+                        <?php
+
+                        for ($i = 1; $i<= $totalPaginas; $i++ ){
+
+                        ?>
+                        <li class="page-item"><a class="page-link" href="<?=$router->getUrl("tienda", ["page"=>$i]) ?>"><?=$i ?></a></li>
+                            <?php
+                        } ?>
+                        <li class="page-item">
+                            <a class="page-link" href="#" aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                                <span class="sr-only">Next</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
 
             </div>
         </div>

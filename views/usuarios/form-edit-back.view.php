@@ -21,7 +21,6 @@
         <input id="username" class="form-control" type="text" name="username" value="<?= $usuario->getUsername() ?>" required>
     </div>
 
-    <?php if(!empty($usuario) &&  $usuario->getRole() === "ROLE_ADMIN"):?>
         <div class="form-group">
             <label for="role">Role:
                 <select name="role" id="role">
@@ -30,9 +29,6 @@
                 </select></label>
         </div>
 
-    <?php else: ?>
-
-    <?php endif;?>
     <div class="form-group">
         <label for="avatar">Avatar:</label>
         <input id="avatar" class="form-control" type="file" name="avatar" value="<?= $usuario->getAvatar() ?>" required>
