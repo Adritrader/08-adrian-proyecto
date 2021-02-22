@@ -118,8 +118,8 @@ class Registra implements Entity, JsonSerializable {
             "id"=>$this->getId(),
             "USUARIO_id"=>$this->getUsuarioId(),
             "SERVICIO_id"=>$this->getServicioId(),
-            "hora"=>$this->getHoraCita(),
-            "fecha"=>$this->getFechaCita()
+            "hora"=>$this->getHoraCita()->format("H:i:s"),
+            "fecha"=>$this->getFechaCita()->format("Y-m-d")
         ];
     }
 
