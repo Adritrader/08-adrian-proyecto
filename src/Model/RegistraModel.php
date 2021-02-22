@@ -18,6 +18,15 @@ class RegistraModel extends Model
         parent::__construct($pdo, $tableName, $className);
     }
 
+    public function saveTransaction(Registra $registra)
+    {
+        $fnSaveTransaction = function () use ($registra) {
+            $this->save($registra);
+        };
+        $this->executeTransaction($fnSaveTransaction);
+    }
+
+
     public function getNombre(int $id): Usuario {
         $usuarioModel = new UsuarioModel($this->pdo);
         try {

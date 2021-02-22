@@ -13,17 +13,17 @@ class Registra implements Entity, JsonSerializable {
     private ?int $id = null;
     private int $USUARIO_id;
     private int $SERVICIO_id;
-    private DateTime $hora_cita;
-    private DateTime $fecha_cita;
+    private DateTime $horaCita;
+    private DateTime $fechaCita;
 
     public function __set(string $name, $value)
     {
         switch ($name) {
             case "hora":
-                $this->hora_cita = DateTime::createFromFormat("H:i:s", $value);
+                $this->horaCita = DateTime::createFromFormat("H:i:s", $value);
                 break;
             case "fecha":
-                $this->fecha_cita = DateTime::createFromFormat("Y-m-d", $value);
+                $this->fechaCita = DateTime::createFromFormat("Y-m-d", $value);
                 break;
         }
     }
@@ -76,40 +76,40 @@ class Registra implements Entity, JsonSerializable {
         $this->SERVICIO_id = $SERVICIO_id;
     }
 
-
-
-
     /**
-     * @return DateTime
+     * @return mixed
      */
-    public function getHoraCita(): DateTime
+    public function getHoraCita()
     {
-        return $this->hora_cita;
+        return $this->horaCita;
     }
 
     /**
-     * @param DateTime $hora_cita
+     * @param mixed $horaCita
      */
-    public function setHoraCita(DateTime $hora_cita): void
+    public function setHoraCita($horaCita): void
     {
-        $this->hora_cita = $hora_cita;
+        $this->horaCita = $horaCita;
     }
 
     /**
-     * @return DateTime
+     * @return mixed
      */
-    public function getFechaCita(): DateTime
+    public function getFechaCita()
     {
-        return $this->fecha_cita;
+        return $this->fechaCita;
     }
 
     /**
-     * @param DateTime $fecha_cita
+     * @param mixed $fechaCita
      */
-    public function setFechaCita(DateTime $fecha_cita): void
+    public function setFechaCita($fechaCita): void
     {
-        $this->fecha_cita = $fecha_cita;
+        $this->fechaCita = $fechaCita;
     }
+
+
+
 
 
     public function toArray(): array
