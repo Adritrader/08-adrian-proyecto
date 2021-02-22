@@ -7,7 +7,7 @@
 
         <div class="row fila-formulario">
             <div class="form-style-3 col-4 col-formulario">
-                <form action="/contact" method="post">
+                <form action="" method="post">
                     <fieldset>
                         <legend>Datos Personales</legend>
                         <label for="field1"><span>Nombre <span class="required">*</span></span><input type="text"

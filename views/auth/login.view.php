@@ -11,7 +11,7 @@
 <div class="row fila-formulario">
                 <div class="form-style-3 col-4 col-formulario">
                     <?php
-                    if(!empty($message)): ;?>
+                    if(!empty($message)):?>
 
                         <div class="alert alert-success" role="alert">
                             <?= $message ?>

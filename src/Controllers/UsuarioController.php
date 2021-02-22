@@ -60,9 +60,12 @@ class UsuarioController extends Controller
     public function perfilUsuario(int $id): string
     {
 
-
+        $usuarioModel = App::getModel(UsuarioModel::class);
+        $user = $usuarioModel->find($_SESSION["loggedUser"]);
 
         $errors = [];
+        $router = App::get(Router::class);
+        /*
         if (!empty($id)) {
             try {
 
@@ -73,10 +76,10 @@ class UsuarioController extends Controller
             } catch (NotFoundException $notFoundException) {
                 $errors[] = $notFoundException->getMessage();
             }
-        }
+        }*/
 
 
-        return $this->response->renderView("perfil", "my", compact( 'usuario', 'errors', ));
+        return $this->response->renderView("perfil", "my", compact( 'user', 'errors', 'router' ));
     }
 
     /**
@@ -282,7 +285,6 @@ public function createUsuario(): string
             $errors[] = "Debe introcir el mismo password";
         }
 
-        var_dump($errors);
 
         if (empty($errors)) {
             try {
@@ -460,6 +462,270 @@ public function createUsuario(): string
             "errors", "isGetMethod", "usuario"));
     }
 
+
+    public function editPerfilUsuario(int $id): string
+    {
+        $isGetMethod = true;
+        $errors = [];
+        $usuarioModel = App::getModel(UsuarioModel::class);
+        $usuario = null;
+
+        if (empty($id)) {
+            $errors[] = '404 No encontrado';
+        } else {
+            $usuario = $usuarioModel->find($id);
+
+        }
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $isGetMethod = false;
+
+            $id = filter_input(INPUT_POST, "id", FILTER_VALIDATE_INT);
+            if (empty($id)) {
+                $errors[] = "ID Erronea";
+            }
+
+            $nombre = filter_input(INPUT_POST, "nombre", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+            $apellidos = filter_input(INPUT_POST, "apellidos", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+            $telefono = filter_input(INPUT_POST, "telefono", FILTER_VALIDATE_INT);
+            $email = filter_input(INPUT_POST, "email", FILTER_VALIDATE_EMAIL);
+            $username = filter_input(INPUT_POST, "username");
+
+            if (empty($nombre)) {
+                $errors[] = "El nombre es obligatorio";
+            }
+            if (empty($apellidos)) {
+                $errors[] = "Los apellidos son obligatorios";
+            }
+
+            if (empty($telefono)) {
+                $errors[] = "El teléfono es obligatorio";
+            }
+
+            if (empty($email)) {
+                $errors[] = "El email es obligatorio";
+            }
+
+            if (empty($username)) {
+                $errors[] = "El username es obligatorio";
+            }
+
+
+            if (empty($errors)) {
+                try {
+                    // Instead of creating a new object we load the current data object.
+                    $usuario = $usuarioModel->find($id);
+
+                    //then we set the new values
+                    $usuario->setNombre($nombre);
+                    $usuario->setApellidos($apellidos);
+                    $usuario->setTelefono($telefono);
+                    $usuario->setEmail($email);
+                    $usuario->setUsername($username);
+
+                    $usuario->update($usuario);
+
+                } catch (PDOException $e) {
+                    $errors[] = "Error: " . $e->getMessage();
+                }
+            }
+        }
+
+        return $this->response->renderView("usuarios-edit", "my", compact(
+            "errors", "isGetMethod", "usuario"));
+    }
+
+
+    /**
+     * @param int $id
+     * @return string
+     * @throws Exception
+     */
+    public function updatePerfilUsuario(int $id): string
+    {
+
+        $errors = [];
+        $isGetMethod = false;
+        $nombre = filter_input(INPUT_POST, "nombre", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        $apellidos = filter_input(INPUT_POST, "apellidos", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        $telefono = filter_input(INPUT_POST, "telefono", FILTER_VALIDATE_INT);
+        $email = filter_input(INPUT_POST, "email", FILTER_VALIDATE_EMAIL);
+        $username = filter_input(INPUT_POST, "username");
+        $role = filter_input(INPUT_POST, "role", FILTER_SANITIZE_STRING);
+        $avatar = filter_input(INPUT_POST, "avatar");
+
+
+        if (empty($nombre)) {
+            $errors[] = "El nombre es obligatorio";
+        }
+        if (empty($apellidos)) {
+            $errors[] = "Los apellidos son obligatorios";
+        }
+
+        if (empty($telefono)) {
+            $errors[] = "El teléfono es obligatorio";
+        }
+
+        if (empty($email)) {
+            $errors[] = "El email es obligatorio";
+        }
+
+        if (empty($username)) {
+            $errors[] = "El username es obligatorio";
+        }
+
+        if(!empty($user) && $user->getRole() === "ROLE_ADMIN") {
+            if (empty($role)) {
+                $errors[] = "El rol es obligatorio";
+            } else {
+
+            }
+        }
+
+        // Si hay errores no necesitamos subir la imagen
+        if (empty($errors)) {
+            try {
+                $uploadedFile = new UploadedFile("avatar", 2000 * 1024, ["image/jpeg", "image/jpg", "image/png"]);
+                if ($uploadedFile->validate()) {
+                    $uploadedFile->save(Usuario::AVATAR_PATH);
+                    $avatar = $uploadedFile->getFileName();
+                }
+            } catch (Exception $exception) {
+                $errors[] = "Error uploading file ($exception)";
+            }
+        }
+
+        if (empty($errors)) {
+
+            try {
+
+                $usuarioModel = App::getModel(UsuarioModel::class);
+                // getting the partner by its identifier
+                $usuario = $usuarioModel->find($id);
+                $usuario->setNombre($nombre);
+                $usuario->setApellidos($apellidos);
+                $usuario->setTelefono($telefono);
+                $usuario->setEmail($email);
+                $usuario->setUsername($username);
+                $usuario->setAvatar($avatar);
+                if(!empty($user) && $user->getRole() === "ROLE_ADMIN") {
+                    $usuario->setRole($role);
+                }
+
+                // updating changes
+                $usuarioModel->update($usuario);
+            } catch (Exception $e) {
+                $errors[] = 'Error: ' . $e->getMessage();
+            }
+        }
+        return $this->response->renderView("usuarios-edit", "my", compact(
+            "errors", "isGetMethod", "usuario"));
+    }
+
+    public function editPassUsuario(int $id): string
+    {
+        $isGetMethod = true;
+        $errors = [];
+        $usuarioModel = App::getModel(UsuarioModel::class);
+        $usuario = null;
+
+        if (empty($id)) {
+            $errors[] = '404 No encontrado';
+        } else {
+            $usuario = $usuarioModel->find($id);
+
+        }
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $isGetMethod = false;
+
+            $id = filter_input(INPUT_POST, "id", FILTER_VALIDATE_INT);
+            if (empty($id)) {
+                $errors[] = "ID Erronea";
+            }
+
+            $password = filter_input(INPUT_POST, "password");
+            $repitePassword = filter_input(INPUT_POST, "repitePassword");
+
+            if (empty($password)) {
+                $errors[] = "El password es obligtorio";
+            }
+
+            if(empty($repitePassword)){
+
+                $errors[] = "Debe repetir el password";
+            }
+
+            if($repitePassword !== $password){
+
+                $errors[] = "Debe introcir el mismo password";
+            }
+
+
+            if (empty($errors)) {
+                try {
+                    // Instead of creating a new object we load the current data object.
+                    $usuario = $usuarioModel->find($id);
+
+                    //then we set the new values
+                    $usuario->setPassword($password);
+
+                    $usuario->update($usuario);
+
+                } catch (PDOException $e) {
+                    $errors[] = "Error: " . $e->getMessage();
+                }
+            }
+        }
+
+        return $this->response->renderView("usuarios-edit-pass", "my", compact(
+            "errors", "isGetMethod", "usuario"));
+    }
+
+    public function updatePassUsuario(int $id): string
+    {
+
+        $errors = [];
+        $isGetMethod = false;
+        $password = filter_input(INPUT_POST, "password");
+        $repitePassword = filter_input(INPUT_POST, "repitePassword");
+
+        if (empty($password)) {
+            $errors[] = "El password es obligtorio";
+        }
+
+        if(empty($repitePassword)){
+
+            $errors[] = "Debe repetir el password";
+        }
+
+        if($repitePassword !== $password){
+
+            $errors[] = "Debe introcir el mismo password";
+        }
+
+
+
+        if (empty($errors)) {
+
+            try {
+
+                $usuarioModel = App::getModel(UsuarioModel::class);
+                // Instead of creating a new object we load the current data object.
+                $usuario = $usuarioModel->find($id);
+
+                //then we set the new values
+                $usuario->setPassword($password);
+
+                // updating changes
+                $usuarioModel->update($usuario);
+            } catch (Exception $e) {
+                $errors[] = 'Error: ' . $e->getMessage();
+            }
+        }
+        return $this->response->renderView("usuarios-edit", "my", compact(
+            "errors", "isGetMethod", "usuario"));
+    }
 
 
     public function deleteUsuario(int $id): string

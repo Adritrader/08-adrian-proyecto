@@ -101,31 +101,7 @@ class MyController extends Controller
 
     }
 
-    public function perfil(int $id): string
-    {
 
-        $errors = [];
-        if (!empty($id)) {
-            try {
-                $usuarioModel = App::getModel(UsuarioModel::class);
-                $usuario = $usuarioModel->find($id);
-
-                return $this->response->renderView("perfil", "my", compact(
-                    "errors", "usuario"));
-
-            } catch (NotFoundException $notFoundException) {
-                $errors[] = $notFoundException->getMessage();
-            }
-        }
-        else
-            return $this->response->renderView("perfil", "my", compact(
-                "errors", "usuario"));
-
-        return "";
-
-
-
-    }
 
     public function singlePage(): string
     {

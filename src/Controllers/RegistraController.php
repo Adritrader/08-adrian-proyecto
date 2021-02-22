@@ -19,6 +19,7 @@ use App\Core\App;
 use App\Core\Security;
 use App\Model\RegistraModel;
 use App\Model\ServicioModel;
+use App\Model\UsuarioModel;
 use App\Utils\MyLogger;
 use App\Utils\UploadedFile;
 use DateTime;
@@ -110,9 +111,14 @@ class RegistraController extends Controller {
     {
 
         $title = "Reserva cita";
+        $errors = [];
+        $servicioModel = App::getModel(ServicioModel::class);
+        $servicios= $servicioModel->findAll();
         $router = App::get(Router::class);
+        $usuarioModel = App::getModel(UsuarioModel::class);
+        $user = $usuarioModel->find($_SESSION["loggedUser"]);
 
-        return $this->response->renderView("reservas-create-form", "my", compact('title', 'router', 'servicios'));
+        return $this->response->renderView("reservas-create-form", "my", compact('title', 'router', 'servicios', 'errors', 'user', 'router'));
     }
 
 
@@ -180,12 +186,13 @@ class RegistraController extends Controller {
         }
 
         if (!empty($errors)) {
-            App::get('flash')->set("message", "La reserva se ha creado correctamente");
-            App::get(Router::class)->redirect("login");
-        }
+            App::get('flash')->set("message", "La reserva no se ha podido crear");
+            //App::get(Router::class)->redirect("login");
 
-        return $this->response->renderView("auth/login", "my", compact(
-            "errors", "nombre"));
+        }
+    var_dump($errors);
+        return $this->response->renderView("a", "my", compact(
+            "errors", "nombre", 'errors'));
     }
 
     public function showProducto(int $id): string

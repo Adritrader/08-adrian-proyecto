@@ -21,13 +21,18 @@
         <input id="username" class="form-control" type="text" name="username" value="<?= $usuario->getUsername() ?>" required>
     </div>
 
-    <div class="form-group">
-        <label for="role">Role:
-            <select name="role" id="role">
-                <option value="ROLE_USER">ROLE_USER</option>
-                <option value="ROLE_ADMIN">ROLE_ADMIN</option>
-            </select></label>
-    </div>
+    <?php if(!empty($user) &&  $user->getRole() === "ROLE_ADMIN"):?>
+        <div class="form-group">
+            <label for="role">Role:
+                <select name="role" id="role">
+                    <option value="ROLE_USER">ROLE_USER</option>
+                    <option value="ROLE_ADMIN">ROLE_ADMIN</option>
+                </select></label>
+        </div>
+
+    <?php else: ?>
+
+    <?php endif;?>
     <div class="form-group">
         <label for="avatar">Avatar:</label>
         <input id="avatar" class="form-control" type="file" name="avatar" value="<?= $usuario->getAvatar() ?>" required>
