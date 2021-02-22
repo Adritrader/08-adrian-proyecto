@@ -8,6 +8,7 @@ use App\Core\Exception\ModelException;
 use App\Core\Exception\NotFoundException;
 use App\Core\Model;
 use App\Entity\Registra;
+use App\Entity\Servicio;
 use App\Entity\Usuario;
 use PDO;
 
@@ -35,5 +36,15 @@ class RegistraModel extends Model
             throw new ModelException($e->getMessage());
         }
         return $usuario;
+    }
+
+    public function getServicio(int $id): Servicio {
+        $servicioModel = new ServicioModel($this->pdo);
+        try {
+            $servicio = $servicioModel->find($id);
+        } catch (NotFoundException $e) {
+            throw new ModelException($e->getMessage());
+        }
+        return $servicio;
     }
 }

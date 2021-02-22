@@ -60,8 +60,10 @@
                         <?php foreach ($registra as $reserva) { ?>
                             <tr>
                                 <td><?= $reserva->getId()?></td>
-                                <td><?= $reserva->getUsuarioId() ?></td>
-                                <td><?= $reserva->getServicioId() ?></td>
+                                <td> <?php $usuario = $registraModel->getNombre($reserva->getUsuarioId());
+                                echo $usuario->getNombre() ?></td>
+                                <td><?php $servicio = $registraModel->getServicio($reserva->getServicioId());
+                                echo $servicio->getNombre()?></td>
                                 <td><?= $reserva->getHoraCita()->format("H:i:s") ?></td>
                                 <td><?= $reserva->getFechaCita()->format("Y-m-d") ?></td>
                                 <td><a href="/reservas/<?= $reserva->getId() ?>/edit">
