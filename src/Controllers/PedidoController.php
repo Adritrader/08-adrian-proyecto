@@ -57,9 +57,6 @@ class PedidoController extends Controller
 
         $message = App::get("flash")::get("message");
 
-        var_dump($pedidos);
-        var_dump($realizaUsuario);
-
         return $this->response->renderView("back/back-pedidos", "back", compact('title', 'pedidos', 'realizaUsuario',
             'pedidoModel', 'realiza_usuarioModel', 'contiene','contieneModel', 'errors', 'router', 'message'));
     }

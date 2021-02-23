@@ -203,7 +203,7 @@ public function createUsuario(): string
                 $errors[] = "Error uploading file ($exception)";
             }
         }
-        var_dump($errors);
+
 
         if (empty($errors)) {
 
@@ -305,19 +305,19 @@ public function createUsuario(): string
 
             } catch (PDOException | ModelException | Exception $e) {
                 $errors[] = "Error: " . $e->getMessage();
-                var_dump($errors);
+
             }
         }
 
         if (empty($errors)) {
             App::get('flash')->set("message", "Se ha registrado correctamente");
             //App::get(Router::class)->redirect("login");
-            var_dump($errors);
+
         } else {
 
             App::get('flash')->set("message", "No se ha podido registrar");
 
-            var_dump($errors);
+
         }
 
         return $this->response->renderView("", "my", compact(
@@ -795,7 +795,6 @@ public function createUsuario(): string
                     $usuario = $usuarioModel->find($id);
                     $result = $usuarioModel->delete($usuario);
 
-                    var_dump($result);
                 } catch (PDOException $e) {
                     $errors[] = "Error: " . $e->getMessage();
                 }

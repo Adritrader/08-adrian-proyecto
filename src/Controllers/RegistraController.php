@@ -134,7 +134,7 @@ class RegistraController extends Controller {
         $SERVICIO_id = filter_input(INPUT_POST, "SERVICIO_id", FILTER_VALIDATE_INT);
         $hora_cita = filter_input(INPUT_POST, "hora_cita");
 
-        var_dump($hora_cita);
+
 
         if (empty($USUARIO_id)) {
             $errors[] = "El nombre es obligatorio";
@@ -166,7 +166,7 @@ class RegistraController extends Controller {
                 $registra->setFechaCita($fecha_cita);
                 $registra->setHoraCita($hora_cita);
 
-                var_dump($registra);
+
                 $registraModel->saveTransaction($registra);
                 App::get(MyLogger::class)->info("Se ha creado una nueva reserva");
                 App::get('flash')->set("message", "La reserva se ha creado correctamente");
@@ -181,7 +181,7 @@ class RegistraController extends Controller {
             App::get(Router::class)->redirect("login");
 
         }
-    var_dump($errors);
+
         return $this->response->renderView("auth/login", "my", compact(
              'errors'));
     }
