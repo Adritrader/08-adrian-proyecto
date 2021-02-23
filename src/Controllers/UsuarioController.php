@@ -285,6 +285,7 @@ public function createUsuario(): string
             $errors[] = "Debe introcir el mismo password";
         }
 
+        $password = App::get("security")->encode($password);
 
         if (empty($errors)) {
             try {
