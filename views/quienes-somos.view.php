@@ -23,7 +23,7 @@
                 </p>
                 <p>Nuestro equipo se caracteriza por la exquisita atención al cliente y unos acabados simplemente
                     perfectos. Lograremos realizar cualquier tipo de servicio, siempre personalizado y con
-                    atención inmediata.
+                    atención inmediata.,..
                 </p>
             </div>
 
